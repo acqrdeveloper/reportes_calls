@@ -39,7 +39,7 @@
       @include('layout.recursos.modals.modal_asssistance')
       @include('layout.recursos.modals.modal_standby')
       @include('layout.recursos.modals.modal_releases_annexed')
-      @include('layout.recursos.modals.modal_queues')
+      @include('layout.recursos.modals.modal_asterisk')
       @include('layout.recursos.modals.modal_users')
       @include('layout.recursos.modals.modal_leyendas')
       <div class="control-sidebar-bg"></div>

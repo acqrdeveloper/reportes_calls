@@ -34,9 +34,6 @@ Route::group(['middleware'=>['user']], function () {
         // Reportes de consolidado de eventos
         Route::post('events_consolidated', ['uses'=>'EventsAgentController@events_consolidated']);
 
-        // Reporte de nivel de occupacion
-        Route::post('level_of_occupation', ['uses'=>'LeveloccupationController@index']);
-
         // Repote nuevo de eventos
         Route::post('detail_event_report', ['uses'=>'DetailEventsReportController@index']);
 
@@ -65,6 +62,14 @@ Route::group(['middleware'=>['user']], function () {
         Route::post('exportQueues', ['uses'=>'QueuesController@exportQueues']);
         Route::post('executeSSH', ['uses'=>'QueuesController@executeSSH']);
         Route::post('taskmanagerQueues', ['uses'=>'QueuesController@taskManagerQueues']);
+
+        // Administrar Template Queues
+        Route::post('manage_template_queues', ['uses'=>'QueuesTemplateController@index']);
+
+        // Administrar los Sonidos de los masivos
+        Route::post('manage_sound_massive', ['uses'=>'SoundMassiveController@index']);
+        Route::post('form_status_sound_massive', ['uses'=>'SoundMassiveController@formChangeStatus']);
+        Route::post('saveformSoundMassiveStatus', ['uses'=>'SoundMassiveController@saveFormSoundMassiveStatus']);
 
         // Broadcast Message
         Route::post('broadcast_message', ['uses'=>'BroadcastMessageController@index']);
@@ -95,7 +100,6 @@ Route::group(['middleware'=>['user']], function () {
     Route::post('export_details_events_report', ['uses'=>'DetailEventsReportController@export_details_events_report']);
     Route::post('export_agents_online', ['uses'=>'AgentsOnlineController@export']);
     Route::post('export_surveys', ['uses'=>'SurveysController@export']);
-    Route::post('export_level_occupation', ['uses'=>'LeveloccupationController@export']);
     Route::post('export_list_user', ['uses'=>'UserController@export']);
 
     // Perfil de Usuario

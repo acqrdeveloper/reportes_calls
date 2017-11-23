@@ -1,12 +1,12 @@
 <!-- Modal content-->
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <button type="button" class="close" onclick="clearModalClose('modalAsterisk', 'div.dialogAsterisk')" data-dismiss="modal">&times;</button>
+        <button type="button" class="close" onclick="clearModalClose('modalAsterisk', 'div.dialogAsterisk')">&times;</button>
         <h4 class="modal-title">Change Status Queue [{{ $nameQueue }}]</h4>
     </div>
     <div class="modal-body">
         <form id="formQueuesStatus">
-            <span>¿ Deseas cambiar al estado <b>{{ ($Status == 1 ? 'Inactivo' : 'Activo') }}</b>?</span>
+            <span>¿ Deseas cambiar al estado {{ ($Status == 1 ? 'Inactivo' : 'Activo') }}?</span>
             <div class="alert alert-danger formError" style="display: none"></div>
             <input type="hidden" name="queueID" value="{{ $idQueue }}">
             <input type="hidden" name="statusQueue" value="{{ $Status }}">

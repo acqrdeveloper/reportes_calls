@@ -1,7 +1,7 @@
 <!-- Modal content-->
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <button type="button" class="close" onclick="clearModalClose('modalQueues', 'div.dialogQueues')" data-dismiss="modal">&times;</button>
+        <button type="button" class="close" onclick="clearModalClose('modalAsterisk', 'div.dialogAsterisk')" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">{{ $updateForm === true ? "Edit" : "Add" }} Queue</h4>
     </div>
     <div class="modal-body">
@@ -56,7 +56,7 @@
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary btnForm">{!! $updateForm === true ? "<i class='fa fa-edit'></i> Editar" : "<i class='fa fa-plus'></i> Agregar" !!}</button>
                 <button type="submit" class="btn btn-info btnLoad" style="display: none"><i class="fa fa-spin fa-spinner"></i> Cargando</button>
-                <button type="button" class="btn btn-default" onclick="clearModalClose('modalQueues', 'div.dialogQueues')" data-dismiss="modal"><i class="fa fa-close"></i> Cerrar</button>
+                <button type="button" class="btn btn-default" onclick="clearModalClose('modalAsterisk', 'div.dialogAsterisk')" data-dismiss="modal"><i class="fa fa-close"></i> Cerrar</button>
             </div>
         </form>
     </div>
@@ -65,7 +65,8 @@
 <script>
     hideErrorForm('.formError')
     loadRouteMusic('#selectedMusic','#audioTag')
+    loadSelectStrategy('#selectedStrategy')
     searchLegendQueue('#selectedStrategy')
     searchRouteMusic('#selectedMusic','#audioTag')
-    clearModalClose('modalQueues', 'div.dialogQueues')
+    clearModalClose('modalAsterisk', 'div.dialogAsterisk')
 </script>

@@ -26,7 +26,7 @@ class QueuesController extends CosapiController
                 return $this->list_queues();
             } else {
                 return view('elements/index')->with(array(
-                    'routeReport'           => 'elements.manage.manage_queues',
+                    'routeReport'           => 'elements.manage.asterisk.asterisk_queues',
                     'titleReport'           => 'Manage Queues',
                     'boxReport'             => false,
                     'dateHourFilter'        => false,
@@ -88,7 +88,7 @@ class QueuesController extends CosapiController
         $i = 0;
         foreach ($builderview as $view) {
             $i++;
-            $Status = ($view['Status'] == 1 ? 'Activo' : 'Desactivo');
+            $Status = ($view['Status'] == 1 ? 'Activo' : 'Inactivo');
             $outgoingcollection->push([
                 'Id'                    => $i,
                 'Name'                  => $view['Name'],
@@ -96,9 +96,9 @@ class QueuesController extends CosapiController
                 'Strategy'              => $view['Strategy'],
                 'Priority'              => $view['Priority'],
                 'Status'                => '<span class="label label-'.($Status == 'Activo' ? 'success' : 'danger').' labelFix">'.$Status.'</span>',
-                'Actions'               => '<span data-toggle="tooltip" data-placement="left" title="Edit Queue"><a class="btn btn-warning btn-xs" onclick="responseModal('."'div.dialogQueues','form_queues','".$view['Id']."'".')" data-toggle="modal" data-target="#modalQueues"><i class="fa fa-edit" aria-hidden="true"></i></a></span>
-                                            <span data-toggle="tooltip" data-placement="left" title="Assign User"><a class="btn btn-info btn-xs" onclick="'.($view['Status'] == 1 ? "responseModal('div.dialogQueuesLarge','form_assign_user','".$view['Id']."')" : "").'" '.($view['Status'] == 1 ? 'data-toggle="modal" data-target="#modalQueues"' : 'disabled').'><i class="fa fa-group" aria-hidden="true"></i> </a></span>
-                                            <span data-toggle="tooltip" data-placement="left" title="Change Status"><a class="btn btn-danger btn-xs" onclick="responseModal('."'div.dialogQueues','form_status_queue','".$view['Id']."'".')" data-toggle="modal" data-target="#modalQueues"><i class="fa fa-ban" aria-hidden="true"></i></a>'
+                'Actions'               => '<span data-toggle="tooltip" data-placement="left" title="Edit Queue"><a class="btn btn-warning btn-xs" onclick="responseModal('."'div.dialogAsterisk','form_queues','".$view['Id']."'".')" data-toggle="modal" data-target="#modalAsterisk"><i class="fa fa-edit" aria-hidden="true"></i></a></span>
+                                            <span data-toggle="tooltip" data-placement="left" title="Assign User"><a class="btn btn-info btn-xs" onclick="'.($view['Status'] == 1 ? "responseModal('div.dialogAsteriskLarge','form_assign_user','".$view['Id']."')" : "").'" '.($view['Status'] == 1 ? 'data-toggle="modal" data-target="#modalAsterisk"' : 'disabled').'><i class="fa fa-group" aria-hidden="true"></i> </a></span>
+                                            <span data-toggle="tooltip" data-placement="left" title="Change Status"><a class="btn btn-danger btn-xs" onclick="responseModal('."'div.dialogAsterisk','form_status_queue','".$view['Id']."'".')" data-toggle="modal" data-target="#modalAsterisk"><i class="fa fa-retweet" aria-hidden="true"></i></a>'
             ]);
         }
         return $outgoingcollection;
@@ -167,10 +167,12 @@ class QueuesController extends CosapiController
     public function getOptions()
     {
         $strategy = QueueStrategy::Select()
+            ->where('estado_id','=','1')
             ->get()
             ->toArray();
 
         $priority = QueuePriority::Select()
+            ->where('estado_id','=','1')
             ->get()
             ->toArray();
 
@@ -353,13 +355,19 @@ class QueuesController extends CosapiController
         $line = '[general]'.$jumpLine;
         $line = $line.'persistentmembers = yes'.$jumpLine;
         $line = $line.'autofill = yes'.$jumpLine;
-        $line = $line.'autopause = all'.$jumpLine;
         $line = $line.$jumpLine;
         $QueuesTemplate = $this->getQueuesTemplateExport();
         foreach ($QueuesTemplate as $template) {
             $line = $line.'['.$template['name_template'].'](!)'.$jumpLine;
             $line = $line.'music = '.$template['music_on_hold']['name_music'].''.$jumpLine;
             $line = $line.'joinempty = '.$template['empty_template'].''.$jumpLine;
+            $line = $line.'timeout = '.$template['timeout_template'].''.$jumpLine;
+            $line = $line.'memberdelay = '.$template['memberdelay_template'].''.$jumpLine;
+            $line = $line.'ringinuse = '.$template['ringinuse_template'].''.$jumpLine;
+            $line = $line.'autopause = '.$template['autopause_template'].''.$jumpLine;
+            $line = $line.'autopausebusy = '.$template['autopausebusy_template'].''.$jumpLine;
+            $line = $line.'wrapuptime = '.$template['wrapuptime_template'].''.$jumpLine;
+            $line = $line.'maxlen = '.$template['maxlen_template'].''.$jumpLine;
             $line = $line.$jumpLine;
         }
         $Queues = $this->getQueueExport();

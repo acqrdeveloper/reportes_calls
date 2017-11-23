@@ -27,9 +27,6 @@ const showTabConsolidated = (evento) => dataTables('table-consolidated', getData
 /* [showTabDetailEvents Función que carga los datos detallados de los Eventos del Agente] */
 const showTabDetailEvents = (evento) => dataTables('table-detail-events', getDataFilters(evento), 'events_detail')
 
-/* [showTabDetailEvents Función que carga los datos detallados de los Eventos del Agente] */
-const showTabLevelOccupation = (evento) => dataTables('table-level-occupation', getDataFilters(evento), 'level_of_occupation')
-
 /* [show_tab_angetOnline Función que carga los datos de los agentes online] */
 const showTabAgentOnline = (evento) => dataTables('table-agentOnline', getDataFilters(evento), 'agents_online')
 
@@ -41,6 +38,12 @@ const showTabListUser = (evento) => dataTables('table-list-user', getDataFilters
 
 /* [showTabListQueues Función que carga los datos detallados de las colas] */
 const showTabListQueues = (evento) => dataTables('table-list-queue', getDataFilters(evento), 'manage_queues')
+
+/* [showTabListTemplateQueues Función que carga los datos detallados de los template de las colas] */
+const showTabListTemplateQueues = (evento) => dataTables('table-list-template-queue', getDataFilters(evento), 'manage_template_queues')
+
+/* [showTabListTemplateQueues Función que carga los datos detallados de los sonidos masivos] */
+const showTabListSoundMassive = (evento) => dataTables('table-list-sound-massive', getDataFilters(evento), 'manage_sound_massive')
 
 /* [showTabAnnexed Función que carga la lista de anexos] */
 const showTabAnnexed = (event) => {
@@ -475,6 +478,11 @@ const loadRouteMusic = (selectMusic, audioTag) => {
     $(audioTag).attr('src', src)
 }
 
+const loadSelectStrategy = (selectStrategy) => {
+    let nameStrategy = $(selectStrategy + " option:selected").data('name')
+    $('#'+nameStrategy).fadeIn('blind')
+}
+
 // Función que detecta el cambio en un select y manda mediante el data-id la ruta para el audio
 const searchRouteMusic = (selectMusic, audioTag) => {
     $(selectMusic).change(function(){
@@ -486,11 +494,8 @@ const searchRouteMusic = (selectMusic, audioTag) => {
 const searchLegendQueue = (selectedStrategy) => {
     $(selectedStrategy).change(function(){
         let nameStrategy = $(selectedStrategy + " option:selected").data('name')
-        $('#'+nameStrategy).fadeOut(function() {
-            $('.legend').fadeOut(function() {
-                $('#'+nameStrategy).show()
-            })
-        })
+        $('.legendQueue').hide()
+        $('#'+nameStrategy).fadeIn('blind')
     })
 }
 

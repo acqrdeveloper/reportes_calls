@@ -220,6 +220,7 @@ elixir(function(mix) {
 		*/
 		.copy('resources/assets/sapia/js/form/formUsers.js'									, 'public/js/form/formUsers.min.js')
         .copy('resources/assets/sapia/js/form/formQueues.js'								, 'public/js/form/formQueues.min.js')
+        .copy('resources/assets/sapia/js/form/formSoundMassive.js'							, 'public/js/form/formSoundMassive.min.js')
 
 		/**
 	  	* Copiar imagenes en una sola carpeta

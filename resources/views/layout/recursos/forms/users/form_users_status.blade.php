@@ -6,7 +6,7 @@
     </div>
     <div class="modal-body">
         <form id="formChangeStatus">
-            <span>¿Deseas cambiar a {{ $User['primer_nombre'].' '.$User['apellido_paterno'] }}, al estado {{ ($User['estado_id'] == 1 ? 'Desactivo' : 'Activo') }} ?</span>
+            <span>¿Deseas cambiar a {{ $User['primer_nombre'].' '.$User['apellido_paterno'] }}, al estado {{ ($User['estado_id'] == 1 ? 'Inactivo' : 'Activo') }} ?</span>
             <div class=" alert alert-danger formError" style="display: none"></div>
             <input type="hidden" name="userID" value="{{ $idUser }}">
             <input type="hidden" name="statusUser" value="{{ $User['estado_id'] }}">

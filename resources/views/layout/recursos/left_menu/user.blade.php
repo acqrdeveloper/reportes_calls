@@ -4,7 +4,7 @@
   </a>
   <ul class="treeview-menu">
       <li><a href="#" v-on:click="loadOptionMenu('events_detail')" class="reportes"><i class="fa fa-circle-o text-purple"></i> Detail Events</a></li>
-    <!-- <li><a href="#" v-on:click="loadOptionMenu('events_consolidated')"  class="reportes"><i class="fa fa-circle-o text-yellow"></i> Consolidated Events</a></li> -->
+      <!-- <li><a href="#" v-on:click="loadOptionMenu('events_consolidated')"  class="reportes"><i class="fa fa-circle-o text-yellow"></i> Consolidated Events</a></li> -->
   </ul>
 </li>
 

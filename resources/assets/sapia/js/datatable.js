@@ -176,19 +176,6 @@ const columnsDatatable = (route) => {
 		]
 	}
 
-	if (route === 'level_of_occupation') {
-		columns = [
-			{'data': 'date', 'order': 'asc'},
-			{'data': 'hour'},
-			{'data': 'indbound'},
-			{'data': 'acw'},
-			{'data': 'outbound'},
-			{'data': 'auxiliares'},
-			{'data': 'logueo'},
-			{'data': 'occupation_cosapi'}
-		]
-	}
-
 	if (route === 'manage_users') {
 		columns = [
 			{'data': 'Id', 'order': 'asc'},
@@ -214,6 +201,25 @@ const columnsDatatable = (route) => {
 			{'data': 'Actions', 'className': 'text-center'}
 		]
 	}
+
+    if (route === 'manage_template_queues') {
+        columns = [
+            {'data': 'Id', 'order': 'asc'},
+            {'data': 'Name'},
+            {'data': 'MusicOnHold'},
+            {'data': 'Status'},
+            {'data': 'Actions', 'className': 'text-center'}
+        ]
+    }
+
+    if (route === 'manage_sound_massive') {
+        columns = [
+            {'data': 'Id', 'order': 'asc'},
+            {'data': 'Name'},
+            {'data': 'Status'},
+            {'data': 'Actions', 'className': 'text-center'}
+        ]
+    }
 
 	return columns
 }

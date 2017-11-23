@@ -15,7 +15,7 @@ $('#formQueues').submit(function(e) {
                 changeButtonForm('btnLoad','btnForm')
                 let action = (data.action === 'create' ? 'agrego' : 'edito')
                 showNotificacion('success', 'Se '+ action +' correctamente la cola !!!', 'Success', 2000, false, true)
-                clearModal('modalQueues', 'div.dialogQueues')
+                clearModal('modalAsterisk', 'div.dialogAsterisk')
                 buscar()
             }else{
                 showNotificacion('error', 'Problemas de inserción a la base de datos', 'Error', 10000, false, true)
@@ -44,7 +44,7 @@ $('#formQueuesStatus').submit(function(e) {
             if(data.message === 'Success'){
                 changeButtonForm('btnLoad','btnForm')
                 showNotificacion('success', 'Se cambio el estado de la cola correctamente !!!', 'Success', 2000, false, true)
-                clearModal('modalQueues', 'div.dialogQueues')
+                clearModal('modalAsterisk', 'div.dialogAsterisk')
                 buscar()
             }else{
                 showNotificacion('error', 'Problemas al actualizar el dato en la base de datos', 'Error', 10000, false, true)
@@ -73,7 +73,7 @@ $('#formAssignUser').submit(function(e) {
             if(data.message === 'Success'){
                 changeButtonForm('btnLoad','btnForm')
                 showNotificacion('success', 'Se guardaron los usuarios en la cola, exitosamente !!!', 'Success', 2000, false, true)
-                clearModal('modalQueues', 'div.dialogQueuesLarge')
+                clearModal('modalAsterisk', 'div.dialogAsteriskLarge')
                 buscar()
             }else{
                 showNotificacion('error', 'Problemas al actualizar el dato en la base de datos', 'Error', 10000, false, true)
