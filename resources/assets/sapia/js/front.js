@@ -42,8 +42,11 @@ const showTabListQueues = (evento) => dataTables('table-list-queue', getDataFilt
 /* [showTabListTemplateQueues Función que carga los datos detallados de los template de las colas] */
 const showTabListTemplateQueues = (evento) => dataTables('table-list-template-queue', getDataFilters(evento), 'manage_template_queues')
 
-/* [showTabListTemplateQueues Función que carga los datos detallados de los sonidos masivos] */
+/* [showTabListSoundMassive Función que carga los datos detallados de los sonidos masivos] */
 const showTabListSoundMassive = (evento) => dataTables('table-list-sound-massive', getDataFilters(evento), 'manage_sound_massive')
+
+/* [showTabListMusicOnHold Función que carga los datos detallados de los music on hold] */
+const showTabListMusicOnHold = (evento) => dataTables('table-list-music-on-hold', getDataFilters(evento), 'manage_music_on_hold')
 
 /* [showTabAnnexed Función que carga la lista de anexos] */
 const showTabAnnexed = (event) => {

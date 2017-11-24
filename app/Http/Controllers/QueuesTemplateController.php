@@ -3,6 +3,7 @@
 namespace Cosapi\Http\Controllers;
 
 use Cosapi\Collector\Collector;
+use Cosapi\Models\QueuesMusicOnHold;
 use Cosapi\Models\QueuesTemplate;
 use Illuminate\Http\Request;
 
@@ -31,7 +32,7 @@ class QueuesTemplateController extends CosapiController
                     'viewRolTypeSearch'     => false,
                     'viewButtonSearch'      => false,
                     'viewButtonExport'      => false,
-                    'exportReport'          => 'export_list_template_queue',
+                    'exportReport'          => '',
                     'nameRouteController'   => 'manage_template_queues'
                 ));
             }
@@ -85,8 +86,8 @@ class QueuesTemplateController extends CosapiController
                 'Name'                  => $view['Name'],
                 'MusicOnHold'           => $view['MusicOnHold'],
                 'Status'                => '<span class="label label-'.($Status == 'Activo' ? 'success' : 'danger').' labelFix">'.$Status.'</span>',
-                'Actions'               => '<span data-toggle="tooltip" data-placement="left" title="Edit Template Queue"><a class="btn btn-warning btn-xs" onclick="responseModal('."'div.dialogAsterisk','form_queues','".$view['Id']."'".')" data-toggle="modal" data-target="#modalAsterisk"><i class="fa fa-edit" aria-hidden="true"></i></a></span>
-                                            <span data-toggle="tooltip" data-placement="left" title="Change Status"><a class="btn btn-danger btn-xs" onclick="responseModal('."'div.dialogAsterisk','form_status_queue','".$view['Id']."'".')" data-toggle="modal" data-target="#modalAsterisk"><i class="fa fa-retweet" aria-hidden="true"></i></a>'
+                'Actions'               => '<span data-toggle="tooltip" data-placement="left" title="Edit Template Queue"><a class="btn btn-warning btn-xs" onclick="responseModal('."'div.dialogAsterisk','form_template_queues','".$view['Id']."'".')" data-toggle="modal" data-target="#modalAsterisk"><i class="fa fa-edit" aria-hidden="true"></i></a></span>
+                                            <span data-toggle="tooltip" data-placement="left" title="Change Status"><a class="btn btn-danger btn-xs" onclick="responseModal('."'div.dialogAsterisk','form_status_template_queues','".$view['Id']."'".')" data-toggle="modal" data-target="#modalAsterisk"><i class="fa fa-retweet" aria-hidden="true"></i></a>'
             ]);
         }
         return $outgoingcollection;
@@ -94,20 +95,110 @@ class QueuesTemplateController extends CosapiController
 
     public function formChangeStatus(Request $request)
     {
-        $getQueue   = $this->getTemplateQueue($request->valueID);
-        return view('layout/recursos/forms/queues/form_status')->with(array(
-            'idQueue'    => $getQueue[0]['id'],
-            'nameQueue'  => $getQueue[0]['name'],
-            'Status'     => $getQueue[0]['estado_id']
+        $getTemplateQueues   = $this->getTemplateQueue($request->valueID);
+        return view('layout/recursos/forms/templates/queues/form_status')->with(array(
+            'idTemplateQueue'     => $getTemplateQueues[0]['id'],
+            'nameTemplateQueue'   => $getTemplateQueues[0]['name_template'],
+            'Status'              => $getTemplateQueues[0]['estado_id']
         ));
+    }
+
+    public function formTemplateQueues(Request $request)
+    {
+        $options    = $this->getOptions();
+        $countMusicOnHold = $this->countMusicOnHold();
+        if ($request->valueID == null) {
+            return view('layout/recursos/forms/templates/queues/form_template_queues')->with(array(
+                'updateForm'             => false,
+                'optionsMusicOnHold'     => $options['MusicOnHold'],
+                'idTemplateQueue'        => '',
+                'nameTemplateQueue'      => '',
+                'selectedMusicOnHold'    => '',
+                'countMusicOnHold'       => $countMusicOnHold
+            ));
+        } else {
+            $getTemplateQueue = $this->getTemplateQueue($request->valueID);
+            return view('layout/recursos/forms/templates/queues/form_template_queues')->with(array(
+                'updateForm'             => true,
+                'optionsMusicOnHold'     => $options['MusicOnHold'],
+                'idTemplateQueue'        => $request->valueID,
+                'nameTemplateQueue'      => $getTemplateQueue[0]['name_template'],
+                'selectedMusicOnHold'    => $getTemplateQueue[0]['music_onhold'],
+                'countMusicOnHold'       => $countMusicOnHold
+            ));
+        }
     }
 
     public function getTemplateQueue($idTemplateQueue)
     {
         $template_queue = QueuesTemplate::Select()
+            ->with('musicOnHold')
             ->where('id', $idTemplateQueue)
             ->get()
             ->toArray();
         return $template_queue;
+    }
+
+    public function getOptions()
+    {
+        $musicOnHold = QueuesMusicOnHold::Select()
+            ->where('estado_id','=','1')
+            ->get()
+            ->toArray();
+
+        $options['MusicOnHold']  = $musicOnHold;
+        return $options;
+    }
+
+    public function countMusicOnHold()
+    {
+        $countMusicOnHold = QueuesMusicOnHold::Select()
+            ->where('estado_id', '=', '1')
+            ->count();
+        return $countMusicOnHold;
+    }
+
+    public function saveFormTemplateQueuesStatus(Request $request)
+    {
+        if ($request->ajax()) {
+            $statusTemplateQueue = ($request->statusTemplateQueue == 1 ? 2 : 1);
+            $queueTemplateQueryStatus = QueuesTemplate::where('id', $request->templateQueueID)
+                ->update([
+                    'estado_id' => $statusTemplateQueue
+                ]);
+            if ($queueTemplateQueryStatus) {
+                return ['message' => 'Success'];
+            }
+            return ['message' => 'Error'];
+        }
+        return ['message' => 'Error'];
+    }
+
+    public function saveFormTemplateQueues(Request $request)
+    {
+        if ($request->ajax()) {
+            $teamplateQueueQuery = QueuesTemplate::updateOrCreate([
+                'id' => $request->templateQueueID
+            ], [
+                'name_template' => $request->nameQueue,
+                'music_onhold' => $request->selectedMusicOnHold,
+                'empty_template' => 'yes',
+                'timeout_template' => 10,
+                'memberdelay_template' => 1,
+                'ringinuse_template' => 'no',
+                'autopause_template' => 'yes',
+                'autopausebusy_template' => 'yes',
+                'wrapuptime_template' => 2,
+                'maxlen_template' => 0,
+                'estado_id' => '1'
+            ]);
+
+            $action = ($request->templateQueueID ? 'updated' : 'create');
+            if ($teamplateQueueQuery) {
+                return ['message' => 'Success', 'action' => $action];
+            }
+            return ['message' => 'Error'];
+        }
+        return ['message' => 'Error'];
     }
 }

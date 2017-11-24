@@ -3,7 +3,7 @@
         <h3 class="box-title">@yield('titleReport')</h3>
         <div class="box-tools">
             <div class="btn-group pull-right">
-                <a onclick="responseModal('div.dialogAsterisk','form_queues')" data-toggle="modal" data-target="#modalAsterisk" class="btn btn-primary"><i class="fa fa-user-plus" aria-hidden="true" ></i> Add Template Queue</a>
+                <a onclick="responseModal('div.dialogAsterisk','form_template_queues')" data-toggle="modal" data-target="#modalAsterisk" class="btn btn-primary"><i class="fa fa-user-plus" aria-hidden="true" ></i> Add Template Queue</a>
             </div>
         </div>
     </div>

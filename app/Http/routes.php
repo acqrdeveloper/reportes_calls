@@ -65,6 +65,13 @@ Route::group(['middleware'=>['user']], function () {
 
         // Administrar Template Queues
         Route::post('manage_template_queues', ['uses'=>'QueuesTemplateController@index']);
+        Route::post('form_template_queues', ['uses'=>'QueuesTemplateController@formTemplateQueues']);
+        Route::post('form_status_template_queues', ['uses'=>'QueuesTemplateController@formChangeStatus']);
+        Route::post('saveformTemplateQueues', ['uses'=>'QueuesTemplateController@saveFormTemplateQueues']);
+        Route::post('saveformTemplateQueuesStatus', ['uses'=>'QueuesTemplateController@saveFormTemplateQueuesStatus']);
+
+        // Administrar Music On Hold
+        Route::post('manage_music_on_hold', ['uses'=>'QueuesMusicOnHoldController@index']);
 
         // Administrar los Sonidos de los masivos
         Route::post('manage_sound_massive', ['uses'=>'SoundMassiveController@index']);

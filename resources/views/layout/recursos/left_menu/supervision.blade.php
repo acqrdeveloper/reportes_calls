@@ -56,15 +56,17 @@
       <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i></span>
     </a>
     <ul class="treeview-menu">
-      <!-- <li class="treeview">
-        <a href="#">
-          <i class="fa fa-circle-o text-danger"></i> <span>Manage Template</span> <i class="fa fa-angle-left pull-right"></i>
-        </a>
-        <ul class="treeview-menu">
-          <li><a href="#" v-on:click="loadOptionMenu('manage_template_queues')"><i class="fa fa-circle-o text-blue"></i> Template Queues</a></li>
-        </ul>
-      </li> -->
-      <!-- <li><a href="#"><i class="fa fa-circle-o text-info"></i> Manage MusicOnHold</a></li> -->
+      <template v-if="getRole === 'admin'">
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-circle-o text-danger"></i> <span>Manage Template</span> <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="#" v-on:click="loadOptionMenu('manage_template_queues')"><i class="fa fa-circle-o text-blue"></i> Template Queues</a></li>
+          </ul>
+        </li>
+        <li><a href="#" v-on:click="loadOptionMenu('manage_music_on_hold')"><i class="fa fa-circle-o text-info"></i> Manage MusicOnHold</a></li>
+      </template>
       <li><a href="#" v-on:click="loadOptionMenu('manage_queues')"> <i class="fa fa-circle-o text-success"></i> Manage Queues</a></li>
       <li><a href="#" v-on:click="loadOptionMenu('manage_sound_massive')"> <i class="fa fa-circle-o text-aqua"></i> Manage Sound Massive</a></li>
     </ul>

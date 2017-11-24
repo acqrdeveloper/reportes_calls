@@ -221,6 +221,15 @@ const columnsDatatable = (route) => {
         ]
     }
 
+    if (route === 'manage_music_on_hold') {
+        columns = [
+            {'data': 'Id', 'order': 'asc'},
+            {'data': 'Name'},
+            {'data': 'Mode'},
+            {'data': 'Status'}
+        ]
+    }
+
 	return columns
 }
 

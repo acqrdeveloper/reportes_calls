@@ -5,13 +5,14 @@
         <h4 class="modal-title">{{ $updateForm === true ? "Edit" : "Add" }} Queue</h4>
     </div>
     <div class="modal-body">
+        @if($countTemplateQueues > 0)
         <form id="formQueues">
             <div class="form-group">
                 <label>Name Queue</label>
                 <input type="text" name="nameQueue" class="form-control" placeholder="Enter Name Queue" value="{{ $nameQueue }}">
             </div>
             <div class="form-group">
-                <label for="exampleInputPassword1">VDN</label>
+                <label>VDN</label>
                 <input type="text" name="numVdn" class="form-control" placeholder="Enter number VDN" value="{{ $numVdn }}" onkeypress="return filterNumber(event)" onkeydown="return BlockCopyPaste(event)" {!! $updateForm === true ? 'readonly="readonly"' : '' !!}>
             </div>
             <div class="form-group">
@@ -59,6 +60,11 @@
                 <button type="button" class="btn btn-default" onclick="clearModalClose('modalAsterisk', 'div.dialogAsterisk')" data-dismiss="modal"><i class="fa fa-close"></i> Cerrar</button>
             </div>
         </form>
+        @else
+            <div class="alert alert-warning">
+                <span class="fa fa-warning"></span> <strong>Debes tener por lo menos un template creado y/o habilitado para crear y/o editar una cola.</strong>
+            </div>
+        @endif
     </div>
 </div>
 {!!Html::script('js/form/formQueues.min.js?version='.date('YmdHis')) !!}
