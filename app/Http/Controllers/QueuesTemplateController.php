@@ -3,6 +3,7 @@
 namespace Cosapi\Http\Controllers;
 
 use Cosapi\Collector\Collector;
+use Cosapi\Http\Requests\QueuesTemplateRequest;
 use Cosapi\Models\QueuesMusicOnHold;
 use Cosapi\Models\QueuesTemplate;
 use Illuminate\Http\Request;
@@ -114,6 +115,14 @@ class QueuesTemplateController extends CosapiController
                 'idTemplateQueue'        => '',
                 'nameTemplateQueue'      => '',
                 'selectedMusicOnHold'    => '',
+                'selectedJoinEmpty'      => '',
+                'timeOut'                => '',
+                'memberDelay'            => '',
+                'selectedRingInUse'      => '',
+                'selectedAutoPause'      => '',
+                'selectedAutoPauseBusy'  => '',
+                'wrapUptime'             => '',
+                'maxLen'                 => '',
                 'countMusicOnHold'       => $countMusicOnHold
             ));
         } else {
@@ -124,6 +133,14 @@ class QueuesTemplateController extends CosapiController
                 'idTemplateQueue'        => $request->valueID,
                 'nameTemplateQueue'      => $getTemplateQueue[0]['name_template'],
                 'selectedMusicOnHold'    => $getTemplateQueue[0]['music_onhold'],
+                'selectedJoinEmpty'      => $getTemplateQueue[0]['empty_template'],
+                'timeOut'                => $getTemplateQueue[0]['timeout_template'],
+                'memberDelay'            => $getTemplateQueue[0]['memberdelay_template'],
+                'selectedRingInUse'      => $getTemplateQueue[0]['ringinuse_template'],
+                'selectedAutoPause'      => $getTemplateQueue[0]['autopause_template'],
+                'selectedAutoPauseBusy'  => $getTemplateQueue[0]['autopausebusy_template'],
+                'wrapUptime'             => $getTemplateQueue[0]['wrapuptime_template'],
+                'maxLen'                 => $getTemplateQueue[0]['maxlen_template'],
                 'countMusicOnHold'       => $countMusicOnHold
             ));
         }
@@ -174,22 +191,22 @@ class QueuesTemplateController extends CosapiController
         return ['message' => 'Error'];
     }
 
-    public function saveFormTemplateQueues(Request $request)
+    public function saveFormTemplateQueues(QueuesTemplateRequest $request)
     {
         if ($request->ajax()) {
             $teamplateQueueQuery = QueuesTemplate::updateOrCreate([
                 'id' => $request->templateQueueID
             ], [
-                'name_template' => $request->nameQueue,
+                'name_template' => $request->nameTemplateQueue,
                 'music_onhold' => $request->selectedMusicOnHold,
-                'empty_template' => 'yes',
-                'timeout_template' => 10,
-                'memberdelay_template' => 1,
-                'ringinuse_template' => 'no',
-                'autopause_template' => 'yes',
-                'autopausebusy_template' => 'yes',
-                'wrapuptime_template' => 2,
-                'maxlen_template' => 0,
+                'empty_template' => $request->selectedJoinEmpty,
+                'timeout_template' => $request->timeOut,
+                'memberdelay_template' => $request->memberDelay,
+                'ringinuse_template' => $request->selectedRingInUse,
+                'autopause_template' => $request->selectedAutoPause,
+                'autopausebusy_template' => $request->selectedAutoPauseBusy,
+                'wrapuptime_template' => $request->wrapUptime,
+                'maxlen_template' => $request->maxLen,
                 'estado_id' => '1'
             ]);
 

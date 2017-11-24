@@ -32,6 +32,14 @@
                 </select>
             </div>
             <div class="form-group">
+                <label>Templates</label>
+                <select name="selectedTemplate" class="form-control">
+                    @foreach ($optionsTemplate as $template)
+                        <option value="{{ $template['id'] }}" {{ $template['id'] === $selectedTemplate ? "selected" : "" }}>{{ $template['name_template'] }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
                 <label>N° Limit Call Waiting</label>
                 <input type="text" name="limitCallWaiting" class="form-control" placeholder="Enter Limit Call Waiting" value="{{ $numLimitCallWaiting }}" onkeypress="return filterNumber(event)" onkeydown="return BlockCopyPaste(event)">
             </div>

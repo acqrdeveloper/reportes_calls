@@ -28,6 +28,7 @@ class QueuesRequest extends Request
             'numVdn'              => 'required|min:4|max:5|unique:queues,vdn,'.$this->queueID,
             'selectedStrategy'    => 'required',
             'selectedPriority'    => 'required',
+            'selectedTemplate'    => 'required',
             'limitCallWaiting'    => 'required',
             'selectedMusic'       => 'required'
         ];
@@ -41,7 +42,8 @@ class QueuesRequest extends Request
             'numVdn.min'                    => 'El número de VDN debe ser minimo de 4 números',
             'numVdn.max'                    => 'El número de VDN debe ser máximo de 5 números',
             'selectedStrategy.required'     => 'Debes escoger una Estrategia',
-            'selectedPriority.required'     => 'Debes escoger una prioridad',
+            'selectedPriority.required'     => 'Debes escoger una Prioridad',
+            'selectedTemplate.required'     => 'Debes escoger un Template',
             'limitCallWaiting.required'     => 'Debes colocar un limite de llamadas encoladas',
             'selectedMusic.required'        => 'Debes escoger una musica para la cola',
             'nameQueue.unique'              => 'El nombre de la Cola ingresada ya existe',

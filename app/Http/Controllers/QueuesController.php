@@ -113,6 +113,7 @@ class QueuesController extends CosapiController
                 'updateForm'             => false,
                 'optionsStrategy'        => $options['Strategy'],
                 'optionsPriority'        => $options['Priority'],
+                'optionsTemplate'        => $options['Template'],
                 'optionsMusic'           => $options['Music'],
                 'idQueue'                => '',
                 'nameQueue'              => '',
@@ -120,6 +121,7 @@ class QueuesController extends CosapiController
                 'numLimitCallWaiting'    => '',
                 'selectedStrategy'       => '',
                 'selectedPriority'       => '',
+                'selectedTemplate'       => '',
                 'selectedMusic'          => '',
                 'countTemplateQueues'    => $countTemplateQueues
             ));
@@ -129,6 +131,7 @@ class QueuesController extends CosapiController
                 'updateForm'             => true,
                 'optionsStrategy'        => $options['Strategy'],
                 'optionsPriority'        => $options['Priority'],
+                'optionsTemplate'        => $options['Template'],
                 'optionsMusic'           => $options['Music'],
                 'idQueue'                => $request->valueID,
                 'nameQueue'              => $getQueue[0]['name'],
@@ -136,6 +139,7 @@ class QueuesController extends CosapiController
                 'numLimitCallWaiting'    => $getQueue[0]['limit_call_waiting'],
                 'selectedStrategy'       => $getQueue[0]['queues_strategy_id'],
                 'selectedPriority'       => $getQueue[0]['queues_priority_id'],
+                'selectedTemplate'       => $getQueue[0]['queues_template_id'],
                 'selectedMusic'          => $getQueue[0]['queues_music_id'],
                 'countTemplateQueues'    => $countTemplateQueues
             ));
@@ -183,9 +187,15 @@ class QueuesController extends CosapiController
             ->get()
             ->toArray();
 
+        $template = QueuesTemplate::Select()
+            ->where('estado_id','=','1')
+            ->get()
+            ->toArray();
+
         $users = $this->getUsers();
         $options['Strategy']  = $strategy;
         $options['Priority']  = $priority;
+        $options['Template']  = $template;
         $options['Music']     = $music;
         $options['Users']     = $users;
         return $options;
@@ -255,7 +265,7 @@ class QueuesController extends CosapiController
                 'queues_priority_id' => $request->selectedPriority,
                 'limit_call_waiting' => $request->limitCallWaiting,
                 'queues_music_id' => $request->selectedMusic,
-                'queues_template_id' => '1',
+                'queues_template_id' => $request->selectedTemplate,
                 'estado_id' => '1'
             ]);
 

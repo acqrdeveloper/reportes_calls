@@ -9,7 +9,7 @@
         <form id="formTemplateQueues">
             <div class="form-group">
                 <label>Name Template Queue</label>
-                <input type="text" name="nameQueue" class="form-control" placeholder="Enter Name Template Queue" value="{{ $nameTemplateQueue }}">
+                <input type="text" name="nameTemplateQueue" class="form-control" placeholder="Enter Name Template Queue" value="{{ $nameTemplateQueue }}" onkeypress="return filterLetter(event)" onkeydown="return BlockCopyPaste(event)">
             </div>
             <div class="form-group">
                 <label>Music On Hold</label>
@@ -19,7 +19,50 @@
                     @endforeach
                 </select>
             </div>
-
+            <div class="form-group">
+                <label>Join Empty</label>
+                <select id="selectedJoinEmpty" name="selectedJoinEmpty" class="form-control">
+                    <option value="yes" {{ $selectedJoinEmpty === 'yes' ? "selected" : "" }}>yes</option>
+                    <option value="no" {{ $selectedJoinEmpty === 'no' ? "selected" : "" }}>no</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>TimeOut</label>
+                <input type="text" name="timeOut" class="form-control" placeholder="Enter Number TimeOut" value="{{ $timeOut }}" onkeypress="return filterNumber(event)" onkeydown="return BlockCopyPaste(event)">
+            </div>
+            <div class="form-group">
+                <label>Member Delay</label>
+                <input type="text" name="memberDelay" class="form-control" placeholder="Enter Number Member Delay" value="{{ $memberDelay }}" onkeypress="return filterNumber(event)" onkeydown="return BlockCopyPaste(event)">
+            </div>
+            <div class="form-group">
+                <label>Ring In Use</label>
+                <select id="selectedRingInUse" name="selectedRingInUse" class="form-control">
+                    <option value="yes" {{ $selectedRingInUse === 'yes' ? "selected" : "" }}>yes</option>
+                    <option value="no" {{ $selectedRingInUse === 'no' ? "selected" : "" }}>no</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>AutoPause</label>
+                <select id="selectedAutoPause" name="selectedAutoPause" class="form-control">
+                    <option value="yes" {{ $selectedAutoPause === 'yes' ? "selected" : "" }}>yes</option>
+                    <option value="no" {{ $selectedAutoPause === 'no' ? "selected" : "" }}>no</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>AutoPause Busy</label>
+                <select id="selectedAutoPauseBusy" name="selectedAutoPauseBusy" class="form-control">
+                    <option value="yes" {{ $selectedAutoPauseBusy === 'yes' ? "selected" : "" }}>yes</option>
+                    <option value="no" {{ $selectedAutoPauseBusy === 'no' ? "selected" : "" }}>no</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Wrap Uptime</label>
+                <input type="text" name="wrapUptime" class="form-control" placeholder="Enter Number Wrap Uptime" value="{{ $wrapUptime }}" onkeypress="return filterNumber(event)" onkeydown="return BlockCopyPaste(event)">
+            </div>
+            <div class="form-group">
+                <label>Max Len</label>
+                <input type="text" name="maxLen" class="form-control" placeholder="Enter Number Max Len" value="{{ $maxLen }}" onkeypress="return filterNumber(event)" onkeydown="return BlockCopyPaste(event)">
+            </div>
             <div class="alert alert-danger formError" style="display: none"></div>
             <input type="hidden" name="templateQueueID" value="{{ $idTemplateQueue }}">
             <div class="modal-footer">
