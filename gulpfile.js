@@ -170,11 +170,24 @@ elixir(function(mix) {
 elixir(function(mix) {
 	mix
 		.styles([
-			'plugins/select2/select2.css'
-		],'public/css/select2.min.css','resources/assets/')
+			'node_modules/bootstrap-select/css/bootstrap-select.css'
+		],'public/css/bootstrap-select.min.css','resources/assets/')
 		.scripts([
-			'plugins/select2/select2.js'
-		],'public/js/select2.min.js','resources/assets/')
+            'node_modules/bootstrap-select/js/bootstrap-select.js'
+		],'public/js/bootstrap-select.min.js','resources/assets/')
+})
+
+/**
+ Generando un solo archivo css y js para la funcionalidad de clockpicker
+ */
+elixir(function(mix) {
+    mix
+        .styles([
+            'node_modules/clockpicker/bootstrap-clockpicker.css'
+        ],'public/css/bootstrap-clockpicker.min.css','resources/assets/')
+        .scripts([
+            'node_modules/clockpicker/bootstrap-clockpicker.js'
+        ],'public/js/bootstrap-clockpicker.min.js','resources/assets/')
 })
 
 /**

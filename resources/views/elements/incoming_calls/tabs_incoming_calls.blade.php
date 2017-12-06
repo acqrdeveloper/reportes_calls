@@ -24,6 +24,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Hour</th>
+                    <th>Fecha Hora</th>
                     <th>Telephone</th>
                     <th>Agent</th>
                     <th>Skill</th>
@@ -41,10 +42,14 @@
 <script type="text/javascript">
 $(document).ready(function(){
     showTabIncoming('calls_completed')
-    DataTableHide('table-incoming',[8,9],'{{Session::get('UserRole')}}')
+    DataTableHide(true,'table-incoming',[8,9],'{{Session::get('UserRole')}}')
+    DataTableHide(false,'table-incoming',[2])
 })
 
+filterDateHourDatatable('#table-incoming',2)
+
 $('.nav-tabs > li').click(function() {
-    DataTableHide('table-incoming',[8,9],'{{Session::get('UserRole')}}')
+    DataTableHide(true,'table-incoming',[8,9],'{{Session::get('UserRole')}}')
+    DataTableHide(false,'table-incoming',[2])
 })
 </script>

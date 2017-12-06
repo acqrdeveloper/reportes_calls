@@ -24,21 +24,19 @@ class OutgoingCallsController extends CosapiController
             if ($request->fecha_evento){
                 return $this->list_calls_outgoing($request->fecha_evento);
             }else{
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(
+                    'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewButtonSearch','viewButtonExport','viewCustomFilter'
+                ),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.outgoing_calls.outgoing_calls',
                     'titleReport'           => 'Report of Calls Outbound',
-                    'boxReport'             => true,
-                    'dateHourFilter'        => true,
-                    'dateFilter'            => true,
-                    'viewDateSearch'        => true,
-                    'viewDateSingleSearch'  => false,
-                    'viewHourSearch'        => false,
-                    'viewRolTypeSearch'     => false,
-                    'viewButtonSearch'      => true,
-                    'viewButtonExport'      => true,
                     'exportReport'          => 'export_outgoing',
                     'nameRouteController'   => 'outgoing_calls'
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }
@@ -174,6 +172,7 @@ class OutgoingCallsController extends CosapiController
             $outgoingcollection->push([
                 'date'                      => $view['date'],
                 'hour'                      => $view['hour'],
+                'fecha_hora'                => $view['date'].' '.$view['hour'],
                 'annexedorigin'             => $view['annexedorigin'],
                 'destination'               => $view['destination'],
                 'calltime'                  => $view['calltime'],

@@ -7,6 +7,7 @@
                         <th>NOMBRE COMPLETO</th>
                         <th>FECHA</th>
                         <th>HORA</th>
+                        <th>FECHA HORA</th>
                         <th>NOMBRE DEL EVENTO</th>
                         <th>REALIZADO POR</th>
                     </tr>
@@ -18,10 +19,14 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        buscar();
-    });
+        buscar()
+    })
+
+    filterSelectDatatable('#filter_fullname','#table-detail-events',0)
+    filterDateHourDatatable('#table-detail-events',3)
 
     function buscar(){
-        showTabDetailEvents('events_detail');
+        showTabDetailEvents('events_detail')
+        DataTableHide(false,'table-detail-events',[3])
     }
 </script>

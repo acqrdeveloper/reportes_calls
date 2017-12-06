@@ -422,7 +422,7 @@ function detailEvents($detalleEventos){
 
     foreach($detalleEventos as  $key => $detalleEvento){
 
-        $detailEvents[$key]['full_name_user']   = $detalleEvento['user']['primer_nombre'].'  '.$detalleEvento['user']['segundo_nombre'].'  '.$detalleEvento['user']['apellido_paterno'].'  '.$detalleEvento['user']['apellido_materno'];
+        $detailEvents[$key]['full_name_user']   = $detalleEvento['user']['primer_nombre'].' '.$detalleEvento['user']['segundo_nombre'].' '.$detalleEvento['user']['apellido_paterno'].' '.$detalleEvento['user']['apellido_materno'];
         $detailEvents[$key]['fecha_evento']     = $detalleEvento['fecha_evento'];
         $detailEvents[$key]['name_evento']      = $detalleEvento['evento']['name'];
         $evento_realizado                       = $detalleEvento['observaciones'];

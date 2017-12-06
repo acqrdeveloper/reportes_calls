@@ -20,20 +20,17 @@ class BroadcastMessageController extends CosapiController
             if ($request->fecha_evento) {
                 return $this->list_queues();
             } else {
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.broadcast.broadcast_message',
                     'titleReport'           => 'Broadcast Message',
-                    'boxReport'             => false,
-                    'dateHourFilter'        => false,
-                    'dateFilter'            => false,
-                    'viewDateSearch'        => false,
-                    'viewDateSingleSearch'  => false,
-                    'viewHourSearch'        => false,
-                    'viewButtonSearch'      => false,
-                    'viewButtonExport'      => false,
-                    'exportReport'          => false,
+                    'exportReport'          => '',
                     'nameRouteController'   => 'broadcast_message'
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }

@@ -8,6 +8,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Hour</th>
+                    <th>Fecha Hora</th>
                     <th>Agents</th>
                 </tr>
                 </thead>
@@ -18,9 +19,13 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        buscar();
+        buscar()
     })
+
+    filterDateHourDatatable('#table-agentOnline',2)
+
     function buscar(){
         showTabAgentOnline('agents_online')
+        DataTableHide(false,'table-agentOnline',[2])
     }
 </script>

@@ -19,21 +19,17 @@ class SoundMassiveController extends CosapiController
             if ($request->fecha_evento) {
                 return $this->list_sound_massive();
             } else {
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.manage.asterisk.asterisk_sound_massive',
                     'titleReport'           => 'Manage Sound Massive',
-                    'boxReport'             => false,
-                    'dateHourFilter'        => false,
-                    'dateFilter'            => false,
-                    'viewDateSearch'        => false,
-                    'viewDateSingleSearch'  => false,
-                    'viewHourSearch'        => false,
-                    'viewRolTypeSearch'     => false,
-                    'viewButtonSearch'      => false,
-                    'viewButtonExport'      => false,
                     'exportReport'          => 'export_list_sound_massive',
                     'nameRouteController'   => 'manage_sound_massive'
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }

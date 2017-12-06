@@ -7,16 +7,19 @@
             </div>
             <div class="modal-body">
                 <div class="alert bg-gray">
-                    <b>Total ACD : </b> Inbound + Hold Inbound + Ring Inbound Interno + Inbound Interno + Hold Inbound Interno
+                    <b>Total ACD : </b> Inbound + Hold Inbound
                 </div>
                 <div class="alert bg-gray">
-                    <b>Total Outbound : </b> OutBound + Ring Outbound + Hold Outbound + Outbound Interno + Hold Outbound Interno
+                    <b>Total Outbound : </b> OutBound + Ring Outbound + Hold Outbound
                 </div>
                 <div class="alert bg-gray">
-                    <b>Auxxiliares S/BackOffice : </b> Break + SSHH + Refrigerio + Feedback + Capacitacion
+                    <b>Backoffice : </b> Gestión BackOffice + Inbound Interno + Ring Inbound Interno + Hold Inbound Interno + Outbound Interno + Ring Outbound Interno + Hold Outbound Interno
                 </div>
                 <div class="alert bg-gray">
-                    <b>Auxiliares C/BackOffice : </b> Break + SSHH + Refrigerio + Feedback + Capacitación + Gestión BackOffice
+                    <b>Auxiliares S/BackOffice : </b> Break + SSHH + Refrigerio + Feedback + Capacitacion
+                </div>
+                <div class="alert bg-gray">
+                    <b>Auxiliares C/BackOffice : </b> Break + SSHH + Refrigerio + Feedback + Capacitación + Backoffice
                 </div>
                 <div class="alert bg-gray">
                     <b>Nivel Ocupación S/BackOffice : </b>
@@ -27,7 +30,7 @@
                 <div class="alert bg-gray">
                     <b>Nivel Ocupación C/BackOffice : </b>
                     <span>
-                        (Total ACD + Total Outbound + Gestión BackOffice ) / (Total Logeo - Auxiliares S/BackOffice)
+                        (Total ACD + Total Outbound + Backoffice ) / (Total Logeo - Auxiliares S/BackOffice)
                     </span>
                 </div>
             </div>

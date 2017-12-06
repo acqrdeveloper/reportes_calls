@@ -27,6 +27,23 @@
                                         <input type="text" id="texto" name="fecha_evento" class="form-control fecha_evento_single pull-right" >
                                     @endif
                                 </div>
+
+                                @if($customDataFilter != '')
+                                    <td>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-user"></i>
+                                            </div>
+                                            <select class="show-tick show-menu-arrow" id="filter_fullname" data-live-search="true" data-width="100%" data-header="Buscar por Nombre Completo">
+                                                <option value="">Buscar por Nombre Completo</option>
+                                                @foreach($customDataFilter as $key => $customData)
+                                                    <option value="{{ $customDataFilter[$key] }}">{{ $customDataFilter[$key] }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </td>
+                                @endif
+
                             </div>
                         @endif
                         @if($viewHourSearch)
@@ -76,20 +93,17 @@
             </div>
         @endif
         @if($viewButtonExport)
-        <div class="box-body">
-            <div class="row">
-                <div class="col-md-12">
+            <div class="box-body">
+                <div class="row">
                     <div class="col-md-12">
                         <div class="text-center">
                             <div class="btn-group">
                                 @include('layout.recursos.buttons_export')
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
-        </div>
         @endif
 	</div>
 @endif

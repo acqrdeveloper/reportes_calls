@@ -374,4 +374,56 @@ class CosapiController extends Controller
     {
         return User::Select()->where('id', $userID)->get()->toArray();
     }
+
+    function customDataFilter(){
+        $listUsers  = User::Select()
+                        ->where('estado_id', '=', '1')
+                        ->whereNotIn('role', ['admin'])
+                        ->orderBy('primer_nombre')
+                        ->orderBy('apellido_paterno')
+                        ->orderBy('apellido_materno')
+                        ->get()
+                        ->toArray();
+
+        $customData = array();
+
+        foreach ($listUsers as $key => $user){
+            $customData['listUsers']['idUser'][$key] = $user['id'];
+            $customData['listUsers']['fullName'][$key] = $user['primer_nombre'].' '.$user['segundo_nombre'].' '.$user['apellido_paterno'].' '.$user['apellido_materno'];
+        }
+
+        return $customData;
+    }
+
+    /**
+     * [reportAction Función que habilita las opciones que existen en los reportes]
+     * @param boxReport Habilita el contenedor de las opciones del reporte
+     * @param dateHourFilter Habilita el contenedor donde se encuentra los input para poder filtrar por fecha, hora, tipo, y el boton que ejecuta la busqueda
+     * @param dateFilter Habilita el input para poder filtrar por fechas los reportes
+     * @param viewDateSearch Habilita la función para que muestre un calendario completo
+     * @param viewDateSingleSearch Habilita la función para que muestre un calendario simple
+     * @param viewHourSearch Habilita el input para filtrar por una hora o media hora
+     * @param viewRolTypeSearch Habilita el filtro por rol
+     * @param viewButtonSearch Habilita el boton para ejecutar la busqueda
+     * @param viewButtonExport Habilita los botones para exportar la informaci
+     * @param viewCustomFilter
+     * @param $customDataFilter
+     * @return Devuelve un array con las opciones del reporte
+     */
+
+    function reportAction($arrayAction, $customDataFilter){
+        return array(
+            'boxReport'             => in_array('boxReport',$arrayAction) ? true : false,
+            'dateHourFilter'        => in_array('dateHourFilter',$arrayAction) ? true : false,
+            'dateFilter'            => in_array('dateFilter',$arrayAction) ? true : false,
+            'viewDateSearch'        => in_array('viewDateSearch',$arrayAction) ? true : false,
+            'viewDateSingleSearch'  => in_array('viewDateSingleSearch',$arrayAction) ? true : false,
+            'viewHourSearch'        => in_array('viewHourSearch',$arrayAction) ? true : false,
+            'viewRolTypeSearch'     => in_array('viewRolTypeSearch',$arrayAction) ? true : false,
+            'viewButtonSearch'      => in_array('viewButtonSearch',$arrayAction) ? true : false,
+            'viewButtonExport'      => in_array('viewButtonExport',$arrayAction) ? true : false,
+            'viewCustomFilter'      => in_array('viewCustomFilter',$arrayAction) ? true : false,
+            'customDataFilter'      => $customDataFilter
+        );
+    }
 }

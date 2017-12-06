@@ -22,21 +22,17 @@ class QueuesMusicOnHoldController extends CosapiController
             if ($request->fecha_evento) {
                 return $this->list_music_on_hold();
             } else {
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.manage.asterisk.asterisk_music_on_hold',
                     'titleReport'           => 'Manage Music On Hold',
-                    'boxReport'             => false,
-                    'dateHourFilter'        => false,
-                    'dateFilter'            => false,
-                    'viewDateSearch'        => false,
-                    'viewDateSingleSearch'  => false,
-                    'viewHourSearch'        => false,
-                    'viewRolTypeSearch'     => false,
-                    'viewButtonSearch'      => false,
-                    'viewButtonExport'      => false,
                     'exportReport'          => '',
                     'nameRouteController'   => 'manage_music_on_hold'
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }

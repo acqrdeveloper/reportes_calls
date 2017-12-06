@@ -22,21 +22,19 @@ class SurveysController extends CosapiController
             if ($request->fecha_evento){
                 return $this->list_surveys($request->fecha_evento, $request->evento);
             }else{
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(
+                    'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewButtonExport'
+                ),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.surveys.surveys',
                     'titleReport'           => 'Report of Surveys',
-                    'boxReport'             => true,
-                    'dateHourFilter'        => true,
-                    'dateFilter'            => true,
-                    'viewDateSearch'        => true,
-                    'viewDateSingleSearch'  => false,
-                    'viewHourSearch'        => false,
-                    'viewRolTypeSearch'     => true,
-                    'viewButtonSearch'      => false,
-                    'viewButtonExport'      => true,
                     'exportReport'          => 'export_surveys',
                     'nameRouteController'   => ''
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }
@@ -195,6 +193,7 @@ class SurveysController extends CosapiController
                 'Type Survey'       =>  $view['Type Survey'],
                 'Date'              =>  $view['Date'],
                 'Hour'              =>  $view['Hour'],
+                'fecha_hora'        =>  $view['Date'].' '.$view['Hour'],
                 'Username'          =>  $view['Username'],
                 'Anexo'             =>  $view['Anexo'],
                 'Telephone'         =>  $view['Telephone'],

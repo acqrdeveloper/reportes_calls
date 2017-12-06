@@ -24,7 +24,7 @@ const dataTables = (nombreDIV, data, route) => {
 		},
 		'paging': true,
 		'pageLength': 100,
-		'lengthMenu': [100, 200, 300, 400, 500],
+		'lengthMenu': [100, 200, 300, 400, 500, 1000, 1500],
 		'scrollY': '300px',
 		'scrollX': true,
 		'scrollCollapse': true,
@@ -79,6 +79,7 @@ const columnsDatatable = (route) => {
 		columns = [
 			{'data': 'date', 'order': 'asc'},
 			{'data': 'hour'},
+			{'data': 'fecha_hora'},
 			{'data': 'telephone'},
 			{'data': 'agent'},
 			{'data': 'skill'},
@@ -95,6 +96,7 @@ const columnsDatatable = (route) => {
 			{'data': 'Type Survey', 'order': 'asc'},
 			{'data': 'Date'},
 			{'data': 'Hour'},
+			{'data': 'fecha_hora'},
 			{'data': 'Username'},
 			{'data': 'Anexo'},
 			{'data': 'Telephone'},
@@ -150,6 +152,7 @@ const columnsDatatable = (route) => {
 			{'data': 'nombre_agente', 'order': 'asc'},
 			{'data': 'fecha'},
 			{'data': 'hora'},
+			{'data': 'fecha_hora'},
 			{'data': 'evento'},
 			{'data': 'accion'}
 		]
@@ -159,6 +162,7 @@ const columnsDatatable = (route) => {
 		columns = [
 			{'data': 'date', 'order': 'asc'},
 			{'data': 'hour'},
+            {'data': 'fecha_hora'},
 			{'data': 'annexedorigin'},
 			{'data': 'username'},
 			{'data': 'destination'},
@@ -172,6 +176,7 @@ const columnsDatatable = (route) => {
 		columns = [
 			{'data': 'date', 'order': 'asc'},
 			{'data': 'hour'},
+			{'data': 'fecha_hora'},
 			{'data': 'agents'}
 		]
 	}
@@ -239,11 +244,17 @@ const columnsDatatable = (route) => {
  * @param {Array}  numeroColumnas[Se pasan los numeros de columnas que se desean ocultar]
  * @return Oculta las columnas en el datatable
  */
-const DataTableHide = (nombreDIV, numeroColumnas, roleUser) => {
-	let exist = RoleTableHide().indexOf(roleUser)
-	if (exist >= 0) {
-		let DataTableDiv = $(`#${nombreDIV}`).DataTable()
-		DataTableDiv.columns(numeroColumnas).visible(false, false)
-		DataTableDiv.columns.adjust().draw(false)
+const DataTableHide = (filterRole, nameDatatable, numeroColumnas, roleUser) => {
+	if(filterRole){
+        let exist = RoleTableHide().indexOf(roleUser)
+        if (exist >= 0) {
+            let DataTableDiv = $(`#${nameDatatable}`).DataTable()
+            DataTableDiv.columns(numeroColumnas).visible(false, false)
+            DataTableDiv.columns.adjust().draw(false)
+        }
+	}else{
+        let DataTableDiv = $(`#${nameDatatable}`).DataTable()
+        DataTableDiv.columns(numeroColumnas).visible(false, false)
+        DataTableDiv.columns.adjust().draw(false)
 	}
 }

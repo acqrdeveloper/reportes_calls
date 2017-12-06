@@ -32,21 +32,16 @@ class UserController extends CosapiController
             if ($request->fecha_evento) {
                 return $this->list_users();
             } else {
-                return view('elements/index')->with(array(
+                $arrayReport = $this->reportAction(array(),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'               => 'elements.manage.manage_users',
                     'titleReport'               => 'Manage Users',
-                    'boxReport'                 => false,
-                    'dateHourFilter'            => false,
-                    'dateFilter'                => false,
-                    'viewDateSearch'            => false,
-                    'viewDateSingleSearch'      => false,
-                    'viewHourSearch'            => false,
-                    'viewRolTypeSearch'         => false,
-                    'viewButtonSearch'          => false,
-                    'viewButtonExport'          => false,
                     'exportReport'              => 'export_list_user',
                     'nameRouteController'       => 'manage_users'
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }

@@ -7,8 +7,8 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Login</th>
-                    <th>ACD</th>
+                    <th>Fuera de Tiempo</th>
+                    <th>Disponible</th>
                     <th>Break</th>
                     <th>SS.HH</th>
                     <th>Refrigerio</th>
@@ -16,16 +16,16 @@
                     <th>Capacitación</th>
                     <th>Gestión BackOffice</th>
                     <th>Inbound</th>
-                    <th>OutBound</th>
                     <th>Ring Inbound</th>
-                    <th>Ring Outbound</th>
                     <th>Hold Inbound</th>
+                    <th>OutBound</th>
+                    <th>Ring Outbound</th>
                     <th>Hold Outbound</th>
-                    <th>Ring Inbound Interno</th>
                     <th>Inbound Interno</th>
+                    <th>Ring Inbound Interno</th>
+                    <th>Hold Inbound Interno</th>
                     <th>Outbound Interno</th>
                     <th>Ring Outbound Interno</th>
-                    <th>Hold Inbound Interno</th>
                     <th>Hold Outbound Interno</th>
                     <th>Ring Inbound Transfer</th>
                     <th>Inbound Transfer</th>
@@ -66,8 +66,8 @@
             },
             "columns"    : [
                 {"data" : "Name"},
-                {"data" : "Login"},
-                {"data" : "ACD"},
+                {"data" : "Fuera de Tiempo"},
+                {"data" : "Disponible"},
                 {"data" : "Break"},
                 {"data" : "SSHH"},
                 {"data" : "Refrigerio"},
@@ -75,13 +75,13 @@
                 {"data" : "Capacitacion"},
                 {"data" : "Gestion BackOffice"},
                 {"data" : "Inbound"},
-                {"data" : "OutBound"},
                 {"data" : "Ring Inbound"},
-                {"data" : "Ring Outbound"},
                 {"data" : "Hold Inbound"},
+                {"data" : "OutBound"},
+                {"data" : "Ring Outbound"},
                 {"data" : "Hold Outbound"},
-                {"data" : "Ring Inbound Interno"},
                 {"data" : "Inbound Interno"},
+                {"data" : "Ring Inbound Interno"},
                 {"data" : "Outbound Interno"},
                 {"data" : "Ring Outbound Interno"},
                 {"data" : "Hold Inbound Interno"},

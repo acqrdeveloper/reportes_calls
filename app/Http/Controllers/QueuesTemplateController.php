@@ -21,21 +21,17 @@ class QueuesTemplateController extends CosapiController
             if ($request->fecha_evento) {
                 return $this->list_template_queues();
             } else {
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.manage.asterisk.template.template_queues',
                     'titleReport'           => 'Manage Template Queues',
-                    'boxReport'             => false,
-                    'dateHourFilter'        => false,
-                    'dateFilter'            => false,
-                    'viewDateSearch'        => false,
-                    'viewDateSingleSearch'  => false,
-                    'viewHourSearch'        => false,
-                    'viewRolTypeSearch'     => false,
-                    'viewButtonSearch'      => false,
-                    'viewButtonExport'      => false,
                     'exportReport'          => '',
                     'nameRouteController'   => 'manage_template_queues'
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }

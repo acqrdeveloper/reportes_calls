@@ -23,21 +23,19 @@ class AgentsOnlineController extends CosapiController
             if ($request->fecha_evento){
                 return $this->agents_online($request->fecha_evento);
             }else{
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(
+                    'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewButtonSearch','viewButtonExport','viewCustomFilter'
+                ),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.agents_online.agents-online',
                     'titleReport'           => 'Report of Agent Online',
-                    'boxReport'             => true,
-                    'dateHourFilter'        => true,
-                    'dateFilter'            => true,
-                    'viewDateSearch'        => true,
-                    'viewDateSingleSearch'  => false,
-                    'viewHourSearch'        => false,
-                    'viewRolTypeSearch'     => false,
-                    'viewButtonSearch'      => true,
-                    'viewButtonExport'      => true,
                     'exportReport'          => 'export_agents_online',
                     'nameRouteController'   => 'agents_online'
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
 
@@ -105,9 +103,10 @@ class AgentsOnlineController extends CosapiController
         foreach ($builderview as $view) {
 
             $outgoingcollection->push([
-                'date'      => $view['date'],
-                'hour'      => $view['hour'],
-                'agents'    => $view['agents']
+                'date'          => $view['date'],
+                'hour'          => $view['hour'],
+                'fecha_hora'    => $view['date'].' '.$view['hour'],
+                'agents'        => $view['agents']
             ]);
 
         }

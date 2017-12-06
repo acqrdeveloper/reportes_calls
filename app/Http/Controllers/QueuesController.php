@@ -2,6 +2,7 @@
 
 namespace Cosapi\Http\Controllers;
 
+use Carbon\Carbon;
 use Cosapi\Collector\Collector;
 use Cosapi\Models\QueueMusic;
 use Cosapi\Models\Queues;
@@ -11,6 +12,7 @@ use Cosapi\Models\QueueStrategy;
 use Cosapi\Models\User;
 use Cosapi\Models\Users_Queues;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 use Cosapi\Http\Requests;
@@ -25,21 +27,17 @@ class QueuesController extends CosapiController
             if ($request->fecha_evento) {
                 return $this->list_queues();
             } else {
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.manage.asterisk.asterisk_queues',
                     'titleReport'           => 'Manage Queues',
-                    'boxReport'             => false,
-                    'dateHourFilter'        => false,
-                    'dateFilter'            => false,
-                    'viewDateSearch'        => false,
-                    'viewDateSingleSearch'  => false,
-                    'viewHourSearch'        => false,
-                    'viewRolTypeSearch'     => false,
-                    'viewButtonSearch'      => false,
-                    'viewButtonExport'      => false,
-                    'exportReport'          => 'export_list_user',
+                    'exportReport'          => '',
                     'nameRouteController'   => 'manage_queues'
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }
@@ -306,7 +304,9 @@ class QueuesController extends CosapiController
                     ], [
                         'user_id' => $valUserQueue,
                         'queue_id' => $request->queueID,
-                        'priority' => $request->selectPriority[$keyUserQueue]
+                        'priority' => $request->selectPriority[$keyUserQueue],
+                        'audit_user' => Auth::id(),
+                        'audit_date' => Carbon::now()
                     ]);
                 }
                 if ($queueUserQuery) {

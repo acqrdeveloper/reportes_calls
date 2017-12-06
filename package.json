@@ -14,6 +14,8 @@
   "dependencies": {
     "babel-runtime": "^6.23.0",
     "bootstrap-sass": "^3.0.0",
+    "bootstrap-select": "^1.12.4",
+    "clockpicker": "0.0.7",
     "daterangepicker": "^2.1.25",
     "highcharts": "^5.0.14",
     "laravel-elixir-webpack": "^1.0.1",

@@ -41,7 +41,6 @@ class DashboardController extends IncomingCallsController
             }
 
             $listEventos = Eventos::select('id', 'name')->Orderby('id')->get()->toArray();
-
             return response()->json([
               'listAllUserProfile' => $listProfile,
               'listAllEventos' => $listEventos,
@@ -77,18 +76,17 @@ class DashboardController extends IncomingCallsController
                     $groupEvent = $this->get_events($nameEvent);
 
                     $queueLog = Queue_Log::select()
-            ->whereIn('event', $groupEvent)
-            ->whereBetween('datetime', [$dateStart, $dateEnd])
-            ->filtro_time($metrica)
-            ->count();
+                                    ->whereIn('event', $groupEvent)
+                                    ->whereBetween('datetime', [$dateStart, $dateEnd])
+                                    ->filtro_time($metrica)
+                                    ->count();
 
                     $resultKpis[$kpi->name] = [
-            'message' => $queueLog,
-            'symbol' => $kpi->symbol,
-            'time' => $kpi->time
-          ];
+                        'message' => $queueLog,
+                        'symbol' => $kpi->symbol,
+                        'time' => $kpi->time
+                      ];
                 }
-
                 return response()->json([$resultKpis], 200);
             } catch (\Exception $e) {
                 return response()->json(['message' => $e->getMessage()], 500);
@@ -118,7 +116,6 @@ class DashboardController extends IncomingCallsController
                             ->whereIn('agent_role', $request->filterRoles)
                             ->groupBy('event_id')
                             ->get()->toArray();
-
             return response()->json(['message' => $AgentOnline], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);

@@ -26,21 +26,19 @@ class IncomingCallsController extends CosapiController
             if ($request->evento){
                 return $this->calls_incoming($request->fecha_evento, $request->evento);
             }else{
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(
+                    'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewButtonExport','viewCustomFilter'
+                ),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.incoming_calls.tabs_incoming_calls',
                     'titleReport'           => 'Report of Calls Inbound',
-                    'boxReport'             => true,
-                    'dateHourFilter'        => true,
-                    'dateFilter'            => true,
-                    'viewDateSearch'        => true,
-                    'viewDateSingleSearch'  => false,
-                    'viewRolTypeSearch'     => false,
-                    'viewHourSearch'        => false,
-                    'viewButtonSearch'      => false,
-                    'viewButtonExport'      => true,
                     'exportReport'          => 'export_incoming',
                     'nameRouteController'   => ''
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }
@@ -201,6 +199,7 @@ class IncomingCallsController extends CosapiController
             $incomingcollection->push([
                 'date'                      => $view['date'],
                 'hour'                      => $view['hour'],
+                'fecha_hora'                => $view['date'].' '.$view['hour'],
                 'telephone'                 => $view['telephone'],
                 'agent'                     => $view['agent'],
                 'skill'                     => $view['skill'],

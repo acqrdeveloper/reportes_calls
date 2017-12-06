@@ -20,21 +20,19 @@ class DetailEventsReportController extends CosapiController
             if ($request->fecha_evento){
                 return $this->list_detail_event_report($request->fecha_evento, $request->filter_rol, $request->group_filter);
             }else{
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(
+                    'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewRolTypeSearch','viewButtonSearch','viewButtonExport'
+                ),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.details_events_report.details_events_report',
-                    'titleReport'           => 'Report of Details Events Report (Beta)',
-                    'boxReport'             => true,
-                    'dateHourFilter'        => true,
-                    'dateFilter'            => true,
-                    'viewDateSearch'        => true,
-                    'viewDateSingleSearch'  => false,
-                    'viewHourSearch'        => false,
-                    'viewRolTypeSearch'     => true,
-                    'viewButtonSearch'      => true,
-                    'viewButtonExport'      => true,
+                    'titleReport'           => 'Report Level of Occupation',
                     'exportReport'          => 'export_details_events_report',
                     'nameRouteController'   => ''
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }
@@ -57,17 +55,28 @@ class DetailEventsReportController extends CosapiController
         $builderview = [];
         $posicion = 0;
         foreach ($query_detail_event_report as $query_event) {
-            $totalACD = $query_event->Inbound + $query_event->Hold_Inbound + $query_event->Ring_Inbound_Interno + $query_event->Inbound_Interno + $query_event->Hold_Inbound_Interno;
-            $totalOutbound = $query_event->OutBound + $query_event->Ring_Outbound + $query_event->Hold_Outbound + $query_event->Outbound_Interno + $query_event->Hold_Outbound_Interno;
+
+            $totalACD = $query_event->Inbound + $query_event->Hold_Inbound;
+
+            $totalOutbound = $query_event->OutBound + $query_event->Ring_Outbound + $query_event->Hold_Outbound;
+
+            $totalBackoffice = $query_event->Gestion_BackOffice + $query_event->Inbound_Interno + $query_event->Ring_Inbound_Interno + $query_event->Hold_Inbound_Interno + $query_event->Outbound_Interno + $query_event->Ring_Outbound_Interno + $query_event->Hold_Outbound_Interno;
+
             $totalAuxiliares = $query_event->Break + $query_event->SSHH + $query_event->Refrigerio + $query_event->Feedback + $query_event->Capacitacion;
-            $totalAuxiliaresBack = $query_event->Break + $query_event->SSHH + $query_event->Refrigerio + $query_event->Feedback + $query_event->Capacitacion + $query_event->Gestion_BackOffice;
-            $totalSuma = $query_event->Login + $query_event->ACD + $query_event->Break + $query_event->SSHH + $query_event->Refrigerio + $query_event->Feedback + $query_event->Capacitacion + $query_event->Gestion_BackOffice + $query_event->Inbound + $query_event->OutBound + $query_event->Ring_Inbound + $query_event->Ring_Outbound + $query_event->Hold_Inbound + $query_event->Hold_Outbound + $query_event->Ring_Inbound_Interno + $query_event->Inbound_Interno + $query_event->Outbound_Interno + $query_event->Ring_Outbound_Interno + $query_event->Hold_Inbound_Interno + $query_event->Hold_Outbound_Interno + $query_event->Ring_Inbound_Transfer + $query_event->Inbound_Transfer + $query_event->Hold_Inbound_Transfer + $query_event->Ring_Outbound_Transfer + $query_event->Hold_Outbound_Transfer + $query_event->Outbound_Transfer;
+
+            $totalAuxiliaresBack = $totalAuxiliares + $totalBackoffice;
+
+            $totalSuma = $query_event->ACD + $query_event->Break + $query_event->SSHH + $query_event->Refrigerio + $query_event->Feedback + $query_event->Capacitacion + $query_event->Gestion_BackOffice + $query_event->Inbound + $query_event->OutBound + $query_event->Ring_Inbound + $query_event->Ring_Outbound + $query_event->Hold_Inbound + $query_event->Hold_Outbound + $query_event->Ring_Inbound_Interno + $query_event->Inbound_Interno + $query_event->Outbound_Interno + $query_event->Ring_Outbound_Interno + $query_event->Hold_Inbound_Interno + $query_event->Hold_Outbound_Interno + $query_event->Ring_Inbound_Transfer + $query_event->Inbound_Transfer + $query_event->Hold_Inbound_Transfer + $query_event->Ring_Outbound_Transfer + $query_event->Hold_Outbound_Transfer + $query_event->Outbound_Transfer + $query_event->Desconectado;
+
             $tiempoLogeo = $totalSuma - $query_event->Desconectado;
+
             $totalOcupacion = ($totalACD + $totalOutbound)/($tiempoLogeo - $totalAuxiliaresBack);
-            $totalOcupacionBack = ($totalACD + $totalOutbound + $query_event->Gestion_BackOffice)/($tiempoLogeo - $totalAuxiliares);
+
+            $totalOcupacionBack = ($totalACD + $totalOutbound + $totalBackoffice)/($tiempoLogeo - $totalAuxiliares);
+
             $builderview[$posicion]['Name']                        = $query_event->date_register;
-            $builderview[$posicion]['Login']                       = conversorSegundosHoras($query_event->Login, false);
-            $builderview[$posicion]['ACD']                         = conversorSegundosHoras($query_event->ACD, false);
+            $builderview[$posicion]['Fuera de Tiempo']             = conversorSegundosHoras($query_event->Login, false);
+            $builderview[$posicion]['Disponible']                  = conversorSegundosHoras($query_event->ACD, false);
             $builderview[$posicion]['Break']                       = conversorSegundosHoras($query_event->Break, false);
             $builderview[$posicion]['SSHH']                        = conversorSegundosHoras($query_event->SSHH, false);
             $builderview[$posicion]['Refrigerio']                  = conversorSegundosHoras($query_event->Refrigerio, false);
@@ -75,16 +84,16 @@ class DetailEventsReportController extends CosapiController
             $builderview[$posicion]['Capacitacion']                = conversorSegundosHoras($query_event->Capacitacion, false);
             $builderview[$posicion]['Gestion BackOffice']          = conversorSegundosHoras($query_event->Gestion_BackOffice, false);
             $builderview[$posicion]['Inbound']                     = conversorSegundosHoras($query_event->Inbound, false);
-            $builderview[$posicion]['OutBound']                    = conversorSegundosHoras($query_event->OutBound, false);
             $builderview[$posicion]['Ring Inbound']                = conversorSegundosHoras($query_event->Ring_Inbound, false);
-            $builderview[$posicion]['Ring Outbound']               = conversorSegundosHoras($query_event->Ring_Outbound, false);
             $builderview[$posicion]['Hold Inbound']                = conversorSegundosHoras($query_event->Hold_Inbound, false);
+            $builderview[$posicion]['OutBound']                    = conversorSegundosHoras($query_event->OutBound, false);
+            $builderview[$posicion]['Ring Outbound']               = conversorSegundosHoras($query_event->Ring_Outbound, false);
             $builderview[$posicion]['Hold Outbound']               = conversorSegundosHoras($query_event->Hold_Outbound, false);
-            $builderview[$posicion]['Ring Inbound Interno']        = conversorSegundosHoras($query_event->Ring_Inbound_Interno, false);
             $builderview[$posicion]['Inbound Interno']             = conversorSegundosHoras($query_event->Inbound_Interno, false);
+            $builderview[$posicion]['Ring Inbound Interno']        = conversorSegundosHoras($query_event->Ring_Inbound_Interno, false);
+            $builderview[$posicion]['Hold Inbound Interno']        = conversorSegundosHoras($query_event->Hold_Inbound_Interno, false);
             $builderview[$posicion]['Outbound Interno']            = conversorSegundosHoras($query_event->Outbound_Interno, false);
             $builderview[$posicion]['Ring Outbound Interno']       = conversorSegundosHoras($query_event->Ring_Outbound_Interno, false);
-            $builderview[$posicion]['Hold Inbound Interno']        = conversorSegundosHoras($query_event->Hold_Inbound_Interno, false);
             $builderview[$posicion]['Hold Outbound Interno']       = conversorSegundosHoras($query_event->Hold_Outbound_Interno, false);
             $builderview[$posicion]['Ring Inbound Transfer']       = conversorSegundosHoras($query_event->Ring_Inbound_Transfer, false);
             $builderview[$posicion]['Inbound Transfer']            = conversorSegundosHoras($query_event->Inbound_Transfer, false);
@@ -110,8 +119,8 @@ class DetailEventsReportController extends CosapiController
         foreach ($builderview_detail_event_report as $view) {
             $eventconsolidatedcollection->push([
                 'Name'                       => $view['Name'],
-                'Login'                      => $view['Login'],
-                'ACD'                        => $view['ACD'],
+                'Fuera de Tiempo'            => $view['Fuera de Tiempo'],
+                'Disponible'                 => $view['Disponible'],
                 'Break'                      => $view['Break'],
                 'SSHH'                       => $view['SSHH'],
                 'Refrigerio'                 => $view['Refrigerio'],
@@ -170,6 +179,7 @@ class DetailEventsReportController extends CosapiController
     protected function export_details_events_report_excel($days, $filter_rol, $type_report){
         $filename = 'details_events_report_'.time();
         $query    = $this->query_detail_event_report($days, $filter_rol, $type_report);
+
         Excel::create($filename, function($excel) use($query) {
             $excel->sheet('Details Events Report', function($sheet) use($query) {
                 $sheet->fromArray($this->builderview_detail_event_report($query));

@@ -179,6 +179,12 @@ return [
 
         /** Ami para conectarse al ASterisk **/
         Cosapi\Providers\PHPAmiServiceProvider::class,
+
+        /** Select Bootstrap **/
+        Cosapi\Providers\SelectBoostrapProvider::class,
+
+        /** ClockPicker Bootstrap **/
+        Cosapi\Providers\ClockPickerProvider::class,
     ],
 
     /*

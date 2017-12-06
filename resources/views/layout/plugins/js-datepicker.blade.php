@@ -1,4 +1,5 @@
 <script src="{{ asset('js/daterangepicker.min.js')}}">  </script>
+<script src="{{ asset('js/bootstrap-clockpicker.min.js')}}">  </script>
 <script type="text/javascript">
 $(document).ready(function() {
     $('input[name="fecha_evento"]').daterangepicker({

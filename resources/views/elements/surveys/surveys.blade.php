@@ -25,6 +25,7 @@
                         <th>Type Survey</th>
                         <th>Date</th>
                         <th>Hour</th>
+                        <th>Fecha Hora</th>
                         <th>Username</th>
                         <th>Anexo</th>
                         <th>Telephone</th>
@@ -44,10 +45,13 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        surveys();
+        surveys()
     })
 
+    filterDateHourDatatable('#table-surveys',3)
+
     function surveys(){
-        showTabSurveys('surveys_inbound');
+        showTabSurveys('surveys_inbound')
+        DataTableHide(false,'table-surveys',[3])
     }
 </script>

@@ -541,3 +541,30 @@ const markCheck = (check) => {
 		$('#select_'+check).attr("disabled", true).val('-')
 	}
 }
+
+// Función que filtra un dato convertido en regex desde un select para un datatable
+const filterSelectDatatable = (nameSelect, nameDatatable, numColumn) => {
+    $(nameSelect).on('change', function() {
+        $(nameDatatable).DataTable().columns(numColumn).search(
+            this.value,2,true,true
+        ).draw()
+    })
+}
+
+
+// Función que filtra un dato convertido en regex desde un input para un datatable
+const filterInputDatatable = (nameInput, nameDatatable, numColumn) => {
+	$(nameInput).on('keyup change', function () {
+        $(nameDatatable).DataTable().columns(numColumn).search(
+            this.value,2,true,true
+        ).draw()
+    })
+}
+
+// Función que filtra en una tabla la hora y fecha por descendiente o ascendiente
+const filterDateHourDatatable = (nameDatatable, columnDateHour) => {
+	$('.sortingDatatable').click(function() {
+		let filter = $(this).data('id')
+        $(nameDatatable).DataTable().order( [[ columnDateHour, filter ]] ).draw()
+	})
+}

@@ -6,6 +6,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Hour</th>
+                    <th>Fecha Hora</th>
                     <th>Annexed Origin</th>
                     <th>Username</th>
                     <th>Number Destination</th>
@@ -21,12 +22,15 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        buscar();
+        buscar()
     })
+
+    filterDateHourDatatable('#table-outgoing',2)
 
     function buscar(){
         showTabOutgoing('outgoing_calls');
-        DataTableHide('table-outgoing',[6,7],'{{Session::get('UserRole')}}')
+        DataTableHide(true,'table-outgoing',[6,7],'{{Session::get('UserRole')}}')
+        DataTableHide(false,'table-outgoing',[2])
     }
 </script>
 

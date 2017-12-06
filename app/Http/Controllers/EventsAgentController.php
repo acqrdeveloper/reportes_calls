@@ -25,21 +25,19 @@ class EventsAgentController extends CosapiController
             if ($request->fecha_evento){
                 return $this->list_event_consolidated($request->fecha_evento);
             }else{
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(
+                    'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewButtonSearch','viewButtonExport'
+                ),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.events_consolidated.events_consolidated',
                     'titleReport'           => 'Report of Events Consolidateds',
-                    'boxReport'             => true,
-                    'dateHourFilter'        => true,
-                    'dateFilter'            => true,
-                    'viewDateSearch'        => true,
-                    'viewDateSingleSearch'  => false,
-                    'viewRolTypeSearch'     => false,
-                    'viewHourSearch'        => false,
-                    'viewButtonSearch'      => true,
-                    'viewButtonExport'      => true,
                     'exportReport'          => 'export_events_consolidated',
                     'nameRouteController'   => ''
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
 
@@ -59,23 +57,21 @@ class EventsAgentController extends CosapiController
                 $objCollection          = $this->convertCollection($array_detail_events);
                 $detail_events          = $this->FormatDatatable($objCollection);
                 return $detail_events;
-
             }else{
-                return view('elements/index')->with(array(
+                $customDataFilter = $this->customDataFilter();
+
+                $arrayReport = $this->reportAction(array(
+                    'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewButtonSearch','viewButtonExport','viewCustomFilter'
+                ),$customDataFilter['listUsers']['fullName']);
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.events_detail.events_detail',
                     'titleReport'           => 'Report of Events',
-                    'boxReport'             => true,
-                    'dateHourFilter'        => true,
-                    'dateFilter'            => true,
-                    'viewDateSearch'        => true,
-                    'viewDateSingleSearch'  => false,
-                    'viewHourSearch'        => false,
-                    'viewRolTypeSearch'     => false,
-                    'viewButtonSearch'      => true,
-                    'viewButtonExport'      => true,
                     'exportReport'          => 'export_events_detail',
                     'nameRouteController'   => ''
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }
@@ -271,6 +267,7 @@ class EventsAgentController extends CosapiController
                 'nombre_agente'     => $data['full_name_user'],
                 'fecha'             => $this->MostrarSoloFecha($data['fecha_evento']),
                 'hora'              => $this->MostrarSoloHora($data['fecha_evento']),
+                'fecha_hora'        => $this->MostrarSoloHora($data['fecha_evento']),
                 'evento'            => $data['name_evento'],
                 'accion'            => $data['accion'],
             ]);

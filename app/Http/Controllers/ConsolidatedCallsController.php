@@ -23,21 +23,19 @@ class ConsolidatedCallsController extends CosapiController
             if ($request->evento){
                 return $this->calls_consolidated($request->fecha_evento, $request->evento, $request->rank_hour);
             }else{
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(
+                    'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewHourSearch','viewButtonExport'
+                ),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.consolidated_calls.tabs_consolidated_calls',
                     'titleReport'           => 'Report of Consolidated Calls',
-                    'boxReport'             => true,
-                    'dateHourFilter'        => true,
-                    'dateFilter'            => true,
-                    'viewDateSearch'        => true,
-                    'viewDateSingleSearch'  => false,
-                    'viewRolTypeSearch'     => false,
-                    'viewHourSearch'        => true,
-                    'viewButtonSearch'      => false,
-                    'viewButtonExport'      => true,
                     'exportReport'          => 'export_consolidated',
                     'nameRouteController'   => ''
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }
