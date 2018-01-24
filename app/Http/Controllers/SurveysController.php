@@ -47,7 +47,7 @@ class SurveysController extends CosapiController
      * @return [array]                [Array de datos de los reportes Surveys]
      */
     protected function list_surveys($fecha_evento, $evento){
-        $query_surveys         = $this->query_surveys($fecha_evento,$evento);
+        $query_surveys         = $this->query_surveys($fecha_evento,$evento);        
         $builderview           = $this->builderview($query_surveys);
         $surveyscollection     = $this->surveyscollection($builderview);   
         $list_call_surveys     = $this->FormatDatatable($surveyscollection);    
@@ -74,15 +74,13 @@ class SurveysController extends CosapiController
      */
     protected function query_surveys($fecha_evento,$events){
 
-        $cantidad_preguntas = 1;       
-        $days                                       = explode(' - ', $fecha_evento);
-        $events_id                                  = $this->get_events($events);
+        $number_of_questions = 1;       
+        $days                           = explode(' - ', $fecha_evento);
+        $events_id                      = $this->get_events($events);
 
-        $list_encuesta                              = \DB::select('call sp_surveys_detail("'.$days[0].'","'.$days[1].'",'.$events_id.')');
-        $resuldato_encuesta                         = \DB::select('call sp_surveys_result("'.$days[0].'","'.$days[1].'",'.$events_id.')');
-        $builderesultado                            = $this->builderesultado($resuldato_encuesta,$cantidad_preguntas);
-        $query_surveys['detalle_llamada']           = $list_encuesta;
-        $query_surveys['preguntas_respuestas']      = $builderesultado;
+        $query_surveys['survey']        = \DB::select('call sp_list_surveys("'.$days[0].'","'.$days[1].'",'.$events_id.')');
+        $survey_detail                  = \DB::select('call sp_list_surveys_detail("'.$days[0].'","'.$days[1].'",'.$events_id.')');
+        $query_surveys['survey_detail'] = $this->buildeResult($survey_detail,$number_of_questions);
         return $query_surveys;
     } 
 
@@ -113,27 +111,27 @@ class SurveysController extends CosapiController
 
 
     /**
-     * [builderesultado Función que contruye la información de los resultados]
-     * @param  [array] $resuldato_encuesta [Resultado de la consulta de la información de la encuesta]
+     * [buildeResult Función que contruye la información de los resultados]
+     * @param  [array] $survey_detail [Resultado de la consulta de la información de la encuesta]
      * @return [array]                     [Array armado con datos ordenados obtenidos]
      */
-    protected function builderesultado($resuldato_encuesta,$cantidad_preguntas){
-        $builderesultado    = [];
-        $secuencia          = 1;
-        foreach ($resuldato_encuesta as $resuldato) {
-            if(!isset($builderesultado[$resuldato->encuesta_id])){
-                for ($incrementador = 1; $incrementador <= $cantidad_preguntas; $incrementador++) { 
-                    $builderesultado[$resuldato->encuesta_id]['pregunta_'.$incrementador]     ='-';
-                    $builderesultado[$resuldato->encuesta_id]['respuesta_'.$incrementador]    ='-';
+    protected function buildeResult($survey_detail,$number_of_questions){
+        $buildeResult    = [];
+        $increment          = 1;
+        foreach ($survey_detail as $detail) {
+            if(!isset($buildeResult[$detail->encuesta_id])){
+                for ($increment = 1; $increment <= $number_of_questions; $increment++) { 
+                    $buildeResult[$detail->encuesta_id]['question_'.$increment]     ='-';
+                    $buildeResult[$detail->encuesta_id]['answer_'.$increment]    ='-';
                 }
-                $secuencia = 1;
+                $increment = 1;
             }
-            $builderesultado[$resuldato->encuesta_id]['pregunta_'.$secuencia]  = $resuldato->pregunta;
-            $builderesultado[$resuldato->encuesta_id]['respuesta_'.$secuencia] = $resuldato->respuesta;
-            $secuencia++;
+            $buildeResult[$detail->encuesta_id]['question_'.$increment]  = $detail->question;
+            $buildeResult[$detail->encuesta_id]['answer_'.$increment] = $detail->answer;
+            $increment++;
         }
 
-        return $builderesultado;
+        return $buildeResult;
     }
 
     /**
@@ -144,34 +142,35 @@ class SurveysController extends CosapiController
     protected function builderview($query_surveys){
         $builderview    = [];
         $posicion       = 0;
-        foreach ($query_surveys['detalle_llamada'] as $surveys) {
+        foreach ($query_surveys['survey'] as $surveys) {
 
-            if(!isset($query_surveys['preguntas_respuestas'][$surveys->Id]['pregunta_1'])){
-                    $query_surveys['preguntas_respuestas'][$surveys->Id]['pregunta_1']  ='-';
-                    $query_surveys['preguntas_respuestas'][$surveys->Id]['respuesta_1'] ='-';             
+            if(!isset($query_surveys['survey_detail'][$surveys->Id]['question_1'])){
+                    $query_surveys['survey_detail'][$surveys->Id]['question_1']  ='-';
+                    $query_surveys['survey_detail'][$surveys->Id]['answer_1'] ='-';             
             }
 
-            if(!isset($query_surveys['preguntas_respuestas'][$surveys->Id]['pregunta_2'])){
-                $query_surveys['preguntas_respuestas'][$surveys->Id]['pregunta_2']  ='-';
-                $query_surveys['preguntas_respuestas'][$surveys->Id]['respuesta_2'] ='-'; 
+            if(!isset($query_surveys['survey_detail'][$surveys->Id]['question_2'])){
+                $query_surveys['survey_detail'][$surveys->Id]['question_2']  ='-';
+                $query_surveys['survey_detail'][$surveys->Id]['answer_2'] ='-'; 
             }
 
             if($surveys->Skill == ''){$surveys->Skill = '-';}
             
-            $builderview[$posicion]['Type Survey']    = $surveys->TipoEncuesta;
-            $builderview[$posicion]['Date']           = $surveys->Fecha;
-            $builderview[$posicion]['Hour']           = $surveys->Hora;
-            $builderview[$posicion]['Username']       = $surveys->Username;
-            $builderview[$posicion]['Anexo']          = $surveys->Anexo;
-            $builderview[$posicion]['Telephone']      = $surveys->Telefono;
-            $builderview[$posicion]['Skill']          = $surveys->Skill;
-            $builderview[$posicion]['Duration']       = conversorSegundosHoras($surveys->Duracion,false);
-            $builderview[$posicion]['Question_01']    = $query_surveys['preguntas_respuestas'][$surveys->Id]['pregunta_1'];
-            $builderview[$posicion]['Answer_01']      = $query_surveys['preguntas_respuestas'][$surveys->Id]['respuesta_1'];
-            $builderview[$posicion]['Question_02']    = $query_surveys['preguntas_respuestas'][$surveys->Id]['pregunta_2'];
-            $builderview[$posicion]['Answer_02']      = $query_surveys['preguntas_respuestas'][$surveys->Id]['respuesta_2'];
-            $builderview[$posicion]['Action']         = $surveys->Evento;
-
+            $builderview[$posicion]['Type Survey']          = $surveys->SurveyType;
+            $builderview[$posicion]['Date']                 = $surveys->Date;
+            $builderview[$posicion]['Hour']                 = $surveys->Time;
+            $builderview[$posicion]['Username']             = $surveys->Username;
+            $builderview[$posicion]['Anexo']                = $surveys->Anexo;
+            $builderview[$posicion]['Telephone']            = $surveys->Telephone;
+            $builderview[$posicion]['Skill']                = $surveys->Skill;
+            $builderview[$posicion]['Opcion IVR']           = $surveys->OpcionIVR;
+            $builderview[$posicion]['Duration Call']        = conversorSegundosHoras($surveys->DurationCall,false);
+            $builderview[$posicion]['Duration Survey']      = conversorSegundosHoras($surveys->DurationSurvey,false);
+            $builderview[$posicion]['Question_01']          = $query_surveys['survey_detail'][$surveys->Id]['question_1'];
+            $builderview[$posicion]['Answer_01']            = $query_surveys['survey_detail'][$surveys->Id]['answer_1'];
+            $builderview[$posicion]['Question_02']          = $query_surveys['survey_detail'][$surveys->Id]['question_2'];
+            $builderview[$posicion]['Answer_02']            = $query_surveys['survey_detail'][$surveys->Id]['answer_2'];
+            $builderview[$posicion]['Action']               = $surveys->Evento;
 
             $posicion ++;
         }
@@ -193,12 +192,14 @@ class SurveysController extends CosapiController
                 'Type Survey'       =>  $view['Type Survey'],
                 'Date'              =>  $view['Date'],
                 'Hour'              =>  $view['Hour'],
-                'fecha_hora'        =>  $view['Date'].' '.$view['Hour'],
+                'DateTime'          =>  $view['Date'].' '.$view['Hour'],
                 'Username'          =>  $view['Username'],
                 'Anexo'             =>  $view['Anexo'],
                 'Telephone'         =>  $view['Telephone'],
                 'Skill'             =>  $view['Skill'],
-                'Duration'          =>  $view['Duration'],
+                'Opcion IVR'        =>  $view['Opcion IVR'],
+                'Duration Call'     =>  $view['Duration Call'],
+                'Duration Survey'   =>  $view['Duration Survey'],
                 'Question_01'       =>  $view['Question_01'],
                 'Answer_01'         =>  $view['Answer_01'],
                 'Question_02'       =>  $view['Question_02'],
@@ -273,8 +274,5 @@ class SurveysController extends CosapiController
 
         return $data;
     }   
-
-
-    
 
 }
