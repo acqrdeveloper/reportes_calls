@@ -30,6 +30,8 @@ const showTabDetailEvents = (evento) => dataTables('table-detail-events', getDat
 /* [show_tab_angetOnline Función que carga los datos de los agentes online] */
 const showTabAgentOnline = (evento) => dataTables('table-agentOnline', getDataFilters(evento), 'agents_online')
 
+const showTabAgentOnline2 = (evento) => dataTables('table-level', getDataFilters(evento), 'report_level');//2018
+
 /* [showTabOutgoing Función que carga los datos de las Llamadas Salientes] */
 const showTabOutgoing = (evento) => dataTables('table-outgoing', getDataFilters(evento), 'outgoing_calls')
 

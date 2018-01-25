@@ -12,7 +12,6 @@ Route::get('/testing', ['uses'=>'AdminLTEController@testing'  ,   'as' => 'testi
  */
 Route::post('/', ['uses'=>'Auth\AuthController@postLogin'     ,   'as' => 'login']);
 
-
 Route::group(['middleware'=>['auth'], 'prefix'=>'home' ], function () {
     Route::get('/', ['uses'=>'AdminController@index'         ,    'as' => 'home'      ]);
 });
@@ -36,6 +35,7 @@ Route::group(['middleware'=>['user']], function () {
 
         // Repote nuevo de eventos
         Route::post('detail_event_report', ['uses'=>'DetailEventsReportController@index']);
+        Route::post('report_level', ['uses'=>'ReportController@index']);//2018
 
         // Reporte de llamadas salienes
         Route::post('agents_online', ['uses'=>'AgentsOnlineController@index']);
@@ -105,6 +105,7 @@ Route::group(['middleware'=>['user']], function () {
     Route::post('export_events_detail', ['uses'=>'EventsAgentController@export_event_detail']);
     Route::post('export_events_consolidated', ['uses'=>'EventsAgentController@export_event_consolidated']);
     Route::post('export_details_events_report', ['uses'=>'DetailEventsReportController@export_details_events_report']);
+    Route::post('export_level_events_report', ['uses'=>'ReportController@export_level_events_report']);//2018
     Route::post('export_agents_online', ['uses'=>'AgentsOnlineController@export']);
     Route::post('export_surveys', ['uses'=>'SurveysController@export']);
     Route::post('export_list_user', ['uses'=>'UserController@export']);
@@ -139,3 +140,10 @@ Route::group(['middleware'=>['user']], function () {
     Route::post('frontPanel/getVariablesGlobals', ['uses'=>'AdminController@getVariablesGlobals']);
     Route::post('frontPanel/getStatusAddAgentDashboard', ['uses'=>'AdminController@getStatusAddAgentDashboard']);
 });
+
+//Route::get("/report", "ReportController@viewVue");
+//
+//Route::get("/report_json", "ReportController@doReport");
+//Route::get("/goReport", "ReportController@goReport");
+
+//    Route::get('report_json', ['uses'=>'ReportController@doReport']);

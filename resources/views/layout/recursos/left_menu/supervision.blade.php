@@ -14,7 +14,17 @@
     </a>
     <ul class="treeview-menu">
         <li><a href="#" v-on:click="loadOptionMenu('events_detail')" class="reportes"><i class="fa fa-circle-o text-purple"></i> Detail Events</a></li>
-        <li><a href="#" v-on:click="loadOptionMenu('detail_event_report')"  class="reportes"><i class="fa fa-circle-o text-fuchsia"></i> Level Of Occupation</a></li>
+      <li class="treeview">
+        <a href="#"><i class="fa fa-circle-o text-fuchsia"></i> <span>Level of Ocupation</span>
+          <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a href="#" v-on:click="loadOptionMenu('detail_event_report')" class="reportes"><i class="fa fa-angle-right"></i>Report Clasic</a></li>
+          <li><a href="#" v-on:click="loadOptionMenu('report_level')" class="reportes"><i class="fa fa-angle-right"></i>Report 30 min</a></li>
+        </ul>
+      </li>
     </ul>
   </li>
 

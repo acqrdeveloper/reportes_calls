@@ -8,6 +8,7 @@
  * @param  {String} data      [Nombre del tipo de porte a cargar]
  * @param  {String} route     [Ruta a la cual va a consultar los datos a cargar]
  */
+
 const dataTables = (nombreDIV, data, route) => {
 	// Eliminación del DataTable en caso de que exista
 	$('#' + nombreDIV).dataTable().fnDestroy()
@@ -181,6 +182,15 @@ const columnsDatatable = (route) => {
 		]
 	}
 
+    if (route === 'agents_online') {
+        columns = [
+            {'data': 'date', 'order': 'asc'},
+            {'data': 'hour'},
+            {'data': 'fecha_hora'},
+            {'data': 'agents'}
+        ]
+    }
+
 	if (route === 'manage_users') {
 		columns = [
 			{'data': 'Id', 'order': 'asc'},
@@ -234,6 +244,42 @@ const columnsDatatable = (route) => {
             {'data': 'Status'}
         ]
     }
+
+    if (route === 'report_level') {
+        columns = [
+            {'data': 'Name', 'order': 'asc'},
+            {'data': 'Tiempo Diff Inicial'},
+            {'data': 'Disponible'},
+            {'data': 'Break'},
+            {'data': 'SSHH'},
+            {'data': 'Refrigerio'},
+            {'data': 'Feedback'},
+            {'data': 'Capacitacion'},
+            {'data': 'Gestion BackOffice'},
+            {'data': 'Inbound'},
+            {'data': 'OutBound'},
+            {'data': 'Ring Inbound'},
+            {'data': 'Ring Outbound'},
+            {'data': 'Hold Inbound'},
+            {'data': 'Hold Outbound'},
+            {'data': 'Ring Inbound Interno'},
+            {'data': 'Inbound Interno'},
+            {'data': 'Outbound Interno'},
+            {'data': 'Ring Outbound Interno'},
+            {'data': 'Hold Inbound Interno'},
+            {'data': 'Hold Outbound Interno'},
+            {'data': 'Ring Inbound Transfer'},
+            {'data': 'Inbound Transfer'},
+            {'data': 'Hold Inbound Transfer'},
+            {'data': 'Ring Outbound Transfer'},
+            {'data': 'Hold Outbound Transfer'},
+            {'data': 'Outbound Transfer'},
+            {'data': 'Desconectado'},
+            {'data': 'Tiempo Diff Final'},
+            {'data': 'Total'}
+        ]
+    }
+
 
 	return columns
 }
