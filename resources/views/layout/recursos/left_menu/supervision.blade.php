@@ -22,7 +22,7 @@
         </a>
         <ul class="treeview-menu">
           <li><a href="#" v-on:click="loadOptionMenu('detail_event_report')" class="reportes"><i class="fa fa-angle-right"></i>Report Clasic</a></li>
-          <li><a href="#" v-on:click="loadOptionMenu('report_level')" class="reportes"><i class="fa fa-angle-right"></i>Report 30 min</a></li>
+          <li><a href="#" v-on:click="loadOptionMenu('report_level')" class="reportes"><i class="fa fa-angle-right"></i>Report Hours</a></li>
         </ul>
       </li>
     </ul>
