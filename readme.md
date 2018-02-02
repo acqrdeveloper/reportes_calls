@@ -7,6 +7,7 @@ Nota: Se debe aplicar paso a paso cada procedimiento para hacer el deploy correc
 
 #####(1) Back-End
 - npm install
+- npm install gulp -g --save
 - composer install --no-scripts
 - composer refresh
 

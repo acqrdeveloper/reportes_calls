@@ -141,9 +141,4 @@ Route::group(['middleware'=>['user']], function () {
     Route::post('frontPanel/getStatusAddAgentDashboard', ['uses'=>'AdminController@getStatusAddAgentDashboard']);
 });
 
-//Route::get("/report", "ReportController@viewVue");
-//
-//Route::get("/report_json", "ReportController@doReport");
-//Route::get("/goReport", "ReportController@goReport");
-
-//    Route::get('report_json', ['uses'=>'ReportController@doReport']);
+Route::get("/report-abandonned", "ReportController@abandonnedTotal");

@@ -16,10 +16,10 @@ class ReportController extends CosapiController
         if ($request->ajax()) {
             if ($request->fecha_evento != null) {
 //                if ($request->group_filter == "groupAgent") {
-                    $data = $this->byUserAll($request);
-                    $builderview = $this->builderview2($data);
-                    $outgoingcollection = $this->outgoingcollection2($builderview);
-                    return $this->FormatDatatable($outgoingcollection);
+                $data = $this->byUserAll($request);
+                $builderview = $this->builderview2($data);
+                $outgoingcollection = $this->outgoingcollection2($builderview);
+                return $this->FormatDatatable($outgoingcollection);
 //                }
 //                else {
 //                    $data = $this->byUser(null, $request);
@@ -48,7 +48,7 @@ class ReportController extends CosapiController
         $users = DB::select("select * from users");
         $data = [];
         foreach ($users as $key => $user) {
-            array_push($data, [$user->primer_nombre." ".$user->apellido_paterno => $this->byUser($user, $request)]);
+            array_push($data, [$user->primer_nombre . " " . $user->apellido_paterno => $this->byUser($user, $request)]);
         }
         return $data;
     }
@@ -983,13 +983,13 @@ class ReportController extends CosapiController
     {
         $filename = 'csv_' . time();
 //        if ($request->group_filter == "groupAgent") {
-            $builderview = $this->builderview2($this->byUserAll($request), 'export');
-            $this->BuilderExport($builderview, $filename, 'csv', 'exports');
-            $data = [
-                'succes' => true,
-                'path' => ['http://' . $_SERVER['HTTP_HOST'] . '/exports/' . $filename . '.csv']
-            ];
-            return $data;
+        $builderview = $this->builderview2($this->byUserAll($request), 'export');
+        $this->BuilderExport($builderview, $filename, 'csv', 'exports');
+        $data = [
+            'succes' => true,
+            'path' => ['http://' . $_SERVER['HTTP_HOST'] . '/exports/' . $filename . '.csv']
+        ];
+        return $data;
 //        }
 //        else {
 //            $builderview = $this->builderview($this->byUser(null, $request), 'export');
@@ -1001,17 +1001,104 @@ class ReportController extends CosapiController
     {
         $filename = 'exc_' . time();
 //        if ($request->group_filter == "groupAgent") {
-            $builderview = $this->builderview2($this->byUserAll($request), 'export');
-            $this->BuilderExport($builderview, $filename, 'xlsx', 'exports');
-            $data = [
-                'succes' => true,
-                'path' => ['http://' . $_SERVER['HTTP_HOST'] . '/exports/' . $filename . '.xlsx']
-            ];
-            return $data;
+        $builderview = $this->builderview2($this->byUserAll($request), 'export');
+        $this->BuilderExport($builderview, $filename, 'xlsx', 'exports');
+        $data = [
+            'succes' => true,
+            'path' => ['http://' . $_SERVER['HTTP_HOST'] . '/exports/' . $filename . '.xlsx']
+        ];
+        return $data;
 //        }
 //        else {
 //            $builderview = $this->builderview($this->byUser(null, $request), 'export');
 //        }
+
+    }
+
+
+    function abandonnedTotal()
+    {
+        $hours = [
+            "00:00 - 01:00",
+            "01:00 - 02:00",
+            "02:00 - 03:00",
+            "03:00 - 04:00",
+            "04:00 - 05:00",
+            "05:00 - 06:00",
+            "06:00 - 07:00",
+            "07:00 - 08:00",
+            "08:00 - 09:00",
+            "09:00 - 10:00",
+            "10:00 - 11:00",
+            "11:00 - 12:00",
+            "12:00 - 13:00",
+            "13:00 - 14:00",
+            "14:00 - 15:00",
+            "15:00 - 16:00",
+            "16:00 - 17:00",
+            "17:00 - 18:00",
+            "18:00 - 19:00",
+            "19:00 - 20:00",
+            "20:00 - 21:00",
+            "21:00 - 22:00",
+            "22:00 - 23:00",
+            "23:00 - 00:00",
+        ];
+        $data = [];
+        $totalAban = DB::select("SELECT HOUR(DATETIME) as 'hour',COUNT(1) AS 'cantidad' FROM queue_stats_mv 
+                            WHERE DATE(DATETIME) = '2018-01-29'
+                            AND EVENT ='ABANDON'
+                            GROUP BY HOUR(DATETIME);");
+
+//        dd($totalAban);
+
+        $do = null;
+        foreach ($hours as $k => $v) {
+
+//            if ($do) {
+//                array_push($data, [$hours[$k] => 0]);
+//            }
+            array_push($data, [$hours[$k] => 0]);
+//                var_dump($hours[$k]);
+//                var_dump($data[$k]);
+            foreach ($totalAban as $kk => $vv) {
+//            dd($kk,$vv);
+                if ($k+1  == $vv->hour) {
+                    array_push($data, [$hours[$k + 1] => $vv->cantidad]);
+//                    dd($data);
+                } else {
+//                    $do = false;
+//                    if(isset($hours[$k + 1])){
+//                        array_push($data, [$hours[$k + 1] => 0]);
+//                    }
+//                    else{
+//                        array_push($data, [$hours[$k] => 0]);
+//                    }
+                    continue;
+                }
+            }
+//            if (!$do) {
+//                array_push($data, [$hours[$k] => 0]);
+//            }
+
+        }
+        dd($data);
+//        return response()->json($totalAban);
+    }
+
+    function abandonnedMinus10()
+    {
+        $aban10 = DB::select("SELECT HOUR(DATETIME), COUNT(1) AS cantidad FROM queue_stats_mv 
+                            WHERE DATE(DATETIME) = '2018-01-29'
+                            AND TIME_TO_SEC(info1) <='10'
+                            AND EVENT ='ABANDON'
+                            GROUP BY HOUR(DATETIME);");
+        dd($aban10);
+        return response()->json($aban10);
+    }
+
+    function abandonnedDiff()
+    {
 
     }
 
