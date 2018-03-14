@@ -19,6 +19,12 @@ Route::group(['middleware'=>['auth'], 'prefix'=>'home' ], function () {
 Route::group(['middleware'=>['user']], function () {
     Route::group(['middleware'=>['supervisor', 'cliente', 'calidad']], function () {
 
+        //Dashboard_04
+        Route::get("/abandonadasPorHora", "ReportController@abandonadasPorHora");
+        Route::get("/abandonadasDiez", "ReportController@abandonadasDiez");
+        Route::get("/abandonadasDiff", "ReportController@abandonadasDiff");
+        Route::get("/dashboard_04", "ReportController@dashboard_04");
+
         // Dashboard
         Route::get('dashboard_01', ['uses'=>'DashboardController@dashboard_01']);
         Route::post('dashboard_03', ['uses'=>'Dashboard03Controller@index']);
@@ -140,5 +146,3 @@ Route::group(['middleware'=>['user']], function () {
     Route::post('frontPanel/getVariablesGlobals', ['uses'=>'AdminController@getVariablesGlobals']);
     Route::post('frontPanel/getStatusAddAgentDashboard', ['uses'=>'AdminController@getStatusAddAgentDashboard']);
 });
-
-Route::get("/report-abandonned", "ReportController@abandonnedTotal");
