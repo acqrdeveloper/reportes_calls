@@ -1,12 +1,10 @@
-
-	        <div class="col-md-2 " >
-	            <div class="info-box bg-aqua">
-					<span class="info-box-icon2">
-						<i class="fa fa-clock-o"></i>
-					</span>
-					<div class="info-box-content2">
-						<span class="info-box-text2">AVG Wait Time</span>
-						<span class="info-box-number2"><font size="5.5">{{ $AvgWaitTime }}</font></span>
-					</div>
-				</div>
-	        </div>
+<div class="col-md-2 col-sm-4 col-xs-8" @click="loadMetricasKpi">
+  <div class="info-box bg-aqua" v-if="answered != '-'">
+    <span class="info-box-icon metricas-info-box-icon"><i class="fa fa-clock-o"></i></span>
+    <div class="info-box-content metricas-info-box-content" >
+    	<span class="info-box-text metricas-info-box-text">AVG Wait Time</span>
+    	<span class="info-box-number metricas-info-box-number">@{{ AvgWaitTime }}</span>
+    </div>
+  </div>
+  <div  v-else="answered = '-'">@include('layout.recursos.loading_bar')</div>
+</div>

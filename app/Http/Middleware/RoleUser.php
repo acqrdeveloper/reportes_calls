@@ -29,11 +29,12 @@ class RoleUser
                 Auth::user()->role == 'user'                ||
                 Auth::user()->role == 'supervisor'          ||
                 Auth::user()->role == 'admin'               ||
+                Auth::user()->role == 'cliente'             ||
+                Auth::user()->role == 'calidad'             ||
                 Auth::user()->role == 'backoffice'
             )) {
             return $next($request);
         }
-        $request->session()->flash('alert-danger','Usted no cuenta con los permisos necesarios para este recurso');
-        return redirect('/home');
+        return redirect('/errorRole');
     }
 }

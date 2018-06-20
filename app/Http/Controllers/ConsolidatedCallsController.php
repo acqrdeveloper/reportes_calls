@@ -2,7 +2,6 @@
 
 namespace Cosapi\Http\Controllers;
 
-use Cosapi\Http\Requests;
 use Illuminate\Http\Request;
 use Cosapi\Models\Queue_Log;
 use Cosapi\Collector\Collector;
@@ -24,15 +23,19 @@ class ConsolidatedCallsController extends CosapiController
             if ($request->evento){
                 return $this->calls_consolidated($request->fecha_evento, $request->evento, $request->rank_hour);
             }else{
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(
+                    'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewHourSearch','viewButtonExport'
+                ),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.consolidated_calls.tabs_consolidated_calls',
                     'titleReport'           => 'Report of Consolidated Calls',
-                    'viewButtonSearch'      => false,
-                    'viewHourSearch'        => true,
-                    'viewDateSearch'        => true,
                     'exportReport'          => 'export_consolidated',
                     'nameRouteController'   => ''
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }
@@ -79,7 +82,7 @@ class ConsolidatedCallsController extends CosapiController
         $query_calls_inbound                = $this->query_calls_inbound($fecha_evento, ($rank_hour/60));
 
         switch($evento){
-            case 'skills_group' :
+            case 'skills_group'       :
                 $call_group                 = $this->calls_queue($fecha_evento);
                 $groupby                    = 'queue';
                 break ;
@@ -177,29 +180,31 @@ class ConsolidatedCallsController extends CosapiController
         $time_standar = array(10,15,20,30);
         $Consolidated = [];
         foreach ($calls_inbound as $calls) {
-            
-            
-                if(isset($Consolidated[$calls[$groupby]][$calls['event']])){
 
-                    $Consolidated[$calls[$groupby]][$calls['event']]=$Consolidated[$calls[$groupby]][$calls['event']]+1;
+                $indiceGroupBy    = $calls[$groupby];
+                $indiceEvent      = ($calls['event'] === 'BLINDTRANSFER') ? 'TRANSFER' : $calls['event'];
 
-                    if(isset($Consolidated[$calls[$groupby]]['min_espera'])){
+                if(isset($Consolidated[$indiceGroupBy][$indiceEvent])){
 
-                            $Consolidated[$calls[$groupby]]['min_espera']=abs($calls['info1'])+$Consolidated[$calls[$groupby]]['min_espera'];
+                    $Consolidated[$indiceGroupBy][$indiceEvent]=$Consolidated[$indiceGroupBy][$indiceEvent]+1;
+
+                    if(isset($Consolidated[$indiceGroupBy]['min_espera'])){
+
+                            $Consolidated[$indiceGroupBy]['min_espera']=abs($calls['info1'])+$Consolidated[$indiceGroupBy]['min_espera'];
 
                     }else{
 
-                        $Consolidated[$calls[$groupby]]['min_espera']=abs($calls['info1']);
+                        $Consolidated[$indiceGroupBy]['min_espera']=abs($calls['info1']);
 
                     }
 
-                    if(isset($Consolidated[$calls[$groupby]]['duracion'])){
+                    if(isset($Consolidated[$indiceGroupBy]['duracion'])){
 
-                        $Consolidated[$calls[$groupby]]['duracion']=abs($calls['info2'])+$Consolidated[$calls[$groupby]]['duracion'];
+                        $Consolidated[$indiceGroupBy]['duracion']=abs($calls['info2'])+$Consolidated[$indiceGroupBy]['duracion'];
 
                     }else{
 
-                        $Consolidated[$calls[$groupby]]['duracion']=abs($calls['info2']);
+                        $Consolidated[$indiceGroupBy]['duracion']=abs($calls['info2']);
 
                     }
 
@@ -211,7 +216,7 @@ class ConsolidatedCallsController extends CosapiController
                             /*
                              * Contador de tiempo en cola < 10 y < 20
                             */
-                            $Consolidated[$calls[$groupby]][$calls['event'].$time_standar[$i]]=$Consolidated[$calls[$groupby]][$calls['event'].$time_standar[$i]]+1;
+                            $Consolidated[$indiceGroupBy][$indiceEvent.$time_standar[$i]]=$Consolidated[$indiceGroupBy][$indiceEvent.$time_standar[$i]]+1;
                             
                         }
 
@@ -223,25 +228,25 @@ class ConsolidatedCallsController extends CosapiController
                      * Entra cuando encuentra un evento que aun no a sid contabilizado, para asì inicializar los contadores
                      */
 
-                    $Consolidated[$calls[$groupby]]['name']=$calls[$groupby];
+                    $Consolidated[$indiceGroupBy]['name']=$calls[$groupby];
 
-                    $Consolidated[$calls[$groupby]][$calls['event']]=1;
+                    $Consolidated[$indiceGroupBy][$indiceEvent]=1;
 
 
-                    if(isset($Consolidated[$calls[$groupby]]['min_espera'])){
+                    if(isset($Consolidated[$indiceGroupBy]['min_espera'])){
 
-                        $Consolidated[$calls[$groupby]]['min_espera']=abs($calls['info1'])+$Consolidated[$calls[$groupby]]['min_espera'];
+                        $Consolidated[$indiceGroupBy]['min_espera']=abs($calls['info1'])+$Consolidated[$indiceGroupBy]['min_espera'];
 
                     }else{
-                        $Consolidated[$calls[$groupby]]['min_espera']=abs($calls['info1']);
+                        $Consolidated[$indiceGroupBy]['min_espera']=abs($calls['info1']);
                     }
 
-                    if(isset($Consolidated[$calls[$groupby]]['duracion'])){
+                    if(isset($Consolidated[$indiceGroupBy]['duracion'])){
 
-                        $Consolidated[$calls[$groupby]]['duracion']=abs($calls['info2'])+$Consolidated[$calls[$groupby]]['duracion'];
+                        $Consolidated[$indiceGroupBy]['duracion']=abs($calls['info2'])+$Consolidated[$indiceGroupBy]['duracion'];
 
                     }else{
-                        $Consolidated[$calls[$groupby]]['duracion']=abs($calls['info2']);
+                        $Consolidated[$indiceGroupBy]['duracion']=abs($calls['info2']);
                     }
                     
                     for($i=0;$i<count($time_standar);$i++){
@@ -252,11 +257,11 @@ class ConsolidatedCallsController extends CosapiController
 
                         if(abs($calls['info1'])<=$time_standar[$i]){
                           
-                            $Consolidated[$calls[$groupby]][$calls['event'].$time_standar[$i]]=1;
+                            $Consolidated[$indiceGroupBy][$indiceEvent.$time_standar[$i]]=1;
                             
                         }else{
 
-                            $Consolidated[$calls[$groupby]][$calls['event'].$time_standar[$i]]=0;
+                            $Consolidated[$indiceGroupBy][$indiceEvent.$time_standar[$i]]=0;
 
                         }
 
@@ -566,21 +571,26 @@ protected function BuilderCallsConsolidated($CallsConsolidated ,$call_group,$gro
      * @return [array]       [Array con datos de las rutas donde estas los CSV generados]
      */
     protected function export_csv($days, $rank_hour){
+        $filenamefirst              = 'skills_group';
+        $filenamesecond             = 'agent_group';
+        $filenamethird              = 'day_group';
+        $filenamefourth             = 'hour_group';
+        $filetime                   = time();
 
-        $events = ['skills_group','agent_group','day_group','hour_group'];
+        $events = [$filenamefirst,$filenamesecond,$filenamethird,$filenamefourth];
 
         for($i=0;$i<count($events);$i++){
             $builderview = $this->calls_inbound($days,$events[$i],$rank_hour);
-            $this->BuilderExport($builderview,$events[$i],'csv','exports');
+            $this->BuilderExport($builderview,$events[$i].'_'.$filetime,'csv','exports');
         }
     
         $data = [
             'succes'    => true,
             'path'      => [
-                            'http://'.$_SERVER['HTTP_HOST'].'/exports/skills_group.csv',
-                            'http://'.$_SERVER['HTTP_HOST'].'/exports/agent_group.csv',
-                            'http://'.$_SERVER['HTTP_HOST'].'/exports/day_group.csv',
-                            'http://'.$_SERVER['HTTP_HOST'].'/exports/hour_group.csv'
+                            'http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filenamefirst.'_'.$filetime.'.csv',
+                            'http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filenamesecond.'_'.$filetime.'.csv',
+                            'http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filenamethird.'_'.$filetime.'.csv',
+                            'http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filenamefourth.'_'.$filetime.'.csv'
                             ]
         ];
 
@@ -595,7 +605,8 @@ protected function BuilderCallsConsolidated($CallsConsolidated ,$call_group,$gro
      * @return [array]       [Array con datos de las rutas donde estas los Excel generados]
      */
     protected function export_excel($days,$rank_hour){
-        Excel::create('consolidated_calls', function($excel) use($days,$rank_hour) {
+        $filename               = 'consolidated_calls'.time();
+        Excel::create($filename, function($excel) use($days,$rank_hour) {
 
             $excel->sheet('Skills', function($sheet) use($days,$rank_hour) {
                 $sheet->fromArray($this->calls_inbound($days,'skills_group',$rank_hour));
@@ -618,7 +629,7 @@ protected function BuilderCallsConsolidated($CallsConsolidated ,$call_group,$gro
 
         $data = [
             'succes'    => true,
-            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/consolidated_calls.xlsx']
+            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filename.'.xlsx']
         ];
 
         return $data;

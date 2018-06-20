@@ -31,6 +31,6 @@ class LastLogin
      */
     public function handle(LoginUsers $event)
     {
-        $event->register_event('11',$event->obtener_userid(),'','','',null);
+        $event->register_event('11', $event->obtener_userid(), $event->obtener_userRole(),'','','',null);
     }
 }

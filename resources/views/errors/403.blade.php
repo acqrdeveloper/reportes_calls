@@ -5,7 +5,7 @@
 
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
 
-        {!!Html::style('css/cosapidata_login.min.css')!!}
+        {!!Html::style('css/login.min.css')!!}
     </head>
     <body>
         <div class="row " style="opacity: 0.9;">

@@ -1,0 +1,32 @@
+.metricas-info-box-icon {
+  width: 65px;
+}
+
+.metricas-info-box-content {
+  margin-left: 65px;
+  padding: 4px 10px;
+}
+
+.metricas-info-box-text {
+  text-transform: capitalize;
+  font-size: 95%;
+}
+
+.metricas-info-box-number {
+  font-size: 320%;
+}
+
+.dashboard-title {
+  display: inline-block;
+  font-size: 15px;
+  margin: 0;
+  line-height: 1;
+}
+
+.dashboard-box {
+  margin-bottom: 10px;
+}
+
+.dashboard-box-header {
+  padding: 8px;
+}

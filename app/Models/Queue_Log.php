@@ -64,7 +64,7 @@ class Queue_Log extends Model
     public function scopeFiltro_user_rol($query,$rol,$user_name)
     {
 
-        if( $rol == 'user')
+        if( $rol == 'user' || $rol == 'backoffice')
         {
             return    $query->where('agent','=','Agent/'.$user_name);
         }

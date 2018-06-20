@@ -4,7 +4,6 @@ namespace Cosapi\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use Cosapi\Http\Requests;
 use Cosapi\Http\Controllers\AgenteController;
 use Cosapi\Models\Anexos;
 

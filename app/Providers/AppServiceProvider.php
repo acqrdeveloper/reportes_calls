@@ -4,6 +4,8 @@ namespace Cosapi\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Blade;
+use Carbon\Carbon;
+use Jenssegers\Date\Date;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,9 +16,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::extend(function($value) {
+        Blade::extend(function ($value) {
             return preg_replace('/\@define(.+)/', '<?php ${1}; ?>', $value);
         });
+
+        Carbon::setLocale('es');
+        Date::setLocale('es');
     }
 
     /**
@@ -28,6 +33,4 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
-
-
 }

@@ -84,8 +84,14 @@ return [
     |
     */
     'custom'               => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'username' => [
+            'required'  => 'Debes ingresar un usuario valido',
+            'unique'    => 'No se encuentra el usuario ingresado en nuestra base de datos',
+        ],
+        'password' => [
+            'required'  => 'Debes ingresar una contraseña valida',
+            'min'       => 'La contraseña debe ser minima de 8 caracteres',
+            'max'       => 'La contraseña debe ser maxima de 12 caracteres',
         ],
     ],
     /*

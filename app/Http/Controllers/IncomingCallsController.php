@@ -2,7 +2,6 @@
 
 namespace Cosapi\Http\Controllers;
 
-use Cosapi\Http\Requests;
 use Illuminate\Http\Request;
 use Cosapi\Models\Queue_Log;
 use Cosapi\Collector\Collector;
@@ -10,7 +9,6 @@ use Cosapi\Collector\Collector;
 use DB;
 use Excel;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 use Session;
 
 
@@ -28,15 +26,19 @@ class IncomingCallsController extends CosapiController
             if ($request->evento){
                 return $this->calls_incoming($request->fecha_evento, $request->evento);
             }else{
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(
+                    'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewButtonExport','viewCustomFilter'
+                ),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.incoming_calls.tabs_incoming_calls',
                     'titleReport'           => 'Report of Calls Inbound',
-                    'viewButtonSearch'      => false,
-                    'viewHourSearch'        => false,
-                    'viewDateSearch'        => true,
                     'exportReport'          => 'export_incoming',
                     'nameRouteController'   => ''
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }
@@ -105,10 +107,10 @@ class IncomingCallsController extends CosapiController
 
         switch($events){
             case 'calls_completed' :
-                $events             = array ('COMPLETECALLER', 'COMPLETEAGENT', 'TRANSFER');
+                $events             = array ('COMPLETECALLER', 'COMPLETEAGENT', 'TRANSFER', 'BLINDTRANSFER');
             break;
             case 'calls_transfer' :
-                $events             = array ('TRANSFER');
+                $events             = array ('TRANSFER', 'BLINDTRANSFER');
             break;
             case 'calls_abandone' :
                 $events             = array ('ABANDON');
@@ -127,8 +129,11 @@ class IncomingCallsController extends CosapiController
         $action = '';
         $posicion = 0;
         $builderview = [];
+
+        //dd(getenv('FORMAT_DATE'));
+
         foreach ($query_calls as $query_call) {
-            $builderview[$posicion]['date']        = $query_call['fechamod'];
+            $builderview[$posicion]['date']        = date(getenv('FORMAT_DATE'), strtotime($query_call['fechamod']));
             $builderview[$posicion]['hour']        = $query_call['timemod'];
             $builderview[$posicion]['telephone']   = $query_call['clid'];
             $builderview[$posicion]['agent']       = ExtraerAgente($query_call['agent']);
@@ -137,6 +142,9 @@ class IncomingCallsController extends CosapiController
 
             switch ($query_call['event']) {
                 case 'TRANSFER':
+                    $action = 'Transferido a '.$query_call['url'];
+                    break;
+                case 'BLINDTRANSFER':
                     $action = 'Transferido a '.$query_call['url'];
                     break;
                 case 'ABANDON':
@@ -171,7 +179,8 @@ class IncomingCallsController extends CosapiController
             $colas          = $this->list_vdn();
             $vdn            = $colas[$view['skill']]['vdn'];
             $listen         = 'No compatible';
-            $day            = Carbon::parse($view['date']);
+            $date           = str_replace('/', '-', $view['date']);
+            $day            = Carbon::parse(date('Y-m-d', strtotime($date)));
             $hour           = Carbon::parse($view['hour']);
             $listen         = 'No compatible';
             $bronswer       = detect_bronswer();
@@ -190,6 +199,7 @@ class IncomingCallsController extends CosapiController
             $incomingcollection->push([
                 'date'                      => $view['date'],
                 'hour'                      => $view['hour'],
+                'fecha_hora'                => $view['date'].' '.$view['hour'],
                 'telephone'                 => $view['telephone'],
                 'agent'                     => $view['agent'],
                 'skill'                     => $view['skill'],
@@ -211,20 +221,24 @@ class IncomingCallsController extends CosapiController
      * @return [array]        [Array con la ubicación donde se a guardado el archivo exportado en CSV]
      */
     protected function export_csv($days){
+        $filenamefirst              = "calls_completed";
+        $filenamesecond             = "calls_transfer";
+        $filenamethird              = "calls_abandone";
+        $filetime                   = time();
 
-        $events = ['calls_completed','calls_transfer','calls_abandone'];
+        $events = [$filenamefirst,$filenamesecond,$filenamethird];
 
         for($i=0;$i<count($events);$i++){
             $builderview = $this->builderview($this->query_calls($days,$events[$i]));
-            $this->BuilderExport($builderview,$events[$i],'csv','exports');
+            $this->BuilderExport($builderview,$events[$i].'_'.$filetime,'csv','exports');
         }
     
         $data = [
             'succes'    => true,
             'path'      => [
-                            'http://'.$_SERVER['HTTP_HOST'].'/exports/calls_completed.csv',
-                            'http://'.$_SERVER['HTTP_HOST'].'/exports/calls_transfer.csv',
-                            'http://'.$_SERVER['HTTP_HOST'].'/exports/calls_abandone.csv'
+                            'http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filenamefirst.'_'.$filetime.'.csv',
+                            'http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filenamesecond.'_'.$filetime.'.csv',
+                            'http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filenamethird.'_'.$filetime.'.csv'
                             ]
         ];
 
@@ -238,7 +252,8 @@ class IncomingCallsController extends CosapiController
      * @return [array]        [Array con la ubicación donde se a guardado el archivo exportado en Excel]
      */
     protected function export_excel($days){
-        Excel::create('inbound_calls', function($excel) use($days) {
+        $filename               = 'inbound_calls_'.time();
+        Excel::create($filename, function($excel) use($days) {
 
             $excel->sheet('Atendidas', function($sheet) use($days) {
                 $sheet->fromArray($this->builderview($this->query_calls($days,'calls_completed')));
@@ -258,7 +273,7 @@ class IncomingCallsController extends CosapiController
 
         $data = [
             'succes'    => true,
-            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/inbound_calls.xlsx']
+            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filename.'.xlsx']
         ];
 
         return $data;

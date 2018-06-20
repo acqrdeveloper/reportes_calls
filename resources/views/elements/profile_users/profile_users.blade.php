@@ -1,6 +1,5 @@
 @include('layout.plugins.css-datepicker')
 <form id="formPerfil" enctype="multipart/form-data" method="POST">
-    <input id="tokenId" type="hidden" name="_token" value="{{ csrf_token() }}">
     <div id="divProfile" class="box box-primary">
         <div role="tab" id="headingOne" class="box-header">
             <h4 class="box-title"><b>Edit Profile</b></h4>

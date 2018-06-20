@@ -2,7 +2,6 @@
 
 namespace Cosapi\Http\Controllers;
 
-use Cosapi\Http\Requests;
 use Cosapi\Models\Anexo;
 use Illuminate\Http\Request;
 use Cosapi\Models\Cdr;
@@ -11,7 +10,6 @@ use Cosapi\Collector\Collector;
 use DB;
 use Carbon\Carbon;
 use Session;
-use Illuminate\Support\Facades\Log;
 
 class OutgoingCallsController extends CosapiController
 {
@@ -26,15 +24,19 @@ class OutgoingCallsController extends CosapiController
             if ($request->fecha_evento){
                 return $this->list_calls_outgoing($request->fecha_evento);
             }else{
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(
+                    'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewButtonSearch','viewButtonExport','viewCustomFilter'
+                ),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.outgoing_calls.outgoing_calls',
                     'titleReport'           => 'Report of Calls Outbound',
-                    'viewButtonSearch'      => true,
-                    'viewHourSearch'        => false,
-                    'viewDateSearch'        => true,
                     'exportReport'          => 'export_outgoing',
                     'nameRouteController'   => 'outgoing_calls'
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }
@@ -73,7 +75,7 @@ class OutgoingCallsController extends CosapiController
     protected function query_calls_outgoing($fecha_evento){
 
         $days                   = explode(' - ', $fecha_evento);
-        $range_annexed          = Anexo::select('name')->where('estado_id','1')->get()->toArray();
+        $range_annexed          = Anexo::select('name')->get()->toArray();
         $tamano_anexo           = $this->lengthAnnexed();
         $query_calls_outgoing   = Cdr::Select()
                                     ->filtro_user_rol($this->UserRole,$this->UserSystem)
@@ -82,6 +84,7 @@ class OutgoingCallsController extends CosapiController
                                     ->where('disposition','=','ANSWERED')
                                     ->where('lastapp','=','Dial')
                                     ->whereIn('src',$range_annexed)
+                                    ->whereNotIn('dst',$range_annexed)
                                     ->filtro_days($days)
                                     ->OrderBy('src')
                                     ->get()
@@ -116,7 +119,6 @@ class OutgoingCallsController extends CosapiController
                 $builderview[$posicion]['username']      = $query_call['accountcode'];
                 $builderview[$posicion]['userfield']     = $query_call['userfield']; // Url para descarga de audio
                 $builderview[$posicion]['calltime']      = conversorSegundosHoras($query_call['billsec'],false);
-
             }
             $posicion ++;
         }
@@ -141,17 +143,15 @@ class OutgoingCallsController extends CosapiController
             $listen         = 'No compatible';
             $carpeta        = '';
 
-            if(substr($view['destination'], 0, 4) =='0800'){
-                $carpeta = '0800';
-            }else if(strlen($view['destination']) =='7'){
-                $carpeta = 'local';
-            }else if(strlen($view['destination']) =='9'){
-                if(substr($view['destination'], 0,1)=='0'){
-                    $carpeta = 'nacional';
-                }else{
-                    $carpeta = 'celular';
-                }
+            if(substr($view['destination'], 0, 4) =='0800') $carpeta = '0800';
+            else if(strlen($view['destination']) =='4' or strlen($view['destination']) == '5') $carpeta = 'anexos-externos';
+            else if(strlen($view['destination']) =='7') $carpeta = 'local';
+            else if(strlen($view['destination']) =='9'){
+                if(substr($view['destination'], 0,1)=='0') $carpeta = 'nacional';
+                else $carpeta = 'celular';
             }
+
+
             $url            = 'url=Salientes/'.$carpeta.'/'.$day->format('Y/m/d').'/';
             $proyecto       = '&proyect='.getenv('AUDIO_PROYECT');
 
@@ -172,6 +172,7 @@ class OutgoingCallsController extends CosapiController
             $outgoingcollection->push([
                 'date'                      => $view['date'],
                 'hour'                      => $view['hour'],
+                'fecha_hora'                => $view['date'].' '.$view['hour'],
                 'annexedorigin'             => $view['annexedorigin'],
                 'destination'               => $view['destination'],
                 'calltime'                  => $view['calltime'],
@@ -191,13 +192,13 @@ class OutgoingCallsController extends CosapiController
      * @return [array]        [Array con la ubicación donde se a guardado el archivo exportado en CSV]
      */
     protected function export_csv($days){
-
+        $filename               = 'outgoing_calls_'.time();
         $builderview = $this->builderview($this->query_calls_outgoing($days),'export');
-        $this->BuilderExport($builderview,'outgoing_calls','csv','exports');
+        $this->BuilderExport($builderview,$filename,'csv','exports');
 
         $data = [
             'succes'    => true,
-            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/outgoing_calls.csv']
+            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filename.'.csv']
         ];
 
         return $data;
@@ -209,13 +210,13 @@ class OutgoingCallsController extends CosapiController
      * @return [array]        [Array con la ubicación donde se a guardado el archivo exportado en Excel]
      */
     protected function export_excel($days){
-
+        $filename               = 'outgoing_calls_'.time();
         $builderview = $this->builderview($this->query_calls_outgoing($days),'export');
-        $this->BuilderExport($builderview,'outgoing_calls','xlsx','exports');
+        $this->BuilderExport($builderview,$filename,'xlsx','exports');
 
         $data = [
             'succes'    => true,
-            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/outgoing_calls.xlsx']
+            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filename.'.xlsx']
         ];
 
         return $data;

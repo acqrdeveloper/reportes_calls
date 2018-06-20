@@ -4,7 +4,7 @@
     <!-- Modal content-->
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h4 class="modal-title">Coporacion Sapia</h4>
+        <h4 class="modal-title">Corporacion Sapia</h4>
       </div>
       <div class="modal-body">
         <div class="img-responsive ">

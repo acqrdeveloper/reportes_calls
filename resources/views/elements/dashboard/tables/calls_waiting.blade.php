@@ -2,7 +2,7 @@
   <div class="col-md-12">
     <div class="box box-warning box-solid">
       <div class="box-header with-border ">
-        <h3 class="box-title"><b>Details Encoladas</b></h3>
+        <h3 class="dashboard-title">Details Encoladas</h3>
       </div>
 
       <div class="table-responsive">

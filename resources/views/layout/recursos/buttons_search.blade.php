@@ -1,0 +1,1 @@
+<a onclick="buscar()" class="btn btn-primary {{ $classButton }}"><span class="fa fa-search" aria-hidden="true"></span> Search</a>

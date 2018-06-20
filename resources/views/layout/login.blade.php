@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @include('layout.recursos.icon_title')
     <title>@yield('title')</title>
-    {!!Html::style('css/cosapidata_login.min.css')!!}
+    {!!Html::style('css/login.min.css')!!}
 </head>
 <body>
   @yield('content')

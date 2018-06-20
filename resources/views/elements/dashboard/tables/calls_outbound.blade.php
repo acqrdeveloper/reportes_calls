@@ -2,9 +2,9 @@
   <div class="col-md-12">
     <div class="box box-primary box-solid">
       <div class="box-header with-border ">
-        <h3 class="box-title"><b>Detail Calls Outbound</b></h3>
+        <h3 class="dashboard-title">Detail Calls Outbound</h3>
         <div class="box-tools pull-right">
-         <button type="button" class="btn btn-box-tool" data-widget="collapse" onclick="refreshDetailsCalls()" data-toggle="tooltip" title="Refresh"><i class="fa fa-refresh"></i>
+         <button type="button" class="btn btn-box-tool" data-widget="collapse" @click="refreshDetailsCalls()" data-toggle="tooltip" title="Refresh"><i class="fa fa-refresh"></i>
          </button>
         </div>
       </div>
@@ -24,7 +24,8 @@
             </thead>
             <tbody>
               <template v-for="(outbound, index) in callsOutbound ">
-                <tr>
+                @{{ searchInformationProfile(outbound,index,'callsOutbound') }}
+                <tr v-if="compareRole(outbound.role) === true">
                   <td> @{{ index + 1 }}</td>
                   <td class="products-list product-list-in-box">
                     <div class="product-img">
@@ -44,7 +45,7 @@
                   <td>
                     <span :class ="'label label-' + outbound.color">
                       <i :class ="outbound.icon" style="padding: 1px;" aria-hidden="true"></i>
-                      @{{ outbound.event_name }}
+                        @{{ searchNameEvent(outbound.event_id) }}
                     </span>
                   </td>
                   <td>@{{ outbound.outbound_phone }}</td>
@@ -55,8 +56,8 @@
                   <td colspan="3">=================></td>
                   <td>@{{ outbound.second_event_name }}</td>
                   <td>@{{ outbound.second_outbound_phone }}</td>
-                  <td>@{{ outbound.second_outbound_start }}</td>
-                  <td>@{{ outbound.second_outbound_start }}</td>
+                  <td>@{{ outbound.secondCalltimeElapsed }}</td>
+                  <td>@{{ outbound.secondCalltimeElapsed }}</td>
                 </tr>
               </template>
             </tbody>

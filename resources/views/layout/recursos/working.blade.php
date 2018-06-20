@@ -1,6 +1,6 @@
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">Cosapi Data S.A.</h3>
+        <h3 class="box-title">Sapia S.A.</h3>
     </div><!-- /.box-header -->
     <div class="box-body">
         <center>

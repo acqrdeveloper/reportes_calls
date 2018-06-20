@@ -13,7 +13,7 @@ class DetalleEventosHistory extends DetalleEventos
     public function scopeFiltro_user_rol($query,$rol,$users)
     {
 
-        if( $rol == 'user')
+        if( $rol == 'user' || $rol == 'backoffice')
         {
             return    $query->where('user_id','=',$users);
         }

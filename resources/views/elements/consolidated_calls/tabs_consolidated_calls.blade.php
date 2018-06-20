@@ -1,22 +1,22 @@
 <div class="panel panel-default">
     <ul class="nav nav-tabs nav-pills ">
         <li role="tab" class="active">
-            <a href="#panel-report" role="tab" data-toggle="tab" onclick="show_tab_consolidated('skills_group')">
+            <a href="#panel-report" role="tab" data-toggle="tab" onclick="showTabConsolidated('skills_group')">
                 <icon class="glyphicon glyphicon-earphone"></icon>Agrupado por Skills
             </a>
         </li>
         <li role="tab">
-            <a href="#panel-report" role="tab" data-toggle="tab" onclick="show_tab_consolidated('agent_group')">
+            <a href="#panel-report" role="tab" data-toggle="tab" onclick="showTabConsolidated('agent_group')">
                 <icon class="glyphicon glyphicon-random"></icon>Agrupado por Agentes
             </a>
         </li>
         <li role="tab">
-            <a href="#panel-report" role="tab" data-toggle="tab" onclick="show_tab_consolidated('day_group')">
+            <a href="#panel-report" role="tab" data-toggle="tab" onclick="showTabConsolidated('day_group')">
                 <icon class="glyphicon glyphicon-alert"></icon>Agrupado por Dia
             </a>
         </li>
         <li role="tab">
-            <a href="#panel-report" role="tab" data-toggle="tab" onclick="show_tab_consolidated('hour_group')">
+            <a href="#panel-report" role="tab" data-toggle="tab" onclick="showTabConsolidated('hour_group')">
                 <icon class="glyphicon glyphicon-alert"></icon>Agrupado por Hora
             </a>
         </li>
@@ -68,7 +68,7 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        show_tab_consolidated('skills_group')
+        showTabConsolidated('skills_group')
     })
 
 </script>

@@ -30,6 +30,8 @@ class Kernel extends HttpKernel
         'admin'         => \Cosapi\Http\Middleware\RoleAdministrator::class,
         'user'          => \Cosapi\Http\Middleware\RoleUser::class,
         'supervisor'    => \Cosapi\Http\Middleware\RoleSupervisor::class,
+        'cliente'       => \Cosapi\Http\Middleware\RoleCliente::class,
+        'calidad'       => \Cosapi\Http\Middleware\RoleCalidad::class,
         'auth.basic'    => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest'         => \Cosapi\Http\Middleware\RedirectIfAuthenticated::class,
     ];

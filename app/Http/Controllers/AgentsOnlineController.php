@@ -4,11 +4,9 @@ namespace Cosapi\Http\Controllers;
 
 
 use Cosapi\Collector\Collector;
-use Cosapi\Http\Requests;
 use Illuminate\Http\Request;
 use Cosapi\Models\AgentesOnline;
 use DB;
-use Illuminate\Support\Facades\Log;
 
 class AgentsOnlineController extends CosapiController
 {
@@ -25,15 +23,19 @@ class AgentsOnlineController extends CosapiController
             if ($request->fecha_evento){
                 return $this->agents_online($request->fecha_evento);
             }else{
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(
+                    'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewButtonSearch','viewButtonExport','viewCustomFilter'
+                ),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.agents_online.agents-online',
                     'titleReport'           => 'Report of Agent Online',
-                    'viewButtonSearch'      => true,
-                    'viewHourSearch'        => false,
-                    'viewDateSearch'        => true,
                     'exportReport'          => 'export_agents_online',
                     'nameRouteController'   => 'agents_online'
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
 
@@ -101,9 +103,10 @@ class AgentsOnlineController extends CosapiController
         foreach ($builderview as $view) {
 
             $outgoingcollection->push([
-                'date'      => $view['date'],
-                'hour'      => $view['hour'],
-                'agents'    => $view['agents']
+                'date'          => $view['date'],
+                'hour'          => $view['hour'],
+                'fecha_hora'    => $view['date'].' '.$view['hour'],
+                'agents'        => $view['agents']
             ]);
 
         }
@@ -116,13 +119,13 @@ class AgentsOnlineController extends CosapiController
      * @return [array]        [Array con la ubicación donde se a guardado el archivo exportado en CSV]
      */
     protected function export_csv($days){
-
+        $filename               = 'agents_online_'.time();
         $builderview = $this->builderview($this->query_agents_online($days),'export');
-        $this->BuilderExport($builderview,'agents_online','csv','exports');
+        $this->BuilderExport($builderview,$filename,'csv','exports');
 
         $data = [
             'succes'    => true,
-            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/agents_online.csv']
+            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filename.'.csv']
         ];
 
         return $data;
@@ -134,13 +137,13 @@ class AgentsOnlineController extends CosapiController
      * @return [array]        [Array con la ubicación donde se a guardado el archivo exportado en Excel]
      */
     protected function export_excel($days){
-
+        $filename               = 'agents_online_'.time();
         $builderview = $this->builderview($this->query_agents_online($days,'agents_online'),'export');
-        $this->BuilderExport($builderview,'agents_online','xlsx','exports');
+        $this->BuilderExport($builderview,$filename,'xlsx','exports');
 
         $data = [
             'succes'    => true,
-            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/agents_online.xlsx']
+            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filename.'.xlsx']
         ];
 
         return $data;

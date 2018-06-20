@@ -1,4 +1,5 @@
-var elixir = require('laravel-elixir');
+let elixir = require('laravel-elixir')
+require('laravel-elixir-webpack')
 
 /*
  |--------------------------------------------------------------------------
@@ -10,209 +11,251 @@ var elixir = require('laravel-elixir');
  | file for our application, as well as publishing vendor resources.
  |
  */
-elixir.config.sourcemaps = false;
+elixir.config.sourcemaps = false
 
 elixir(function(mix) {
-    /**
-    Generando el archivo cosapidata_login.min.css para el Layout Login
-    */
-    mix
-    .styles([
-        'vendor/fortawesome/css/font-awesome.min.css',
-        'vendor/bootstrap/css/bootstrap.min.css',
-        'cosapi/css/login.css'
-    ],'public/css/cosapidata_login.min.css','resources/assets/')
+	mix
+		.scripts([
+			'node_modules/vue/vue.min.js',
+			'node_modules/vue-resource/vue-resource.min.js',
+			'node_modules/socket.io-client/socket.io.min.js',
+			'node_modules/sails.io/sails.io.js',
+			'../../.env.js'
+		],'public/js/vuesockets.min.js','resources/assets/')
 
-    /**
-    Generando el archivo cosapi_adminlte.min.css para el Layout AdminLTE
-    */
-    .styles([
-        'vendor/fortawesome/css/font-awesome.min.css',
-        'vendor/bootstrap/css/bootstrap.min.css',
-        'extras/toastr/toastr.min.css',
-        'extras/bootstrap3-dialog/css/bootstrap-dialog.min.css',
-        'plugins/adminLTE/css/AdminLTE.min.css',
-        'plugins/adminLTE/css/skins/_all-skins.min.css',
-        'cosapi/css/preloader.css'
-    ],'public/css/cosapi_adminlte.min.css','resources/assets/')
+		/**
+	  Generando el archivo cosapi_realtime.min.js para mostrar data realtime en panel
+	  */
+		.scripts([
+			'sapia/js/front.js',
+			'sapia/js/helper.js',
+			'sapia/js/datatable.js',
+			'sapia/js/frontVue.js'
+		],'public/js/personalizeFunctions.min.js','resources/assets/')
 
-    /**
-    Generando el archivo cosapi_dashboard.min.css para el Layout AdminLTE
-    */
-    .styles([
-        'vendor/fortawesome/css/font-awesome.min.css',
-        'vendor/bootstrap/css/bootstrap.min.css',
-        'extras/toastr/toastr.min.css',
-        'plugins/adminLTE/css/AdminLTE.min.css',
-        'cosapi/css/preloader.css'
-    ],'public/css/cosapi_dashboard.min.css','resources/assets/');
-});
+		.scripts([
+			'node_modules/vue-select/vue-select.js',
+			'sapia/js/profileuserVue.js'
+		],'public/js/profileuserVue.min.js','resources/assets/')
+})
 
+/*
+  Generando los archivos css y js para el Layout Login
+*/
 elixir(function(mix) {
-  /**
-  Generando el archivo cosapidata_login.min.js para el Layout Login
-  */
-  mix
-  .scripts([
-      'vendor/jquery/jquery.min.js',
-      'vendor/bootstrap/js/bootstrap.min.js',
-      'extras/bootstrap-typeahead/js/bootstrap-typeahead.min.js',
-      'extras/jquery-backstretch/jquery.backstretch.min.js'
-  ],'public/js/cosapidata_login.min.js','resources/assets/')
+	mix
+		.styles([
+			'vendor/adminlte/plugins/font-awesome/css/font-awesome.css',
+			'vendor/adminlte/plugins/bootstrap/dist/css/bootstrap.css',
+			'vendor/adminlte/dist/css/AdminLTE.css',
+			'sapia/css/login.css'
+		],'public/css/login.min.css','resources/assets/')
+		.scripts([
+			'vendor/adminlte/plugins/jquery/dist/jquery.js',
+			'vendor/adminlte/plugins/bootstrap/dist/js/bootstrap.js',
+			'extras/bootstrap-typeahead/js/bootstrap-typeahead.min.js',
+			'extras/jquery-backstretch/jquery.backstretch.min.js'
+		],'public/js/cosapidata_login.min.js','resources/assets/')
+})
 
-  /**
-  Generando el archivo cosapi_adminlte.min.js para el Layout adminLTE
-  */
-  .scripts([
-      'vendor/jquery/jquery.min.js',
-      'plugins/jQueryUI/jquery-ui.min.js'
-  ],'public/js/adminlte_jquerys.min.js','resources/assets/')
+/*
+  Generando los archivos css y js para el Layout Dashboard
+*/
+elixir(function(mix) {
+	mix
+		.styles([
+			'vendor/adminlte/plugins/bootstrap/dist/css/bootstrap.css',
+			'vendor/adminlte/plugins/font-awesome/css/font-awesome.css',
+			'vendor/adminlte/dist/css/AdminLTE.css',
+			'sapia/css/preloader.css'
+		],'public/css/dashboard.min.css','resources/assets/')
+		.scripts([
+			'vendor/adminlte/plugins/jquery/dist/jquery.js',
+			'vendor/adminlte/plugins/bootstrap/dist/js/bootstrap.js',
+			'vendor/adminlte/plugins/fastclick/lib/fastclick.js',
+			'../../.env.js',
+			'sapia/js/helper.js',
+			'node_modules/vue/vue.min.js',
+			'node_modules/vue-resource/vue-resource.min.js',
+			'node_modules/vue-select/vue-select.js',
+			'node_modules/socket.io-client/socket.io.min.js',
+			'sapia/js/cookie.js',
+            'node_modules/daterangepicker/moment.min.js'
+		],'public/js/dashboard.min.js','resources/assets/')
+})
 
-  .scripts([
-      'vendor/bootstrap/js/bootstrap.min.js',
-      'extras/bootstrap3-dialog/js/bootstrap-dialog.js',
-      'extras/toastr/toastr.js',
-  ],'public/js/adminlte_notifications.min.js','resources/assets/')
-
-  .scripts([
-      'plugins/adminLTE/js/app.min.js',
-      'plugins/adminLTE/js/funcionalidades.js'
-  ],'public/js/adminlte_scripts.min.js','resources/assets/')
-
-  .scripts([
-      'node_modules/vue/vue.min.js',
-      'node_modules/vue-resource/vue-resource.min.js',
-      'node_modules/socket.io-client/socket.io.min.js',
-      'node_modules/sails.io/sails.io.js',
-      'cosapi/js/env.js'
-  ],'public/js/adminlte_vuesockets.min.js','resources/assets/')
-
-  /**
-  Generando el archivo cosapi_realtime.min.js para mostrar data realtime en panel
-  */
-  .scripts([
-      'cosapi/js/front.js',
-      'cosapi/js/helper.js',
-      'cosapi/js/datatable.js',
-      'cosapi/js/frontVue.js'
-  ],'public/js/cosapi.min.js','resources/assets/')
-
-  .scripts([
-      'node_modules/vue-select/vue-select.js',
-      'cosapi/js/profileuserVue.js'
-  ],'public/js/profileuserVue.min.js','resources/assets/')
-
-  /**
-  Generando el archivo cosapi_dashboard.min.js para mostrar data realtime en panel
-  */
-  .scripts([
-    'cosapi/js/env.js',
-    'vendor/jquery/jquery.min.js',
-    'vendor/bootstrap/js/bootstrap.min.js',
-    'extras/toastr/toastr.js',
-    'cosapi/js/helper.js',
-    'node_modules/vue/vue.min.js',
-    'node_modules/vue-resource/vue-resource.min.js',
-    'node_modules/vue-select/vue-select.js',
-    'node_modules/socket.io-client/socket.io.min.js'
-  ],'public/js/cosapi_dashboard.min.js','resources/assets/')
-  .scripts([
-    'cosapi/js/dashboard_vue.js'
-  ],'public/js/dashboard_vue.min.js','resources/assets/');
-
-  /** Versionando archivos css y js
-  mix.version([
-    'public/js/cosapidata_login.min.js',
-    'public/css/cosapidata_login.min.css',
-    'public/css/cosapi_adminlte.min.css'
-  ]);
-  */
-});
+/*
+ Generando los archivos css y js para el layout que necesite AdminLTE 2.4
+*/
+elixir(function(mix) {
+	mix
+		.styles([
+			'vendor/adminlte/plugins/bootstrap/dist/css/bootstrap.css',
+			'vendor/adminlte/plugins/font-awesome/css/font-awesome.css',
+			'vendor/adminlte/plugins/Ionicons/css/ionicons.css',
+			'vendor/adminlte/dist/css/AdminLTE.css',
+			'vendor/adminlte/dist/css/skins/_all-skins.css',
+			'sapia/css/preloader.css'
+		],'public/css/adminlte.min.css','resources/assets/')
+		.scripts([
+			'vendor/adminlte/plugins/jquery/dist/jquery.js',
+			'vendor/adminlte/plugins/bootstrap/dist/js/bootstrap.js',
+			'vendor/adminlte/plugins/fastclick/lib/fastclick.js',
+			'vendor/adminlte/dist/js/adminlte.js',
+			'sapia/js/right_menu_adminlte.js'
+		],'public/js/adminlte.min.js','resources/assets/')
+})
 
 /**
  Generando un solo archivo css y js para la funcionalidad de daterangepicker
 */
 elixir(function(mix) {
-  mix
-  .styles([
-      'plugins/daterangepicker/css/daterangepicker.css'
-  ],'public/css/daterangepicker.min.css','resources/assets/')
-  .scripts([
-      'plugins/daterangepicker/js/moment.min.js',
-      'plugins/daterangepicker/js/daterangepicker.js'
-  ],'public/js/daterangepicker.min.js','resources/assets/');
-});
+	mix
+		.styles([
+			'daterangepicker/daterangepicker.css'
+		],'public/css/daterangepicker.min.css','resources/assets/node_modules/')
+		.scripts([
+			'daterangepicker/moment.min.js',
+			'daterangepicker/daterangepicker.js'
+		],'public/js/daterangepicker.min.js','resources/assets/node_modules/')
+})
 
+/**
+ Generando un solo archivo css y js para la funcionalidad de notificaciones
+*/
+elixir(function(mix) {
+	mix
+		.styles([
+			'extras/bootstrap3-dialog/css/bootstrap-dialog.min.css',
+			'extras/toastr/toastr.min.css'
+		],'public/css/notifications.min.css','resources/assets/')
+		.scripts([
+			'extras/bootstrap3-dialog/js/bootstrap-dialog.js',
+			'extras/toastr/toastr.js'
+		],'public/js/notifications.min.js','resources/assets/')
+})
 
 /**
  Generando un solo archivo css y js para la funcionalidad de datatables
 */
 elixir(function(mix) {
-  mix
-  .styles([
-      'plugins/datatables/Buttons-1.2.1/css/buttons.bootstrap.min.css',
-      'plugins/datatables/DataTables-1.10.12/css/dataTables.bootstrap.min.css',
-      'plugins/datatables/Responsive-2.1.0/css/responsive.bootstrap.min.css',
-      'plugins/datatables/Select-1.2.0/css/select.bootstrap.min.css',
-      'plugins/datatables/FixedColumns-3.2.2/css/fixedColumns.bootstrap.min.css',
-      'plugins/datatables/FixedHeader-3.1.2/css/fixedHeader.bootstrap.min.css',
-      'cosapi/css/cosapi.css'
-  ],'public/css/datatables.min.css','resources/assets/')
-  .scripts([
-      'plugins/datatables/DataTables-1.10.12/js/jquery.dataTables.min.js',
-      'plugins/datatables/DataTables-1.10.12/js/dataTables.bootstrap.min.js',
-      'plugins/datatables/Select-1.2.0/js/dataTables.select.min.js',
-      'plugins/datatables/FixedColumns-3.2.2/js/dataTables.fixedColumns.min.js',
-      'plugins/datatables/FixedHeader-3.1.2/js/dataTables.fixedHeader.min.js',
-      'plugins/datatables/JSZip-2.5.0/jszip.min.js',
-      'plugins/datatables/Responsive-2.1.0/js/dataTables.responsive.min.js',
-      'plugins/datatables/Responsive-2.1.0/js/responsive.bootstrap.min.js',
-      'plugins/datatables/Buttons-1.2.1/js/dataTables.buttons.min.js',
-      'plugins/datatables/Buttons-1.2.1/js/buttons.bootstrap.min.js',
-      'plugins/datatables/Buttons-1.2.1/js/buttons.html5.min.js'
-  ],'public/js/datatables.min.js','resources/assets/');
-});
-
+	mix
+		.styles([
+			'plugins/datatables/Buttons-1.2.1/css/buttons.bootstrap.min.css',
+			'plugins/datatables/DataTables-1.10.12/css/dataTables.bootstrap.min.css',
+			'plugins/datatables/Responsive-2.1.0/css/responsive.bootstrap.min.css',
+			'plugins/datatables/Select-1.2.0/css/select.bootstrap.min.css',
+			'plugins/datatables/FixedColumns-3.2.2/css/fixedColumns.bootstrap.min.css',
+			'plugins/datatables/FixedHeader-3.1.2/css/fixedHeader.bootstrap.min.css',
+			'sapia/css/cosapi.css'
+		],'public/css/datatables.min.css','resources/assets/')
+		.scripts([
+			'plugins/datatables/DataTables-1.10.12/js/jquery.dataTables.min.js',
+			'plugins/datatables/DataTables-1.10.12/js/dataTables.bootstrap.min.js',
+			'plugins/datatables/Select-1.2.0/js/dataTables.select.min.js',
+			'plugins/datatables/FixedColumns-3.2.2/js/dataTables.fixedColumns.min.js',
+			'plugins/datatables/FixedHeader-3.1.2/js/dataTables.fixedHeader.min.js',
+			'plugins/datatables/JSZip-2.5.0/jszip.min.js',
+			'plugins/datatables/Responsive-2.1.0/js/dataTables.responsive.min.js',
+			'plugins/datatables/Responsive-2.1.0/js/responsive.bootstrap.min.js',
+			'plugins/datatables/Buttons-1.2.1/js/dataTables.buttons.min.js',
+			'plugins/datatables/Buttons-1.2.1/js/buttons.bootstrap.min.js',
+			'plugins/datatables/Buttons-1.2.1/js/buttons.html5.min.js'
+		],'public/js/datatables.min.js','resources/assets/')
+})
 
 /**
  Generando un solo archivo css y js para la funcionalidad de select
 */
 elixir(function(mix) {
-  mix
-  .styles([
-      'plugins/select2/select2.css'
-  ],'public/css/select2.min.css','resources/assets/')
-  .scripts([
-      'plugins/select2/select2.js'
-  ],'public/js/select2.min.js','resources/assets/');
-});
+	mix
+		.styles([
+			'node_modules/bootstrap-select/css/bootstrap-select.css'
+		],'public/css/bootstrap-select.min.css','resources/assets/')
+		.scripts([
+            'node_modules/bootstrap-select/js/bootstrap-select.js'
+		],'public/js/bootstrap-select.min.js','resources/assets/')
+})
+
+/**
+ Generando un solo archivo css y js para la funcionalidad de clockpicker
+ */
+elixir(function(mix) {
+    mix
+        .styles([
+            'node_modules/clockpicker/bootstrap-clockpicker.css'
+        ],'public/css/bootstrap-clockpicker.min.css','resources/assets/')
+        .scripts([
+            'node_modules/clockpicker/bootstrap-clockpicker.js'
+        ],'public/js/bootstrap-clockpicker.min.js','resources/assets/')
+})
+
+/**
+ Generando los archivos para el drop and drag el cual se usara en el dashboard_03
+*/
+elixir(function(mix) {
+	mix
+		.scripts([
+			'vendor/drop-drag/jquery-ui/jquery-ui.min.js',
+			'vendor/drop-drag/dashboard.js'
+		],'public/js/drop-drag.min.js','resources/assets/')
+})
+
+/**
+ Generando los archivos para el highchart el cual se usara en el dashboard_03
+*/
+elixir(function(mix) {
+	mix
+		.scripts([
+			'highcharts.js',
+			'modules/exporting.js'
+		],'public/js/highchart.min.js','resources/assets/node_modules/highcharts/')
+})
+
+
 
 elixir(function(mix) {
-  /**
+	/**
   Copiar archivos para funcionamiento de adminLTE y Boostrap
   */
-  mix
-  .copy('vendor/twbs/bootstrap/dist/fonts'                           , 'public/fonts')
-  .copy('vendor/fortawesome/font-awesome/fonts'                      , 'public/fonts')
-  .copy('resources/assets/plugins/adminLTE/css/skins'                , 'public/css/skins')
-  .copy('resources/assets/plugins/adminLTE/css/fonts-googleapis.css' , 'public/css/fonts-googleapis.css')
-  .copy('resources/assets/plugins/adminLTE/css/fonts-google-apis'    , 'public/css/fonts-google-apis')
+	mix
+		/**
+		 * Archivos necesario para el Adminlte 2.4
+		 */
+		.copy('resources/assets/vendor/adminlte/plugins/bootstrap/dist/fonts'       , 'public/fonts')
+		.copy('resources/assets/vendor/adminlte/plugins/Ionicons/fonts'             , 'public/fonts')
+		.copy('resources/assets/vendor/adminlte/plugins/font-awesome/fonts'         , 'public/fonts')
+		.copy('resources/assets/sapia/css/fonts-googleapis.css'                     , 'public/css/fonts-googleapis.css')
+		.copy('resources/assets/sapia/css/fonts-google-apis'                        , 'public/css/fonts-google-apis')
 
-  /**
-  Copy files individuales
-  */
-  .copy('resources/assets/index.php'                                 , 'public/index.php')
-  .copy('resources/assets/favicon.ico'                               , 'public/favicon.ico')
-  .copy('resources/assets/cosapi/descargar_audio.php'                , 'public/descargar_audio.php')
+		/**
+		* Generando los archivos para autogestionar los formularios con Vue
+		*/
+		.copy('resources/assets/sapia/js/form/formUsers.js'									, 'public/js/form/formUsers.min.js')
+        .copy('resources/assets/sapia/js/form/formQueues.js'								, 'public/js/form/formQueues.min.js')
+        .copy('resources/assets/sapia/js/form/formSoundMassive.js'							, 'public/js/form/formSoundMassive.min.js')
+        .copy('resources/assets/sapia/js/form/formTemplateQueues.js'						, 'public/js/form/formTemplateQueues.min.js')
 
-  /**
-  Copiar imagenes en una sola carpeta
-  */
-  .copy('resources/assets/images'                                    , 'public/img')
-  .copy('resources/assets/cosapi/img'                                , 'public/img')
+		/**
+	  	* Copiar imagenes en una sola carpeta
+	  	*/
+		.copy('resources/assets/images'										, 'public/img')
+		.copy('resources/assets/sapia/img'									, 'public/img')
+		.copy('resources/assets/index.php'									, 'public/index.php')
+		.copy('resources/assets/favicon.ico'								, 'public/favicon.ico')
 
-  .copy('resources/assets/cosapi/favicon'                            , 'public/favicon')
-  .copy('resources/assets/cosapi/background'                         , 'public/background')
-  .copy('resources/assets/images/default_avatar.png'                 , 'public/storage/default_avatar.png');
+		.copy('resources/assets/sapia/favicon'								, 'public/favicon')
+		.copy('resources/assets/sapia/background'							, 'public/background')
+        .copy('resources/assets/sapia/script_php'							, 'public/script_php')
+        .copy('resources/assets/sapia/sonidos'								, 'public/sonidos')
+		.copy('resources/assets/images/default_avatar.png'					, 'public/storage/default_avatar.png')
 
-});
+		.copy('resources/assets/sapia/css/dashboard.css'					, 'public/css/dashboard.css')
+		.copy('resources/assets/sapia/js/graphics.js'						, 'public/js/graphics.js')
+
+		.copy('resources/assets/sapia/js/dashboard_vue.js'					, 'public/js/dashboard_vue.min.js')
+		.copy('resources/assets/sapia/js/taskqueueVue.js'					, 'public/js/taskqueueVue.min.js')
+		.copy('resources/assets/sapia/js/viewuserqueueVue.js'				, 'public/js/viewuserqueueVue.min.js')
+
+		.copy('resources/assets/node_modules/push.js/push.min.js'			, 'public/js/push.min.js')
+})

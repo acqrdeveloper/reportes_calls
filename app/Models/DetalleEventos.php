@@ -31,14 +31,14 @@ class DetalleEventos extends Model
 
     public function scopeSelect_fechamod($query)
     {
-        return $query->Select(DB::raw("*,CONVERT(varchar(10),fecha_evento,120) as fechamod, CONVERT(varchar,fecha_evento,108) AS timemod,  
+        return $query->Select(DB::raw("*,CONVERT(varchar(10),fecha_evento,120) as fechamod, CONVERT(varchar,fecha_evento,108) AS timemod,
         CONVERT(varchar(5), DATEADD(minute, (DATEPART(n, fecha_evento) %30) * -1, getdate()), 108) AS hourmod " ));
     }
 
     public function scopeFiltro_user_rol($query,$rol,$users)
     {
 
-        if( $rol == 'user')
+        if( $rol == 'user' || $rol == 'backoffice')
         {
             return    $query->where('user_id','=',$users);
         }

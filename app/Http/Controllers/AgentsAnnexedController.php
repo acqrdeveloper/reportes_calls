@@ -4,7 +4,6 @@ namespace Cosapi\Http\Controllers;
 
 use Cosapi\Models\Anexo;
 use Illuminate\Http\Request;
-use Cosapi\Http\Requests;
 
 class AgentsAnnexedController extends CosapiController
 {
@@ -42,8 +41,6 @@ class AgentsAnnexedController extends CosapiController
             if($request->event) {
                 $list_annexed = $this->queryListAnexo($request->event);
                 foreach ($list_annexed as $key => $annexed) {
-
-
                     if($request->event == 'free'){
                         if ($annexed['user'] == null) {
                             if ($contador > 5) {

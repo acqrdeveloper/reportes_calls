@@ -8,28 +8,12 @@ use Cosapi\Models\Eventos;
 use Cosapi\Models\DetalleEventosHistory;
 use Cosapi\Models\DetalleEventos;
 
-use Cosapi\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use Excel;
 
 
 class EventsAgentController extends CosapiController
 {
-
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        $events = Eventos::select()->where('estado_visible_id','=',1)->get()->toArray();
-        return response()->json([
-            'getListEvents'                 => $events,
-        ], 200);
-    }
-
     /**
      * [events_consolidated Función que retorna la vista o datos para el reporte de Consolidated Events]
      * @param  Request $request  [Recepciona datos enviado por POST]
@@ -41,21 +25,23 @@ class EventsAgentController extends CosapiController
             if ($request->fecha_evento){
                 return $this->list_event_consolidated($request->fecha_evento);
             }else{
-                return view('elements/index')->with(array(
+
+                $arrayReport = $this->reportAction(array(
+                    'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewButtonSearch','viewButtonExport'
+                ),'');
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.events_consolidated.events_consolidated',
                     'titleReport'           => 'Report of Events Consolidateds',
-                    'viewButtonSearch'      => true,
-                    'viewHourSearch'        => false,
-                    'viewDateSearch'        => true,
                     'exportReport'          => 'export_events_consolidated',
                     'nameRouteController'   => ''
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
 
     }
-
-
 
     /**
      * [events_detail Función que carga los datos y vista del Details Events]
@@ -65,24 +51,27 @@ class EventsAgentController extends CosapiController
     public function events_detail (Request $request){
         if ($request->ajax()){
             if ($request->fecha_evento){
-
                 $days                   = explode(' - ',$request->fecha_evento);
                 $query_events           = $this->query_events($days);
                 $array_detail_events    = detailEvents($query_events);
                 $objCollection          = $this->convertCollection($array_detail_events);
                 $detail_events          = $this->FormatDatatable($objCollection);
                 return $detail_events;
-
             }else{
-                return view('elements/index')->with(array(
+                $customDataFilter = $this->customDataFilter();
+
+                $arrayReport = $this->reportAction(array(
+                    'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewButtonSearch','viewButtonExport','viewCustomFilter'
+                ),$customDataFilter['listUsers']['fullName']);
+
+                $arrayMerge = array_merge(array(
                     'routeReport'           => 'elements.events_detail.events_detail',
                     'titleReport'           => 'Report of Events',
-                    'viewButtonSearch'      => true,
-                    'viewHourSearch'        => false,
-                    'viewDateSearch'        => true,
                     'exportReport'          => 'export_events_detail',
                     'nameRouteController'   => ''
-                ));
+                ),$arrayReport);
+
+                return view('elements/index')->with($arrayMerge);
             }
         }
     }
@@ -278,6 +267,7 @@ class EventsAgentController extends CosapiController
                 'nombre_agente'     => $data['full_name_user'],
                 'fecha'             => $this->MostrarSoloFecha($data['fecha_evento']),
                 'hora'              => $this->MostrarSoloHora($data['fecha_evento']),
+                'fecha_hora'        => $this->MostrarSoloHora($data['fecha_evento']),
                 'evento'            => $data['name_evento'],
                 'accion'            => $data['accion'],
             ]);
@@ -315,15 +305,16 @@ class EventsAgentController extends CosapiController
      */
     protected function export_event_detail_csv($days){
             $days                   = explode(' - ',$days);
+            $filename               = 'detail_events_'.time();
 
             $builderview = $this->builderview(detailEvents($this->query_events($days)));
-            $this->BuilderExport($builderview,'detail_events','csv','exports');
+            $this->BuilderExport($builderview,$filename,'csv','exports');
 
 
         $data = [
             'succes'    => true,
             'path'      => [
-                'http://'.$_SERVER['HTTP_HOST'].'/exports/detail_events.csv'
+                'http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filename.'.csv'
             ]
         ];
 
@@ -338,7 +329,8 @@ class EventsAgentController extends CosapiController
      */
     protected function export_event_detail_excel($days){
         $days                   = explode(' - ',$days);
-        Excel::create('detail_events', function($excel) use($days) {
+        $filename               = 'detail_events_'.time();
+        Excel::create($filename, function($excel) use($days) {
 
 
             $excel->sheet('Detail Events', function($sheet) use($days) {
@@ -350,7 +342,7 @@ class EventsAgentController extends CosapiController
 
         $data = [
             'succes'    => true,
-            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/detail_events.xlsx']
+            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filename.'.xlsx']
         ];
 
         return $data;
@@ -362,14 +354,15 @@ class EventsAgentController extends CosapiController
      * @return [array]        [Array con la ubicación donde se a guardado el archivo exportado en CSV]
      */
     protected function export_event_consolidated_csv($days){
+        $filename               = 'detail_events_consolidated_'.substr(time(),6,4);
         $builderview = $this->builderview_event_consolidated($this->query_event_consolidated($days));
-        $this->BuilderExport($builderview,'detail_events_consolidated','csv','exports');
+        $this->BuilderExport($builderview,$filename,'csv','exports');
 
 
         $data = [
             'succes'    => true,
             'path'      => [
-                'http://'.$_SERVER['HTTP_HOST'].'/exports/detail_events_consolidated.csv'
+                'http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filename.'.csv'
             ]
         ];
 
@@ -383,7 +376,8 @@ class EventsAgentController extends CosapiController
      * @return [array]        [Array con la ubicación donde se a guardado el archivo exportado en Excel]
      */
     protected function export_event_consolidated_excel($days){
-        Excel::create('detail_events_consolidated', function($excel) use($days) {
+        $filename               = 'detail_events_consolidated_'.time();
+        Excel::create($filename, function($excel) use($days) {
 
             $excel->sheet('Consolidated Events', function($sheet) use($days) {
                 $sheet->fromArray($this->builderview_event_consolidated($this->query_event_consolidated($days)));
@@ -393,7 +387,7 @@ class EventsAgentController extends CosapiController
 
         $data = [
             'succes'    => true,
-            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/detail_events_consolidated.xlsx']
+            'path'      => ['http://'.$_SERVER['HTTP_HOST'].'/exports/'.$filename.'.xlsx']
         ];
 
         return $data;

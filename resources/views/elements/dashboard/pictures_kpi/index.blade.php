@@ -4,6 +4,6 @@
   @include('elements.dashboard.pictures_kpi.answered_time')
   @include('elements.dashboard.pictures_kpi.abandoned')
   @include('elements.dashboard.pictures_kpi.abandoned_time')
-  @include('elements.dashboard.pictures_kpi.sla_day')
   @include('elements.dashboard.pictures_kpi.callWaiting')
+  @include('elements.dashboard.pictures_kpi.show_date_current')
 </div>

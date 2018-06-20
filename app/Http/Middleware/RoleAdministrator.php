@@ -27,7 +27,6 @@ class RoleAdministrator
         if(Auth::check() && Auth::user()->role == 'admin') {
             return $next($request);
         }
-        $request->session()->flash('alert-danger','Usted no cuenta con los permisos necesarios para este recurso');
-        return redirect('/home');
+        return redirect('/errorRole');
     }
 }

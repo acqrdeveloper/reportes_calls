@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -137,7 +137,6 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
-
         /*
          * Application Service Providers...
          */
@@ -156,10 +155,18 @@ return [
         Cosapi\Providers\SocketioServiceProvider::class,
         Cosapi\Providers\VuejsServiceProvider::class,
         Cosapi\Providers\SailsioServiceProvider::class,
+        Cosapi\Providers\AdminLTEProvider::class,
+        Cosapi\Providers\HighchartsServiceProvider::class,
+        Cosapi\Providers\DropdragServiceProvider::class,
+        Cosapi\Providers\PushjsServiceProvider::class,
+        Cosapi\Providers\DateRangePickerServiceProvider::class,
 
         Collective\Html\HtmlServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         Arcanedev\LogViewer\LogViewerServiceProvider::class,
+
+        /** Carbon multi-language **/
+        Jenssegers\Date\DateServiceProvider::class,
 
         /** Excel **/
         Maatwebsite\Excel\ExcelServiceProvider::class,
@@ -169,6 +176,15 @@ return [
 
         /** Intervention Image **/
         Intervention\Image\ImageServiceProvider::class,
+
+        /** Ami para conectarse al ASterisk **/
+        Cosapi\Providers\PHPAmiServiceProvider::class,
+
+        /** Select Bootstrap **/
+        Cosapi\Providers\SelectBoostrapProvider::class,
+
+        /** ClockPicker Bootstrap **/
+        Cosapi\Providers\ClockPickerProvider::class,
     ],
 
     /*
@@ -205,7 +221,7 @@ return [
         'Log'       => Illuminate\Support\Facades\Log::class,
         'Mail'      => Illuminate\Support\Facades\Mail::class,
         'Password'  => Illuminate\Support\Facades\Password::class,
-        'Queue'     => Illuminate\Support\Facades\Queue::class,
+        'Queues'     => Illuminate\Support\Facades\Queues::class,
         'Redirect'  => Illuminate\Support\Facades\Redirect::class,
         'Redis'     => Illuminate\Support\Facades\Redis::class,
         'Request'   => Illuminate\Support\Facades\Request::class,
@@ -224,6 +240,12 @@ return [
         'Form'      => Collective\Html\FormFacade::class,
         'Html'      => Collective\Html\HtmlFacade::class,
         'Debugbar'  => Barryvdh\Debugbar\Facade::class,
+
+        /** Ami para conectarse al ASterisk **/
+        'phpAMI'    => Cosapi\Facades\phpAMI::class,
+
+        /** Carbon multi-language **/
+        'Date' => Jenssegers\Date\Date::class,
 
         /** Excel  **/
         'Excel'     => Maatwebsite\Excel\Facades\Excel::class,

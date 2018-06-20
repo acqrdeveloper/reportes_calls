@@ -8,7 +8,6 @@
 		<div class="box-header">
 			<h3 class="box-title"><b>Reportes de Estado por Agente</b></h3>
 		</div>
-		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
 
 		@include('filtros.filtro-fecha')
 		@include('filtros.button-search')

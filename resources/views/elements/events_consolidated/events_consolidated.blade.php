@@ -49,7 +49,6 @@
             </thead>
         </table>
     </div>
-
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
@@ -58,7 +57,6 @@
     });
 
     function buscar(){
-        var fecha =$("#texto").val();
         $("#reporte-estados").dataTable().fnDestroy();
         $("#reporte-estados").DataTable({
             "ajax"              : {
@@ -66,8 +64,8 @@
                 type    : "POST",
                 dataSrc : "data",
                 data :{
-                    _token       : $('input[name=_token]').val(),
-                    fecha_evento : fecha
+                    _token       : $('meta[name="_token"]').attr('content'),
+                    fecha_evento : $("input[name=fecha_evento]").val()
                 }
             },
             "columns"    : [

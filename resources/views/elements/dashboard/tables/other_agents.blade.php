@@ -1,15 +1,15 @@
 <div class="row-fluid">
   <div class="col-md-12">
-    <div class="box box-primary box-solid">
-      <div class="box-header with-border ">
-        <h3 class="box-title"><b>Details Agents Connect</b></h3>
+    <div class="box box-primary box-solid dashboard-box">
+      <div class="box-header with-border dashboard-box-header">
+        <h3 class="dashboard-title">Details Agents Connect</h3>
         <div class="box-tools pull-right">
-         <button type="button" class="btn btn-box-tool" data-widget="collapse" onclick="refreshDetailsCalls()" data-toggle="tooltip" title="Refresh"><i class="fa fa-refresh"></i>
-         </button>
+          <button type="button" class="btn btn-box-tool" data-widget="collapse" @click="refreshDetailsCalls()" data-toggle="tooltip" title="Refresh"><i class="fa fa-refresh"></i>
+          </button>
         </div>
       </div>
       <div class="box-body">
-        <div class="table-responsive" id =>
+        <div class="table-responsive">
           <table align="center" class="table table-responsive table-condensed text-center">
             <thead>
               <tr>
@@ -23,9 +23,10 @@
             </thead>
             <tbody>
               <template v-for="(other, index) in others ">
-                <tr>
-                  <td>@{{ index + 1 }}</td>
-                  <td class="products-list product-list-in-box">
+                @{{ searchInformationProfile(other,index,'others') }}
+                <tr v-if="compareRole(other.role) === true" >
+                  <td style="vertical-align: middle">@{{ index + 1 }}</td>
+                  <td style="vertical-align: middle"  class="products-list product-list-in-box">
                     <div class="product-img">
                       <img :src="'storage/' + other.avatar" alt="user-img" class="img-circle">
                     </div>
@@ -37,16 +38,16 @@
                       </small>
                     </div>
                   </td>
-                  <td>
+                  <td style="vertical-align: middle">
                     @{{ other.agent_annexed }}</td>
-                  <td>
+                  <td style="vertical-align: middle">
                     <span :class ="'label label-' + other.color">
                       <i :class ="other.icon" style="padding: 1px;" aria-hidden="true"></i>
-                      @{{ other.event_name }}
+                      @{{ searchNameEvent(other.event_id) }}
                     </span>
                   </td>
-                  <td>@{{ other.timeElapsed }}</td>
-                  <td>@{{ other.total_calls }}</td>
+                  <td style="vertical-align: middle">@{{ other.timeElapsed }}</td>
+                  <td style="vertical-align: middle">@{{ other.total_calls }}</td>
                 </tr>
               </template>
             </tbody>
