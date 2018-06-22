@@ -7,14 +7,12 @@ use Cosapi\Models\Queues;
 use Cosapi\Models\User;
 use Cosapi\Models\Users_Queues;
 use Cosapi\Models\QueuePriority;
-
 use Illuminate\Support\Facades\DB;
 use Cosapi\Models\DetalleEventos;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
-
-use Datatables;
-use Excel;
+use Yajra\Datatables\Facades\Datatables;
+use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Jenssegers\Date\Date;
 
