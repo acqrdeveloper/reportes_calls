@@ -67,6 +67,7 @@ return [
 
         'laravel' => [
             'driver'    => env('LARAVEL_DRIVER', 'sqlite'),
+            'odbc_driver'   => env('LARAVEL_ODBC_DRIVER', '{ODBC Driver 13 for SQL Server}'),
             'host'      => env('LARAVEL_HOST', 'localhost'),
             'port'      => env('LARAVEL_PORT', '3306'),
             'database'  => env('LARAVEL_DATABASE', 'forge'),
@@ -80,6 +81,7 @@ return [
 
         'sapia' => [
             'driver'    => env('SAPIA_DRIVER', 'sqlite'),
+            'odbc_driver'   => env('SAPIA_ODBC_DRIVER', '{ODBC Driver 13 for SQL Server}'),
             'host'      => env('SAPIA_HOST', 'localhost'),
             'port'      => env('SAPIA_PORT', '3306'),
             'database'  => env('SAPIA_DATABASE', 'forge'),
