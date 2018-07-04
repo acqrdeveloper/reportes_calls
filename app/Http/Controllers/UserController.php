@@ -5,18 +5,21 @@ namespace Cosapi\Http\Controllers;
 use Cosapi\Models\QueuePriority;
 use Cosapi\Models\Queues;
 use Cosapi\Models\Users_Queues;
+use Cosapi\Models\UsersProfile;
 use Illuminate\Http\Request;
 
 use Cosapi\Collector\Collector;
 use Cosapi\Http\Requests;
 use Cosapi\Models\User;
 use Cosapi\Models\Ubigeos;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
-use Image;
-use DB;
-use Excel;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 
 class UserController extends CosapiController
@@ -204,37 +207,36 @@ class UserController extends CosapiController
 
     public function uploadPerfil(Request $request){
         if ($request->ajax()) {
-
-            if(\Input::file('imgAvatar')){
-                \File::makeDirectory(public_path().'/storage/', $mode = 0777, true, true);
-                if(\Input::get('imgAvatarOriginal') == 'default_avatar.png') { $imageOriginal = ''; }else{ $imageOriginal = \Input::get('imgAvatarOriginal'); }
-                $image = \Input::file('imgAvatar');
+            if(Input::file('imgAvatar')){
+                File::makeDirectory(public_path().'/storage/', $mode = 0777, true, true);
+                if(Input::get('imgAvatarOriginal') == 'default_avatar.png') { $imageOriginal = ''; }else{ $imageOriginal = Input::get('imgAvatarOriginal'); }
+                $image = Input::file('imgAvatar');
                 if (strstr($image->getMimeType(), 'image/')) {
-                    $filename = \Input::get('userName') . time() . '.jpg';
+                    $filename = Input::get('userName') . time() . '.jpg';
                     $filenamedelete = public_path('storage\\') . $imageOriginal;
-                    \File::delete($filenamedelete);
+                    File::delete($filenamedelete);
                     Image::make($image)->resize(680, 680)->save(public_path('storage/') . $filename);
-                }else{
+                } else {
                     return 'NotImage';
                 }
             }else{
-                $filename = \Input::get('imgAvatarOriginal');
+                $filename = Input::get('imgAvatarOriginal');
             }
 
-            $idProfile          = \Input::get('idProfile');
-            $userId             = \Input::get('userId');
-            $numberDni          = \Input::get('numberDni');
-            $numberTelephone    = \Input::get('numberTelephone');
-            $idSex              = \Input::get('idSex');
-            $birthdate          = \Input::get('birthdate');
-            $firstName          = \Input::get('firstName');
-            $secondName         = \Input::get('secondName');
-            $firstLastName      = \Input::get('firstLastName');
-            $secondLastName     = \Input::get('secondLastName');
-            $idDepartamento     = \Input::get('idDepartamento');
+            $idProfile          = Input::get('idProfile');
+            $userId             = Input::get('userId');
+            $numberDni          = Input::get('numberDni');
+            $numberTelephone    = Input::get('numberTelephone');
+            $idSex              = Input::get('idSex');
+            $birthdate          = Input::get('birthdate');
+            $firstName          = Input::get('firstName');
+            $secondName         = Input::get('secondName');
+            $firstLastName      = Input::get('firstLastName');
+            $secondLastName     = Input::get('secondLastName');
+            $idDepartamento     = Input::get('idDepartamento');
 
-            if(!\Input::get('idProvincia') || \Input::get('idProvincia') == '' || \Input::get('idProvincia') == null){ $idProvincia = '';  }else{ $idProvincia = \Input::get('idProvincia'); }
-            if(!\Input::get('idDistrito') || \Input::get('idDistrito') == '' || \Input::get('idDistrito') == null){ $idDistrito = '';  }else{ $idDistrito = \Input::get('idDistrito'); }
+            if(!Input::get('idProvincia') || Input::get('idProvincia') == '' || Input::get('idProvincia') == null){ $idProvincia = '';  }else{ $idProvincia = Input::get('idProvincia'); }
+            if(!Input::get('idDistrito') || Input::get('idDistrito') == '' || Input::get('idDistrito') == null){ $idDistrito = '';  }else{ $idDistrito = Input::get('idDistrito'); }
 
             DB::table('users')
             ->where('id',$userId)
@@ -249,21 +251,44 @@ class UserController extends CosapiController
             
             if($idUbigeo){
                 $ubigeo = $idUbigeo[0]['ubigeo'];
-            }else{
+            } else {
                 $ubigeo = '10000';
             }
-
-            DB::statement('REPLACE INTO users_profile (id,user_id,dni,telefono,Sexo,fecha_nacimiento,avatar,ubigeo_id)'
-                .' VALUES '
-                .'("'.$idProfile.'","'.$userId.'","'.$numberDni.'","'.$numberTelephone.'","'.$idSex.'","'.$birthdate.'","'.$filename.'","'.$ubigeo.'")');
+          $dataUser = $this->searchUser($userId);
+          if(is_null($dataUser)){
+            (new UsersProfile())->fill([
+              'user_id'=>(int)$userId,
+              'dni'=>$numberDni,
+              'telefono'=>$numberTelephone,
+              'Sexo'=>$idSex,
+              'fecha_nacimiento'=> $birthdate,
+              'avatar'=>$filename,
+              'ubigeo_id' => $ubigeo
+            ])->save();
+          }else{
+            UsersProfile::where('id',$idProfile)->update([
+              'user_id'=>(int)$userId,
+              'dni'=>$numberDni,
+              'telefono'=>$numberTelephone,
+              'Sexo'=>$idSex,
+              'fecha_nacimiento'=> $birthdate,
+              'avatar'=>$filename,
+              'ubigeo_id' => $ubigeo
+            ]);
+          }
 
         }
         return 'Ok';
     }
 
+    function searchUser($user_id)
+    {
+        return UsersProfile::where('user_id',$user_id)->first();
+    }
+
     public function viewUser(Request $request){
         if ($request->ajax()) {
-            $resultado = User::Select()
+            $resultado = User::select()
                 ->with('userProfile')
                 ->where('id', $request->userID)
                 ->get()
@@ -278,19 +303,18 @@ class UserController extends CosapiController
 
     public function viewUbigeo(Request $request){
         if($request->ajax()) {
-            $resultado = Ubigeos::Select()
+            $resultado = Ubigeos::select()
                 ->where('ubigeo', $request->idUbigeo)
                 ->groupBy('departamento')
                 ->orderby('departamento','asc')
                 ->get()
                 ->toArray();
         }
-
         return $resultado;
     }
 
     public function getUbigeo($departamento,$provincia,$distrito){
-        $resultado = Ubigeos::Select('ubigeo')
+        $resultado = Ubigeos::select('ubigeo')
             ->where('departamento','=',$departamento)
             ->where('provincia','=',$provincia)
             ->where('distrito','=',$distrito)
@@ -302,7 +326,7 @@ class UserController extends CosapiController
 
     public function viewDepartamento(Request $request){
         if($request->ajax()) {
-            $resultado = Ubigeos::Select('departamento')
+            $resultado = Ubigeos::select('departamento')
                 ->groupBy('departamento')
                 ->orderby('departamento','asc')
                 ->get()
@@ -314,7 +338,7 @@ class UserController extends CosapiController
 
     public function viewProvincia(Request $request){
         if($request->ajax()) {
-            $resultado = Ubigeos::Select('provincia')
+            $resultado = Ubigeos::select('provincia')
                 ->where('departamento', $request->Departamento)
                 ->groupBy('provincia')
                 ->orderby('provincia','asc')
@@ -327,7 +351,7 @@ class UserController extends CosapiController
 
     public function viewDistrito(Request $request){
         if($request->ajax()) {
-            $resultado = Ubigeos::Select('distrito')
+            $resultado = Ubigeos::select('distrito')
                 ->where('provincia', $request->Provincia)
                 ->groupBy('distrito')
                 ->orderby('distrito','asc')
