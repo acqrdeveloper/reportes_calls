@@ -7,7 +7,6 @@ use Cosapi\Models\Queues;
 use Cosapi\Models\Users_Queues;
 use Cosapi\Models\UsersProfile;
 use Illuminate\Http\Request;
-
 use Cosapi\Collector\Collector;
 use Cosapi\Http\Requests;
 use Cosapi\Models\User;
@@ -134,25 +133,41 @@ class UserController extends CosapiController
     }
 
     public function saveFormAssingQueue(Requests\UsersAssignQueuesRequest $request){
+        $queueQuery = false;
         if ($request->ajax()){
             Users_Queues::where('user_id', $request->userID)->delete();
             if($request->checkQueue){
                 foreach($request->checkQueue as $keyQueue => $valueQueue){
-                    $queueQuery = Users_Queues::updateOrCreate([
-                        'user_id'       => $request->userID,
-                        'queue_id'      => $valueQueue
-                    ], [
-                        'user_id'       => $request->userID,
-                        'queue_id'      => $valueQueue,
-                        'priority'      => $request->selectPriority[$keyQueue]
+
+                  $dataUserQueue = $this->searchUserQueue($request->userID,$valueQueue);
+                  if(is_null($dataUserQueue)) {
+                    $queueQuery = (new Users_Queues())->insert([
+                      'user_id'       => $request->userID,
+                      'queue_id'      => $valueQueue,
+                      'priority'      => $request->selectPriority[$keyQueue]
                     ]);
+                  } else {
+                    $queueQuery = Users_Queues::where('id',$dataUserQueue->id)->update([
+                      'user_id'       => $request->userID,
+                      'queue_id'      => $valueQueue,
+                      'priority'      => $request->selectPriority[$keyQueue]
+                    ]);
+                  }
+
                 }
-                if($queueQuery) return ['message' => 'Success'];
-                return ['message' => 'Error'];
+                if($queueQuery) {
+                  return ['message' => 'Success'];
+                }else{
+                  return ['message' => 'Error'];
+                }
             }
             return ['message' => 'Success'];
         }
         return ['message' => 'Error'];
+    }
+    function searchUserQueue($user_id,$queue_id)
+    {
+      return Users_Queues::where('user_id',$user_id)->where('queue_id',$queue_id)->first();
     }
 
     public function saveFormChangePassword(Requests\UsersChangePasswordRequest $request){
