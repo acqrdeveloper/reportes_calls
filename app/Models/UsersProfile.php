@@ -11,5 +11,6 @@ class UsersProfile extends Model
   protected $fillable = [
     'user_id', 'dni', 'telefono', 'Sexo', 'fecha_nacimiento','avatar','ubigeo_id'
   ];
+  public $timestamps      = false;
 
 }
