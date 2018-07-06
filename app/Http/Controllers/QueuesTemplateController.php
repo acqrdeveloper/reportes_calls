@@ -190,8 +190,8 @@ class QueuesTemplateController extends CosapiController
     public function saveFormTemplateQueues(QueuesTemplateRequest $request)
     {
         if ($request->ajax()) {
-          $dataQueueTemplate = $this->searchQueuesTemplate($request->templateQueueID);
-          if(is_null($dataQueueTemplate)){
+
+          if (empty($request->get('templateQueueID'))) {//Crear
             $teamplateQueueQuery = (new QueuesTemplate())->insert([
               'name_template' => $request->nameTemplateQueue,
               'music_onhold' => $request->selectedMusicOnHold,
@@ -205,8 +205,8 @@ class QueuesTemplateController extends CosapiController
               'maxlen_template' => $request->maxLen,
               'estado_id' => '1'
             ]);
-          } else {
-            $teamplateQueueQuery = QueuesTemplate::where('id',$dataQueueTemplate->id)->update([
+          } else {//Actualizar
+            $teamplateQueueQuery = QueuesTemplate::where('id',$request->templateQueueID)->update([
               'name_template' => $request->nameTemplateQueue,
               'music_onhold' => $request->selectedMusicOnHold,
               'empty_template' => $request->selectedJoinEmpty,
@@ -229,10 +229,5 @@ class QueuesTemplateController extends CosapiController
         }
         return ['message' => 'Error'];
     }
-
-  function searchQueuesTemplate($id)
-  {
-    return QueuesTemplate::where('id',$id)->first();
-  }
 
 }
