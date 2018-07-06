@@ -305,7 +305,7 @@ class UserController extends CosapiController
       }
       $dataUser = $this->searchUser($userId);
       if (is_null($dataUser)) {
-        (new UsersProfile())->fill([
+        (new UsersProfile())->insert([
           'user_id' => (int)$userId,
           'dni' => $numberDni,
           'telefono' => $numberTelephone,
@@ -313,7 +313,7 @@ class UserController extends CosapiController
           'fecha_nacimiento' => $birthdate,
           'avatar' => $filename,
           'ubigeo_id' => $ubigeo
-        ])->save();
+        ]);
       } else {
         UsersProfile::where('id', $idProfile)->update([
           'user_id' => (int)$userId,
