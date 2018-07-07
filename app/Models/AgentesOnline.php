@@ -12,8 +12,7 @@ class AgentesOnline extends Model
 
     public function scopeSelect_fechamod($query)
     {
-        
-        return $query->Select(DB::raw("DATE_FORMAT(fecha_evento,'%d/%m/%Y') AS date_agent, DATE_FORMAT(fecha_evento,'%H:%i') AS hour_agent, COUNT(*) AS quantity " ));
+        return $query->Select(DB::raw(" CONVERT(varchar,fecha_evento,103) AS date_agent, CONVERT(varchar(5),fecha_evento,108) AS hour_agent, COUNT(*) AS quantity " ));
     }
 
     public function scopeFiltro_days($query,$days)
@@ -21,7 +20,7 @@ class AgentesOnline extends Model
 
         if( ! empty($days))
         {
-            return    $query->whereBetween(DB::raw("DATE(fecha_evento)"),$days);
+            return    $query->whereBetween(DB::raw(" CONVERT(varchar(10),fecha_evento,120)"),$days);
         }
 
     }

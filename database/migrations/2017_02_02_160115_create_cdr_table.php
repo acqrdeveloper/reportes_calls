@@ -14,7 +14,7 @@ class CreateCdrTable extends Migration
     {
         Schema::create('cdr', function(Blueprint $table)
         {
-            $table->unsignedInteger('id');
+            $table->increments('id')->unsigned();
             $table->dateTime('calldate')->default('0000-00-00 00:00:00');
             $table->string('clid', 80)->default('');
             $table->string('src', 80)->default('');
@@ -31,6 +31,10 @@ class CreateCdrTable extends Migration
             $table->string('accountcode', 20)->default('');
             $table->string('uniqueid', 32)->default('');
             $table->string('userfield')->default('');
+            $table->string('peeraccount',20)->default('');
+            $table->string('linkedid',32)->default('');
+            $table->unsignedInteger('sequence')->default(0);
+              
             $table->index(['src','disposition','lastdata','calldate'], 'Filtro_kpi_dashboard_outbound');
         });
     }

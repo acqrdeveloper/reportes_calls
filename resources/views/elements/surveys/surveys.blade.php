@@ -25,12 +25,14 @@
                         <th>Type Survey</th>
                         <th>Date</th>
                         <th>Hour</th>
-                        <th>Fecha Hora</th>
+                        <th>DateTime</th>
                         <th>Username</th>
                         <th>Anexo</th>
                         <th>Telephone</th>
                         <th>Skill</th>
-                        <th>Duration</th>
+                        <th>Opcion IVR</th>
+                        <th>Duration Call</th>
+                        <th>Duration Survey</th>
                         <th>Question_01</th>
                         <th>Answer_01</th>
                         <th>Question_02</th>

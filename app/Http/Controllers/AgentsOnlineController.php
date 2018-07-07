@@ -77,7 +77,7 @@ class AgentsOnlineController extends CosapiController
         $query_agents_online    = AgentesOnline::select_fechamod()
                                         ->filtro_days($days)
                                         ->whereNotIn('evento_id',$events_ignored)
-                                        ->groupBy('date_agent','hour_agent')
+                                        ->groupBy(DB::raw("CONVERT(varchar,fecha_evento,103), CONVERT(varchar(5),fecha_evento,108)"))
                                         ->get();
         return $query_agents_online;
     }

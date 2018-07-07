@@ -115,6 +115,8 @@ class DashboardController extends IncomingCallsController
                             ->join('eventos', 'eventos.id', '=', 'event_id')
                             ->whereIn('agent_role', $request->filterRoles)
                             ->groupBy('event_id')
+                            ->groupBy('agent_role')
+                            ->groupBy('eventos.name')
                             ->get()->toArray();
             return response()->json(['message' => $AgentOnline], 200);
         } catch (\Exception $e) {
@@ -150,7 +152,7 @@ class DashboardController extends IncomingCallsController
             $percentageUnanswer = 0;
 
             $Queue_Log = Queue_Log::select(DB::raw('event, SUM(ABS(info1)) as timeInQueue, SUM(ABS(info2)) AS timeCallDuration, count(1) AS quantityEvent '))
-                          ->where(DB::raw('DATE(datetime)'), date('Y-m-d'))
+                          ->where(DB::raw('CONVERT(char(10),queue_stats_mv.datetime,120)'), date('Y-m-d'))
                           ->groupBy('event')
                           ->get()
                           ->toArray();
@@ -160,7 +162,7 @@ class DashboardController extends IncomingCallsController
             $tamano_anexo = $this->lengthAnnexed();
 
             $OutgoingCallsController = Cdr::Select(DB::raw('SUM(billsec) AS billsec'))
-                                        ->whereIn(DB::raw('LENGTH(src)'), $tamano_anexo)
+                                        ->whereIn(DB::raw('LEN(src)'), $tamano_anexo)
                                         ->where('dst', 'not like', '*%')
                                         ->where('disposition', '=', 'ANSWERED')
                                         ->where('lastapp', '=', 'Dial')

@@ -16,7 +16,6 @@ class CreateEstadosTable extends Migration
             $table->TinyInteger('id', true,true);
             $table->string('name',15)->unique();
             $table->timestamps();
-
         });
     }
 

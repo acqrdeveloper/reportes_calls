@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class EstadosTableSeeder extends Seeder
 {
@@ -11,7 +12,9 @@ class EstadosTableSeeder extends Seeder
      */
     public function run()
     {
-       \DB::table('estados')->insert(array('id'  =>  '1', 'name'  =>  'Activo'    ));
-        \DB::table('estados')->insert(array('id'  =>  '2', 'name'  =>  'Inactivo'  ));
+
+      $myTable = 'estados';
+      \DB::table($myTable)->insert(array('id'  =>  '1', 'name'  =>  'Activo',   'created_at' => Carbon::now(), 'updated_at' => Carbon::now()   ));
+      \DB::table($myTable)->insert(array('id'  =>  '2', 'name'  =>  'Inactivo', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()  ));
     }
 }

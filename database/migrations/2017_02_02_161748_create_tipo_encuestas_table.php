@@ -20,7 +20,9 @@ class CreateTipoEncuestasTable extends Migration
             $table->timestamps();
 
             /*fk tipo encuesta*/
-            $table->foreign('estado_id', 'FK_tipo_encuestas')->references('id')->on('estados')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+            $table->foreign('estado_id')
+                  ->references('id')
+                  ->on('estados');
         });
     }
 

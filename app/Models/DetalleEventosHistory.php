@@ -7,7 +7,7 @@ use Cosapi\Models\DetalleEventos;
 class DetalleEventosHistory extends DetalleEventos
 {
     protected $connection   = 'laravel';
-    protected $table 		= 'detalle_eventos_history';
+    protected $table 		    = 'detalle_eventos_history';
 
 
     public function scopeFiltro_user_rol($query,$rol,$users)

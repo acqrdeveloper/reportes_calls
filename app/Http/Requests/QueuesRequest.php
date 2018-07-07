@@ -23,15 +23,27 @@ class QueuesRequest extends Request
      */
     public function rules()
     {
+      if (empty($this->request->get('queueID'))) {//Crear
         return [
-            'nameQueue'           => 'required|unique:queues,name,'.$this->queueID,
-            'numVdn'              => 'required|min:4|max:5|unique:queues,vdn,'.$this->queueID,
-            'selectedStrategy'    => 'required',
-            'selectedPriority'    => 'required',
-            'selectedTemplate'    => 'required',
-            'limitCallWaiting'    => 'required',
-            'selectedMusic'       => 'required'
+          'nameQueue' => 'required|unique:queues,name',
+          'numVdn' => 'required|min:4|max:5|unique:queues,vdn',
+          'selectedStrategy' => 'required',
+          'selectedPriority' => 'required',
+          'selectedTemplate' => 'required',
+          'limitCallWaiting' => 'required',
+          'selectedMusic' => 'required'
         ];
+      } else {//Actualizar
+        return [
+          'nameQueue' => 'required|unique:queues,name,' . $this->queueID,
+          'numVdn' => 'required|min:4|max:5|unique:queues,vdn,' . $this->queueID,
+          'selectedStrategy' => 'required',
+          'selectedPriority' => 'required',
+          'selectedTemplate' => 'required',
+          'limitCallWaiting' => 'required',
+          'selectedMusic' => 'required'
+        ];
+      }
     }
 
     public function messages()

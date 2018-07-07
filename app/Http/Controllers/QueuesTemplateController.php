@@ -190,21 +190,36 @@ class QueuesTemplateController extends CosapiController
     public function saveFormTemplateQueues(QueuesTemplateRequest $request)
     {
         if ($request->ajax()) {
-            $teamplateQueueQuery = QueuesTemplate::updateOrCreate([
-                'id' => $request->templateQueueID
-            ], [
-                'name_template' => $request->nameTemplateQueue,
-                'music_onhold' => $request->selectedMusicOnHold,
-                'empty_template' => $request->selectedJoinEmpty,
-                'timeout_template' => $request->timeOut,
-                'memberdelay_template' => $request->memberDelay,
-                'ringinuse_template' => $request->selectedRingInUse,
-                'autopause_template' => $request->selectedAutoPause,
-                'autopausebusy_template' => $request->selectedAutoPauseBusy,
-                'wrapuptime_template' => $request->wrapUptime,
-                'maxlen_template' => $request->maxLen,
-                'estado_id' => '1'
+
+          if (empty($request->get('templateQueueID'))) {//Crear
+            $teamplateQueueQuery = (new QueuesTemplate())->insert([
+              'name_template' => $request->nameTemplateQueue,
+              'music_onhold' => $request->selectedMusicOnHold,
+              'empty_template' => $request->selectedJoinEmpty,
+              'timeout_template' => $request->timeOut,
+              'memberdelay_template' => $request->memberDelay,
+              'ringinuse_template' => $request->selectedRingInUse,
+              'autopause_template' => $request->selectedAutoPause,
+              'autopausebusy_template' => $request->selectedAutoPauseBusy,
+              'wrapuptime_template' => $request->wrapUptime,
+              'maxlen_template' => $request->maxLen,
+              'estado_id' => '1'
             ]);
+          } else {//Actualizar
+            $teamplateQueueQuery = QueuesTemplate::where('id',$request->templateQueueID)->update([
+              'name_template' => $request->nameTemplateQueue,
+              'music_onhold' => $request->selectedMusicOnHold,
+              'empty_template' => $request->selectedJoinEmpty,
+              'timeout_template' => $request->timeOut,
+              'memberdelay_template' => $request->memberDelay,
+              'ringinuse_template' => $request->selectedRingInUse,
+              'autopause_template' => $request->selectedAutoPause,
+              'autopausebusy_template' => $request->selectedAutoPauseBusy,
+              'wrapuptime_template' => $request->wrapUptime,
+              'maxlen_template' => $request->maxLen,
+              'estado_id' => '1'
+            ]);
+          }
 
             $action = ($request->templateQueueID ? 'updated' : 'create');
             if ($teamplateQueueQuery) {
@@ -214,4 +229,5 @@ class QueuesTemplateController extends CosapiController
         }
         return ['message' => 'Error'];
     }
+
 }

@@ -15,20 +15,33 @@ class CreateAgentOnlineTable extends Migration
         Schema::create('agent_online', function (Blueprint $table)
         {
             $table->increments('id')->unsigned();
-            $table->string('number_annexed',8);
-            $table->string('name_agent',35);
-            $table->string('name_event',25);
-            $table->string('name_queue_inbound',50);
-            $table->string('phone_number_inbound',25);
-            $table->time('star_call_inbound');
-            $table->string('total_calls',4);
-            $table->string('name_queue',25);
-            $table->string('status_pause',1);
-            $table->string('penalty_agent',1);
-            $table->string('ringinuse_agent',20);
-            $table->TinyInteger('user_id',false,true);
-            $table->TinyInteger('event_id',false,true)->nullable();
-            $table->string('observaciones',50)->nullable();
+          	$table->unsignedTinyInteger('agent_user_id');
+          	$table->string('agent_role',15)->nullable();
+          	$table->string('agent_name',50);
+          	$table->char('agent_annexed',4)->default('-');
+          	$table->char('agent_status',1)->default(0);
+          	$table->char('agent_penality',1)->default(1);
+          	$table->unsignedTinyInteger('agent_total_calls')->default(0);
+          	$table->char('event_id',2)->nullable();
+          	$table->char('event_id_old',2)->nullable();
+          	$table->string('event_name',35);
+          	$table->string('event_observaciones',50)->nullable();
+          	$table->string('event_time',15);
+          	$table->string('inbound_queue',50)->nullable();
+          	$table->string('inbound_phone',25)->nullable();
+          	$table->string('inbound_start',15);
+          	$table->string('outbound_phone',25)->nullable();
+          	$table->string('outbound_start',15);
+          	$table->string('timeElapsed',2);
+          	$table->char('transfer',2)->nullable()->default(0);
+          	$table->unsignedTinyInteger('status_call')->default(0);
+          	$table->string('second_outbound_phone',25)->nullable();
+          	$table->string('second_outbound_start',15);
+          	$table->char('second_event_id',2)->nullable();
+          	$table->string('second_event_name',35);
+
+            $table->index(['agent_name'], 'Username_Unico');
+
         });
     }
 

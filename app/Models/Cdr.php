@@ -15,7 +15,7 @@ class Cdr extends Model
 
         if( ! empty($days))
         {
-            return    $query->whereBetween(DB::raw("DATE(calldate)"),$days);
+            return    $query->whereBetween(DB::raw("CONVERT(varchar(10),calldate,120)"),$days);
         }
 
     }

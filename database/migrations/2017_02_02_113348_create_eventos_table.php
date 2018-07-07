@@ -22,9 +22,9 @@ class CreateEventosTable extends Migration
              $table->unsignedInteger('cosapi_eventos');
              $table->unsignedInteger('claro_eventos');
              $table->unsignedTinyInteger('estado_id');
-             $table->timestamps();
              $table->string('icon',50)->nullable();
              $table->string('color',50)->nullable();
+             $table->timestamps();
 
              /*creando las relaciones de las llaves foraneas*/
              $table->foreign('estado_id')
@@ -37,9 +37,9 @@ class CreateEventosTable extends Migration
 
               $table->foreign('estado_visible_id')
                 ->references('id')
-                ->on('estados_visibles');   
+                ->on('estados_visibles');
 
-        });        
+        });
 
     }
 

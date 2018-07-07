@@ -79,7 +79,7 @@ class OutgoingCallsController extends CosapiController
         $tamano_anexo           = $this->lengthAnnexed();
         $query_calls_outgoing   = Cdr::Select()
                                     ->filtro_user_rol($this->UserRole,$this->UserSystem)
-                                    ->whereIn(DB::raw('LENGTH(src)'),$tamano_anexo)
+                                    ->whereIn(DB::raw('LEN(src)'),$tamano_anexo)
                                     ->where('dst','not like','*%')
                                     ->where('disposition','=','ANSWERED')
                                     ->where('lastapp','=','Dial')

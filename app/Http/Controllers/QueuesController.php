@@ -2,8 +2,9 @@
 
 namespace Cosapi\Http\Controllers;
 
-use Carbon\Carbon;
 use Cosapi\Collector\Collector;
+use Cosapi\Http\Requests\QueuesAssignUsersRequest;
+use Cosapi\Http\Requests\QueuesRequest;
 use Cosapi\Models\QueueMusic;
 use Cosapi\Models\Queues;
 use Cosapi\Models\QueuePriority;
@@ -12,10 +13,7 @@ use Cosapi\Models\QueueStrategy;
 use Cosapi\Models\User;
 use Cosapi\Models\Users_Queues;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-
-use Cosapi\Http\Requests;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -251,21 +249,33 @@ class QueuesController extends CosapiController
         return $resultArray;
     }
 
-    public function saveFormQueues(Requests\QueuesRequest $request)
+    public function saveFormQueues(QueuesRequest $request)
     {
         if ($request->ajax()) {
-            $queueQuery = Queues::updateOrCreate([
-                'id' => $request->queueID
-            ], [
-                'name' => $request->nameQueue,
-                'vdn' => $request->numVdn,
-                'queues_strategy_id' => $request->selectedStrategy,
-                'queues_priority_id' => $request->selectedPriority,
-                'limit_call_waiting' => $request->limitCallWaiting,
-                'queues_music_id' => $request->selectedMusic,
-                'queues_template_id' => $request->selectedTemplate,
-                'estado_id' => '1'
+
+          if (empty($request->get('queueID'))) {//Crear
+            $queueQuery = (new Queues())->insert([
+              'name' => $request->nameQueue,
+              'vdn' => $request->numVdn,
+              'queues_strategy_id' => $request->selectedStrategy,
+              'queues_priority_id' => $request->selectedPriority,
+              'limit_call_waiting' => $request->limitCallWaiting,
+              'queues_music_id' => $request->selectedMusic,
+              'queues_template_id' => $request->selectedTemplate,
+              'estado_id' => '1'
             ]);
+          } else {//Actualizar
+            $queueQuery = Queues::where('id',$request->queueID)->update([
+              'name' => $request->nameQueue,
+              'vdn' => $request->numVdn,
+              'queues_strategy_id' => $request->selectedStrategy,
+              'queues_priority_id' => $request->selectedPriority,
+              'limit_call_waiting' => $request->limitCallWaiting,
+              'queues_music_id' => $request->selectedMusic,
+              'queues_template_id' => $request->selectedTemplate,
+              'estado_id' => '1'
+            ]);
+          }
 
             $action = ($request->queueID ? 'updated' : 'create');
             if ($queueQuery) {
@@ -292,22 +302,28 @@ class QueuesController extends CosapiController
         return ['message' => 'Error'];
     }
 
-    public function saveFormAssingUser(Requests\QueuesAssignUsersRequest $request)
+    public function saveFormAssingUser(QueuesAssignUsersRequest $request)
     {
         if ($request->ajax()) {
             Users_Queues::where('queue_id', $request->queueID)->delete();
             if ($request->checkUser) {
                 foreach ($request->checkUser as $keyUserQueue => $valUserQueue) {
-                    $queueUserQuery = Users_Queues::updateOrCreate([
-                        'user_id' => $valUserQueue,
-                        'queue_id' => $request->queueID
-                    ], [
-                        'user_id' => $valUserQueue,
-                        'queue_id' => $request->queueID,
-                        'priority' => $request->selectPriority[$keyUserQueue],
-                        'audit_user' => Auth::id(),
-                        'audit_date' => Carbon::now()
+
+                  $dataUserAssign = $this->searchUserAssign($valUserQueue,$request->queueID);
+                  if(is_null($dataUserAssign)) {//Crear
+                    $queueUserQuery = (new Users_Queues())->insert([
+                      'user_id' => $valUserQueue,
+                      'queue_id' => $request->queueID,
+                      'priority' => $request->selectPriority[$keyUserQueue],
                     ]);
+                  } else {//Actualizar
+                    $queueUserQuery = Users_Queues::where('id',$dataUserAssign->id)->update([
+                      'user_id' => $valUserQueue,
+                      'queue_id' => $request->queueID,
+                      'priority' => $request->selectPriority[$keyUserQueue],
+                    ]);
+                  }
+
                 }
                 if ($queueUserQuery) {
                     return ['message' => 'Success'];
@@ -318,6 +334,11 @@ class QueuesController extends CosapiController
         }
         return ['message' => 'Error'];
     }
+
+    function searchUserAssign($user_id,$queue_id)
+  {
+    return Users_Queues::where('user_id',$user_id)->where('queue_id',$queue_id)->first();
+  }
 
     public function taskManagerQueues()
     {

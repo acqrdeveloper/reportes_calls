@@ -185,6 +185,9 @@ return [
 
         /** ClockPicker Bootstrap **/
         Cosapi\Providers\ClockPickerProvider::class,
+
+        /** Driver Microsoft SQLServer **/
+        TechScope\SqlServer\SqlServerServiceProvider::class
     ],
 
     /*

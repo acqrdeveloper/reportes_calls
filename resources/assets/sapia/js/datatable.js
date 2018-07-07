@@ -97,12 +97,14 @@ const columnsDatatable = (route) => {
 			{'data': 'Type Survey', 'order': 'asc'},
 			{'data': 'Date'},
 			{'data': 'Hour'},
-			{'data': 'fecha_hora'},
+			{'data': 'DateTime'},
 			{'data': 'Username'},
 			{'data': 'Anexo'},
 			{'data': 'Telephone'},
 			{'data': 'Skill'},
-			{'data': 'Duration'},
+			{'data': 'Opcion IVR'},
+			{'data': 'Duration Call'},
+			{'data': 'Duration Survey'},
 			{'data': 'Question_01'},
 			{'data': 'Answer_01'},
 			{'data': 'Question_02'},
@@ -163,7 +165,7 @@ const columnsDatatable = (route) => {
 		columns = [
 			{'data': 'date', 'order': 'asc'},
 			{'data': 'hour'},
-            {'data': 'fecha_hora'},
+			{'data': 'fecha_hora'},
 			{'data': 'annexedorigin'},
 			{'data': 'username'},
 			{'data': 'destination'},
@@ -217,33 +219,33 @@ const columnsDatatable = (route) => {
 		]
 	}
 
-    if (route === 'manage_template_queues') {
-        columns = [
-            {'data': 'Id', 'order': 'asc'},
-            {'data': 'Name'},
-            {'data': 'MusicOnHold'},
-            {'data': 'Status'},
-            {'data': 'Actions', 'className': 'text-center'}
-        ]
-    }
+	if (route === 'manage_template_queues') {
+		columns = [
+			{'data': 'Id', 'order': 'asc'},
+			{'data': 'Name'},
+			{'data': 'MusicOnHold'},
+			{'data': 'Status'},
+			{'data': 'Actions', 'className': 'text-center'}
+		]
+	}
 
-    if (route === 'manage_sound_massive') {
-        columns = [
-            {'data': 'Id', 'order': 'asc'},
-            {'data': 'Name'},
-            {'data': 'Status'},
-            {'data': 'Actions', 'className': 'text-center'}
-        ]
-    }
+	if (route === 'manage_sound_massive') {
+		columns = [
+			{'data': 'Id', 'order': 'asc'},
+			{'data': 'Name'},
+			{'data': 'Status'},
+			{'data': 'Actions', 'className': 'text-center'}
+		]
+	}
 
-    if (route === 'manage_music_on_hold') {
-        columns = [
-            {'data': 'Id', 'order': 'asc'},
-            {'data': 'Name'},
-            {'data': 'Mode'},
-            {'data': 'Status'}
-        ]
-    }
+	if (route === 'manage_music_on_hold') {
+		columns = [
+			{'data': 'Id', 'order': 'asc'},
+			{'data': 'Name'},
+			{'data': 'Mode'},
+			{'data': 'Status'}
+		]
+	}
 
     if (route === 'report_level') {
         columns = [
@@ -292,15 +294,15 @@ const columnsDatatable = (route) => {
  */
 const DataTableHide = (filterRole, nameDatatable, numeroColumnas, roleUser) => {
 	if(filterRole){
-        let exist = RoleTableHide().indexOf(roleUser)
-        if (exist >= 0) {
-            let DataTableDiv = $(`#${nameDatatable}`).DataTable()
-            DataTableDiv.columns(numeroColumnas).visible(false, false)
-            DataTableDiv.columns.adjust().draw(false)
-        }
+		let exist = RoleTableHide().indexOf(roleUser)
+		if (exist >= 0) {
+			let DataTableDiv = $(`#${nameDatatable}`).DataTable()
+			DataTableDiv.columns(numeroColumnas).visible(false, false)
+			DataTableDiv.columns.adjust().draw(false)
+		}
 	}else{
-        let DataTableDiv = $(`#${nameDatatable}`).DataTable()
-        DataTableDiv.columns(numeroColumnas).visible(false, false)
-        DataTableDiv.columns.adjust().draw(false)
+		let DataTableDiv = $(`#${nameDatatable}`).DataTable()
+		DataTableDiv.columns(numeroColumnas).visible(false, false)
+		DataTableDiv.columns.adjust().draw(false)
 	}
 }
