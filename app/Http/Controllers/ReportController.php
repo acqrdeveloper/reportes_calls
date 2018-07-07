@@ -15,18 +15,10 @@ class ReportController extends CosapiController
     {
         if ($request->ajax()) {
             if ($request->fecha_evento != null) {
-//                if ($request->group_filter == "groupAgent") {
                 $data = $this->byUserAll($request);
                 $builderview = $this->builderview2($data);
                 $outgoingcollection = $this->outgoingcollection2($builderview);
                 return $this->FormatDatatable($outgoingcollection);
-//                }
-//                else {
-//                    $data = $this->byUser(null, $request);
-//                    $builderview = $this->builderview($data);
-//                    $outgoingcollection = $this->outgoingcollection($builderview);
-//                    return $this->FormatDatatable($outgoingcollection);
-//                }
             } else {
                 $arrayReport = $this->reportAction(array(
                     'boxReport', 'dateHourFilter', 'dateFilter', 'viewDateSingleSearch', 'viewRolTypeSearch', 'viewButtonSearch', 'viewButtonExport'
@@ -149,21 +141,18 @@ class ReportController extends CosapiController
             $set = false;
             $last_data = null;
             //Params procedure
-//            echo ($request);
-            if (isset($request->fecha_evento)) {
-                $date_to_arr = explode(" - ", $request->fecha_evento);
-            } else {
-                $date_to_arr = explode(" - ", $request->days);
-            }
+
+            if (isset($request->fecha_evento)) $date_to_arr = explode(" - ", $request->fecha_evento);
+            else $date_to_arr = explode(" - ", $request->days);
+
             $pfecha_ini = $date_to_arr[0];
             $pfecha_fin = $date_to_arr[1];
 
-            if ($user != null) {
-                $puser_id = $user->id;
-            } else {
-                $puser_id = 48;
-            }
+            if ($user != null) $puser_id = $user->id;
+            else $puser_id = 48;
+
             $prol = $request->filter_rol;
+
             //Validar posicion para el rango de horario
             if (isset($hours[$k + 1])) {
                 $query = DB::select("CALL SP_REPORT_30('" . $pfecha_ini . "','" . $pfecha_fin . "','" . $hours[$k] . "','" . $hours[$k + 1] . "'," . $puser_id . ",'" . $prol . "'); ");
@@ -172,39 +161,30 @@ class ReportController extends CosapiController
             }
             //Si hay registros
             if (count($query)) {
-                if (isset($hours[$k + 1])) {
-                    $range_hour = $hours[$k] . " - " . $hours[$k + 1];
-                } else {
-                    $range_hour = $hours[$k] . " - " . $hours[0];
-                }
+                if (isset($hours[$k + 1])) $range_hour = $hours[$k] . " - " . $hours[$k + 1];
+                else $range_hour = $hours[$k] . " - " . $hours[0];
+
                 //Ultimo indice
                 $index_final = count($query) - 1;
+
                 //Recorrer registros
                 foreach ($query as $kk => $vv) {
 
                     //Validar si estamos tratando el mismo usuario
                     if ($user != null) {
-                        if ($vv->user_id != $current_user_id) {
-                            $data = [];
-                        }
-                        if ($vv->user_id == $user->id) {
-                            $current_user_id = $vv->user_id;
-                        }
+                        if ($vv->user_id != $current_user_id) $data = [];
+                        if ($vv->user_id == $user->id) $current_user_id = $vv->user_id;
                     }
 
 //##
-                    if (isset($query[$kk + 1])) {
-                        $diff_total = $this->getDiffDatetime($vv->date_event, $query[$kk + 1]->date_event, true);
-                    } else {
-                        $diff_total = $this->getDiffDatetime($vv->date_event, $query[0]->date_event, true);
-                    }
+                    if (isset($query[$kk + 1])) $diff_total = $this->getDiffDatetime($vv->date_event, $query[$kk + 1]->date_event, true);
+                    else $diff_total = $this->getDiffDatetime($vv->date_event, $query[0]->date_event, true);
+
                     //Primera regla
                     //Si es el primer indice
                     if ($kk == 0) {
                         $h = (new \DateTime($query[$kk]->date_event))->format("H:i:s");
-                        if ($h != $hours[$i]) {
-                            $temp_diff_ini = $this->getDiffDatetime($query[$kk]->date_event, $hours[$i], true);
-                        }
+                        if ($h != $hours[$i]) $temp_diff_ini = $this->getDiffDatetime($query[$kk]->date_event, $hours[$i], true);
                     }
                     //Segunda regla
                     //Si es el ultimo indice
@@ -447,21 +427,17 @@ class ReportController extends CosapiController
                         }
                     }
                     //Calcular total, no sumar los ultimos registros para estabilizar los 30 min
-                    if ($kk != $index_final) {
-                        $total += $diff_total;
-                    }
-                    //##
+                    if ($kk != $index_final) $total += $diff_total;
 
                 }//Fin ciclo $query
+
                 //Calcular diferencias temporales
                 //Si tiene temporal inicial Ej: [00:00:00 - 00:30:00] -> 00:10:00 = 10 min
-                if ($temp_diff_ini > 0) {
-                    $total = $total + $temp_diff_ini;
-                }
+                if ($temp_diff_ini > 0) $total = $total + $temp_diff_ini;
+
                 //Si tiene temporal fin Ej: [00:00:00 - 00:30:00] -> 00:25:00 = 5 min
-                if ($temp_diff_fin > 0) {
-                    $total = $total + $temp_diff_fin;
-                }
+                if ($temp_diff_fin > 0) $total = $total + $temp_diff_fin;
+
                 //Acondicionar los resultados de diferencia por estado
                 if ($set) {
                     if ($last_data != null) {
@@ -1045,7 +1021,7 @@ class ReportController extends CosapiController
             "23:00 - 00:00",
         ];
         $data = [];
-        $sql = DB::select("SELECT HOUR(DATETIME) as 'hour',COUNT(1) AS 'cantidad' FROM queue_stats_mv 
+        $sql = DB::select("SELECT HOUR(DATETIME) as 'hour',COUNT(1) AS 'cantidad' FROM queue_stats_mv
                             WHERE DATE(DATETIME) = '".$request->pfecha."'
                             AND EVENT ='ABANDON'
                             GROUP BY HOUR(DATETIME);");
@@ -1072,6 +1048,7 @@ class ReportController extends CosapiController
         }
             return $data;
     }
+
     function abandonadasDiez(Request $request)
     {
         $hours = [
@@ -1100,12 +1077,14 @@ class ReportController extends CosapiController
             "22:00 - 23:00",
             "23:00 - 00:00",
         ];
+
         $data = [];
-        $sql = DB::select("SELECT HOUR(DATETIME) AS 'hour', COUNT(1) AS 'cantidad' FROM queue_stats_mv 
+        $sql = DB::select("SELECT HOUR(DATETIME) AS 'hour', COUNT(1) AS 'cantidad' FROM queue_stats_mv
                                 WHERE DATE(DATETIME) = '".$request->pfecha."'
                                 AND TIME_TO_SEC(info1) <='10'
                                 AND EVENT ='ABANDON'
                                 GROUP BY HOUR(DATETIME);");
+
         foreach ($hours as $k => $v) {
             //Validacion si ya cargo $data
             if (count($data)) {
@@ -1128,6 +1107,7 @@ class ReportController extends CosapiController
         }
             return $data;
     }
+
     function abandonadasDiff(Request $request)
     {
         $hours = [
@@ -1173,6 +1153,7 @@ class ReportController extends CosapiController
         }
         return $data;
     }
+
     function dashboard_04()
     {
         return view("dashboard.dashboard_04");
