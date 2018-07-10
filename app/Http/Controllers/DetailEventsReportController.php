@@ -79,9 +79,21 @@ class DetailEventsReportController extends CosapiController
 
       $tiempoLogeo = $totalSuma - $query_event->Desconectado;
 
-      $totalOcupacion = ($totalACD + $totalOutbound) / ($tiempoLogeo - $totalAuxiliaresBack);
+      $first = ($totalACD + $totalOutbound);
+      $second = ($tiempoLogeo - $totalAuxiliaresBack);
+      if($first == 0 && $second == 0) {
+        $totalOcupacion = 0;
+      } else {
+        $totalOcupacion = $first / $second;
+      }
 
-      $totalOcupacionBack = ($totalACD + $totalOutbound + $totalBackoffice) / ($tiempoLogeo - $totalAuxiliares);
+      $first2 = ($totalACD + $totalOutbound + $totalBackoffice);
+      $second2 = ($tiempoLogeo - $totalAuxiliares);
+      if($first2 == 0 && $second2 == 0) {
+        $totalOcupacionBack = 0;
+      } else {
+        $totalOcupacionBack = $first2 / $second2;
+      }
 
       $builderview[$posicion]['Name'] = $query_event->date_register;
       $builderview[$posicion]['Fuera de Tiempo'] = conversorSegundosHoras($query_event->Login, false);
