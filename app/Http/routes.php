@@ -145,4 +145,10 @@ Route::group(['middleware'=>['user']], function () {
 
     Route::post('frontPanel/getVariablesGlobals', ['uses'=>'AdminController@getVariablesGlobals']);
     Route::post('frontPanel/getStatusAddAgentDashboard', ['uses'=>'AdminController@getStatusAddAgentDashboard']);
+
+    //Encoladas
+    Route::post('manage_encoladas',  ['uses'=>'EncoladasController@index']);
+    Route::post('form_template_encoladas', ['uses'=>'EncoladasController@formDeleteEncolada']);
+    Route::post('delete_encolada_id', ['uses'=>'EncoladasController@deleteEncoladaId']);
 });
+

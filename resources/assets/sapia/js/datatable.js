@@ -229,6 +229,17 @@ const columnsDatatable = (route) => {
 		]
 	}
 
+  if (route === 'manage_encoladas') {
+    columns = [
+      {'data': 'Id', 'order': 'asc'},
+      {'data': 'Name_Queue'},
+      {'data': 'Name_Number'},
+      {'data': 'Number_Phone'},
+      {'data': 'Start_Call'},
+      {'data': 'Actions', 'className': 'text-center'}
+    ]
+  }
+
 	if (route === 'manage_sound_massive') {
 		columns = [
 			{'data': 'Id', 'order': 'asc'},

@@ -1037,10 +1037,14 @@ class ReportController extends CosapiController
       "23:00 - 00:00",
     ];
     $data = [];
-    $sql = DB::select("SELECT HOUR(DATETIME) as 'hour',COUNT(1) AS 'cantidad' FROM queue_stats_mv 
-                            WHERE DATE(DATETIME) = '".$request->pfecha."'
-                            AND EVENT ='ABANDON'
-                            GROUP BY HOUR(DATETIME);");
+    $sql = DB::select("SELECT 
+                convert(time,queue_stats_mv.datetime) AS 'hour'
+                FROM queue_stats_mv
+                  WHERE convert(date,queue_stats_mv.datetime) = '" . $request->pfecha . "'
+                  AND EVENT ='ABANDON'
+                  group by convert(time,queue_stats_mv.datetime)");
+
+    //dd($sql);
 
     foreach ($hours as $k => $v) {
       //Validacion si ya cargo $data
@@ -1054,9 +1058,15 @@ class ReportController extends CosapiController
       //Cargamos $data
       array_push($data, [$hours[$k] => 0]);
       //Cliclo $sql
+      $cantidad = null;
       foreach ($sql as $kk => $vv) {
+        if($kk == 0){
+          $cantidad = count($vv->hour);
+        }
         if ($k + 1 == $vv->hour) {
-          array_push($data,[$hours[$k + 1] => $vv->cantidad]);
+          if(!is_null($cantidad)){
+            array_push($data, [$hours[$k + 1] => $cantidad]);
+          }
         } else {
           continue;
         }
@@ -1064,6 +1074,7 @@ class ReportController extends CosapiController
     }
     return $data;
   }
+
   function abandonadasDiez(Request $request)
   {
     $hours = [
@@ -1093,11 +1104,14 @@ class ReportController extends CosapiController
       "23:00 - 00:00",
     ];
     $data = [];
-    $sql = DB::select("SELECT HOUR(DATETIME) AS 'hour', COUNT(1) AS 'cantidad' FROM queue_stats_mv 
-                                WHERE DATE(DATETIME) = '".$request->pfecha."'
-                                AND TIME_TO_SEC(info1) <='10'
-                                AND EVENT ='ABANDON'
-                                GROUP BY HOUR(DATETIME);");
+    $sql = DB::select("SELECT 
+                convert(time,queue_stats_mv.datetime) AS 'hour'
+                FROM queue_stats_mv
+                  WHERE convert(date,queue_stats_mv.datetime) = '" . $request->pfecha . "'
+                  AND datepart(second, convert(time,queue_stats_mv.datetime)) <= '10'
+                  AND EVENT ='ABANDON'
+                  group by convert(time,queue_stats_mv.datetime)");
+
     foreach ($hours as $k => $v) {
       //Validacion si ya cargo $data
       if (count($data)) {
@@ -1110,9 +1124,16 @@ class ReportController extends CosapiController
       //Cargamos $data
       array_push($data, [$hours[$k] => 0]);
       //Cliclo $sql
+      $cantidad =  null;
       foreach ($sql as $kk => $vv) {
+
+        if($kk == 0){
+          $cantidad = count($vv->hour);
+        }
         if ($k + 1 == $vv->hour) {
-          array_push($data,[$hours[$k + 1] => $vv->cantidad]);
+          if(!is_null($cantidad)){
+            array_push($data, [$hours[$k + 1] => $cantidad]);
+          }
         } else {
           continue;
         }
@@ -1120,6 +1141,7 @@ class ReportController extends CosapiController
     }
     return $data;
   }
+
   function abandonadasDiff(Request $request)
   {
     $hours = [
@@ -1148,16 +1170,16 @@ class ReportController extends CosapiController
       "22:00 - 23:00",
       "23:00 - 00:00",
     ];
-    $data=[];
+    $data = [];
     $abandonadasPorHora = $this->abandonadasPorHora($request);
     $abandonadasDiez = $this->abandonadasDiez($request);
     //Cliclo $sql
     foreach ($hours as $k => $v) {
       $res = 0;
-      if(isset($abandonadasPorHora[$k]) && isset($abandonadasDiez[$k])){
+      if (isset($abandonadasPorHora[$k]) && isset($abandonadasDiez[$k])) {
         $n1 = (int)implode($abandonadasPorHora[$k]);
         $n2 = (int)implode($abandonadasDiez[$k]);
-        if($n1 != $n2){
+        if ($n1 != $n2) {
           $res = $n1 - $n2;
         }
       }
@@ -1165,6 +1187,7 @@ class ReportController extends CosapiController
     }
     return $data;
   }
+
   function dashboard_04()
   {
     return view("dashboard.dashboard_04");
