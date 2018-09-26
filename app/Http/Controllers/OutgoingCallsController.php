@@ -6,10 +6,9 @@ use Cosapi\Models\Anexo;
 use Illuminate\Http\Request;
 use Cosapi\Models\Cdr;
 use Cosapi\Collector\Collector;
-
-use DB;
 use Carbon\Carbon;
-use Session;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class OutgoingCallsController extends CosapiController
 {
@@ -24,7 +23,6 @@ class OutgoingCallsController extends CosapiController
       if ($request->fecha_evento){
         return $this->list_calls_outgoing($request->fecha_evento);
       }else{
-
         $arrayReport = $this->reportAction(array(
           'boxReport','dateHourFilter','dateFilter','viewDateSearch','viewButtonSearch','viewButtonExport','viewCustomFilter'
         ),'');
