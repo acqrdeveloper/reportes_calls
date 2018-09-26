@@ -7,7 +7,7 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>Nombre Cola</th>
+                <th>Nombre Colas</th>
                 <th>Nombre Numero</th>
                 <th>Telefono</th>
                 <th>Duracion</th>

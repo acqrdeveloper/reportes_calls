@@ -293,6 +293,15 @@ const columnsDatatable = (route) => {
         ]
     }
 
+  if (route === 'colas_lista_vip') {
+    columns = [
+      {'data': 'id', 'order': 'asc'},
+      {'data': 'name'},
+      {'data': 'number_telephone'},
+      {'data': 'queue_name'},
+      {'data': 'actions', 'className': 'text-center'}
+    ]
+  }
 
 	return columns
 }

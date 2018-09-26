@@ -150,5 +150,14 @@ Route::group(['middleware'=>['user']], function () {
     Route::post('manage_encoladas',  ['uses'=>'EncoladasController@index']);
     Route::post('form_template_encoladas', ['uses'=>'EncoladasController@formDeleteEncolada']);
     Route::post('delete_encolada_id', ['uses'=>'EncoladasController@deleteEncoladaId']);
+
+    //Colas Lista Vip
+    Route::post('colas_lista_vip',['uses'=>'ColasListaVipController@index']);
+    Route::post('form_delete_cola_vip',['uses'=>'ColasListaVipController@showFormDelete']);
+    Route::post('delete_cola_vip',['uses'=>'ColasListaVipController@destroy']);
+    Route::post('form_edit_cola_vip',['uses'=>'ColasListaVipController@showFormEdit']);
+    Route::post('edit_cola_vip',['uses'=>'ColasListaVipController@update']);
+    Route::post('form_create_cola_vip',['uses'=>'ColasListaVipController@showFormCreate']);
+    Route::post('create_cola_vip',['uses'=>'ColasListaVipController@store']);
 });
 

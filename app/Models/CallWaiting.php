@@ -8,6 +8,4 @@ class CallWaiting extends Model
 {
     protected $connection   = 'laravel';
     protected $table = 'call_waiting';
-//    protected $fillable = [
-//    ];
 }

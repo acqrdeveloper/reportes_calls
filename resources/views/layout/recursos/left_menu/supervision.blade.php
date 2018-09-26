@@ -1,4 +1,4 @@
-  <li class="treeview">
+<li class="treeview" xmlns:v-on="http://www.w3.org/1999/xhtml">
     <a href="#">
       <i class="fa fa-dashboard"></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
     </a>
@@ -52,14 +52,14 @@
     </ul>
   </li>
 
-  <li class="treeview active">
+  <li class="treeview">
     <a href="#">
       <i class="fa fa-gears"></i> <span>Administrator</span> <i class="fa fa-angle-left pull-right"></i>
     </a>
     <ul class="treeview-menu">
       <li><a href="#" v-on:click="loadOptionMenu('manage_users')"> <i class="fa fa-circle-o text-red"></i> Manage Users</a></li>
       <li><a href="#" v-on:click="loadOptionMenu('agents_annexed')"> <i class="fa fa-circle-o text-purple"></i> Assign Annexed</a></li>
-      <!--<li><a href="#" v-on:click="loadOptionMenu('broadcast_message')"> <i class="fa fa-circle-o text-green"></i> BroadCast Message</a></li>-->
+      <li><a href="#" v-on:click="loadOptionMenu('colas_lista_vip')"> <i class="fa fa-circle-o text-green"></i> Administrar Colas Vip</a></li>
     </ul>
   </li>
 

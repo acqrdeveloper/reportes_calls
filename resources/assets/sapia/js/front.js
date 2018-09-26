@@ -50,6 +50,9 @@ const showTabListSoundMassive = (evento) => dataTables('table-list-sound-massive
 /* [showTabListEncoladas Función que carga las llamdas encoladas] */
 const showTabListEncoladas = (evento) => dataTables('table-list-encoladas', getDataFilters(evento), 'manage_encoladas')
 
+/* [showTabListEncoladas Función que carga la lista de Colas Vip] */
+const showTabListVip = (evento) => dataTables('table-lista-vip', getDataFilters(evento), 'colas_lista_vip')
+
 /* [showTabListMusicOnHold Función que carga los datos detallados de los music on hold] */
 const showTabListMusicOnHold = (evento) => dataTables('table-list-music-on-hold', getDataFilters(evento), 'manage_music_on_hold')
 

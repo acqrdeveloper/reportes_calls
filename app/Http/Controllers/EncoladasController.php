@@ -5,10 +5,6 @@ namespace Cosapi\Http\Controllers;
 use Carbon\Carbon;
 use Cosapi\Collector\Collector;
 use Cosapi\Models\CallWaiting;
-use Cosapi\Models\Queues;
-use Cosapi\Models\SoundMassive;
-use DateTime;
-use Grpc\Call;
 use Illuminate\Http\Request;
 
 class EncoladasController extends CosapiController
