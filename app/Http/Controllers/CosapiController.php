@@ -306,7 +306,6 @@ class CosapiController extends Controller
       ->where(DB::raw('CONVERT(varchar(10),fecha_evento,120)'), '=', date('Y-m-d'))
       ->orderBy('id', 'asc')
       ->get();
-
     $cant_event = 0;
 
     foreach ($users as $user) {
@@ -432,5 +431,15 @@ class CosapiController extends Controller
       'viewCustomFilter' => in_array('viewCustomFilter', $arrayAction) ? true : false,
       'customDataFilter' => $customDataFilter
     );
+  }
+
+  //Descomentar para obtener la consulta en SQL o aplicar debug de datos
+  public function myDebug($dataModel, $debug_sql = false)
+  {
+    if ($debug_sql) {
+      dd($dataModel->toSql(), $dataModel->getBindings());//Consulta SQL
+    } else {
+      dd($dataModel->get());//Data en debug
+    }
   }
 }

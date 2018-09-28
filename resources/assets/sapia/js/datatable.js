@@ -240,15 +240,6 @@ const columnsDatatable = (route) => {
     ]
   }
 
-	if (route === 'manage_sound_massive') {
-		columns = [
-			{'data': 'Id', 'order': 'asc'},
-			{'data': 'Name'},
-			{'data': 'Status'},
-			{'data': 'Actions', 'className': 'text-center'}
-		]
-	}
-
 	if (route === 'manage_music_on_hold') {
 		columns = [
 			{'data': 'Id', 'order': 'asc'},
@@ -292,6 +283,16 @@ const columnsDatatable = (route) => {
             {'data': 'Total'}
         ]
     }
+
+  if (route === 'manage_sound_massive') {
+    columns = [
+      {'data': 'id', 'order': 'asc'},
+      {'data': 'name_massive'},
+      {'data': 'state_masive'},
+      {'data': 'state_ivr'},
+      {'data': 'actions', 'className': 'text-center'}
+    ]
+  }
 
   if (route === 'colas_lista_vip') {
     columns = [

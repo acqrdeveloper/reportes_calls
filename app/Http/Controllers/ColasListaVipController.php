@@ -43,16 +43,6 @@ class ColasListaVipController extends CosapiController
     return $FormatDatatable;
   }
 
-  //Descomentar para obtener la consulta en SQL o aplicar debug de datos
-  private function myDebug($dataModel, $debug_sql = false)
-  {
-    if ($debug_sql) {
-      dd($dataModel->toSql(), $dataModel->getBindings());//Consulta SQL
-    } else {
-      dd($dataModel->get());//Data en debug
-    }
-  }
-
   function getDataList($id = null)
   {
     if (is_null($id)) {
@@ -77,23 +67,6 @@ class ColasListaVipController extends CosapiController
       $builderview = [];
     }
     return $builderview;
-  }
-
-  function reportAction($arrayAction, $customDataFilter)
-  {
-    return array(
-      'boxReport' => in_array('boxReport', $arrayAction) ? true : false,
-      'dateHourFilter' => in_array('dateHourFilter', $arrayAction) ? true : false,
-      'dateFilter' => in_array('dateFilter', $arrayAction) ? true : false,
-      'viewDateSearch' => in_array('viewDateSearch', $arrayAction) ? true : false,
-      'viewDateSingleSearch' => in_array('viewDateSingleSearch', $arrayAction) ? true : false,
-      'viewHourSearch' => in_array('viewHourSearch', $arrayAction) ? true : false,
-      'viewRolTypeSearch' => in_array('viewRolTypeSearch', $arrayAction) ? true : false,
-      'viewButtonSearch' => in_array('viewButtonSearch', $arrayAction) ? true : false,
-      'viewButtonExport' => in_array('viewButtonExport', $arrayAction) ? true : false,
-      'viewCustomFilter' => in_array('viewCustomFilter', $arrayAction) ? true : false,
-      'customDataFilter' => $customDataFilter
-    );
   }
 
   function dataCollection($builderview)
@@ -194,4 +167,5 @@ class ColasListaVipController extends CosapiController
     }
     return ['message' => 'Error'];
   }
+
 }

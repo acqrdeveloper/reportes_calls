@@ -240,6 +240,10 @@ elixir(function(mix) {
         .copy('resources/assets/sapia/js/form/colas_vip/formEdit.js', 'public/js/form/colas_vip/formEdit.min.js')
         .copy('resources/assets/sapia/js/form/colas_vip/formDelete.js', 'public/js/form/colas_vip/formDelete.min.js')
 
+        .copy('resources/assets/sapia/js/form/sound_massive/formCreate.js', 'public/js/form/sound_massive/formCreate.min.js')
+        .copy('resources/assets/sapia/js/form/sound_massive/formEdit.js', 'public/js/form/sound_massive/formEdit.min.js')
+        .copy('resources/assets/sapia/js/form/sound_massive/formDelete.js', 'public/js/form/sound_massive/formDelete.min.js')
+
         /**
          * Copiar imagenes en una sola carpeta
          */

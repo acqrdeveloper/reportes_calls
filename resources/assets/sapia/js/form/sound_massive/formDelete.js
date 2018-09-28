@@ -2,19 +2,19 @@
  * Created by jdelacruz on 23/11/2017.
  */
 
-$('#formEditVip').submit(function(e) {
+$('#formDeleteSoundMassive').submit(function(e) {
   let data = $(this).serialize()
   changeButtonForm('btnForm','btnLoad')
   $.ajax({
     type        : 'POST',
-    url         : 'edit_sound_massive',
+    url         : 'delete_sound_massive',
     cache       : false,
     headers     : {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')},
     data        : data,
     success: function(data){
       if(data.message === 'Success'){
         changeButtonForm('btnLoad','btnForm')
-        showNotificacion('success', 'Se ha actualizado!', 'Success', 2000, false, true)
+        showNotificacion('success', 'Se ha eliminado!', 'Success', 2000, false, true)
         clearModal('modalAsterisk', 'div.dialogAsterisk')
         buscar()
       }else{

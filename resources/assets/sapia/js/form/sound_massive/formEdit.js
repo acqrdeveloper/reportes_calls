@@ -2,7 +2,7 @@
  * Created by jdelacruz on 23/11/2017.
  */
 
-$('#formEditVip').submit(function(e) {
+$('#formEditSoundMassive').submit(function(e) {
   let data = $(this).serialize()
   changeButtonForm('btnForm','btnLoad')
   $.ajax({
